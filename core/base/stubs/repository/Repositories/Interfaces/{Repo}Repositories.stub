@@ -1,0 +1,7 @@
+<?php
+namespace {CoreNamespace}\{Package}\Repositories\Interfaces;
+use Core\Master\Repositories\Interfaces\RepositoryInterface;
+
+interface {Repo}Repositories extends RepositoryInterface{
+    
+}

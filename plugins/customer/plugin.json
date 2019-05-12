@@ -1,0 +1,10 @@
+{
+    "name": "Customer",
+    "provider": "Plugins\\Customer\\Providers\\CustomerServiceProvider",
+    "plugin": "Plugins\\Customer\\Plugin",
+    "author": "Trinh Le",
+    "version": "1.0",
+    "description": "Customer",
+    "namespace": "Plugins\\Customer\\",
+    "src": "plugins/customer/src"
+}

@@ -1,0 +1,199 @@
+#!/usr/bin/env php
+<?php
+
+class Console {
+    /**
+     * All command we support, there are must followed the rule is each container must have "default" key, and we use option key to run. If we could not find the options available in list, we will add user input options after default command.
+     * Example: php eden composer install => $commands['composer']['install']
+     * Example: php eden composer dump-autoload => $commands['composer']['default'] + dump-autoload
+     *
+     * $command = [ container1, container2, ...]
+     */
+
+    private $commands = [
+        'local'     => [
+            'ip'    => [
+                'cmd'   => 'ipconfig getifaddr en0',
+            ]
+        ],
+        'composer'  => [
+            'default'   => [
+                'cmd'   => self::DEFAULT_COMPOSER_COMMAND,
+            ],
+            'install' => [
+                'cmd'   => self::DEFAULT_COMPOSER_COMMAND. ' install --ignore-platform-reqs', // Quick install (included ignore platform
+            ]
+        ],
+        'server'    => [
+            'default'   => [
+                'cmd'   => self::DEFAULT_SERVER_COMMAND,
+                'multiple'  => false, // default false
+                'message'   => null
+            ], // Default command
+            'config'     => [
+                'cmd'   => self::DEFAULT_SERVER_COMMAND. ' config',
+            ],
+            'start'     => [
+                'cmd'   => self::DEFAULT_SERVER_COMMAND. ' up -d',
+                'message'   => 'Starting your server with command '. self::DEFAULT_SERVER_COMMAND
+            ],
+            'start:build'     => [
+                'cmd'   => self::DEFAULT_SERVER_COMMAND. ' up -d --build', // Quick start and fore to build image
+            ],
+            'stop'      => [
+                'cmd'   => self::DEFAULT_SERVER_COMMAND. ' down',
+            ],
+            'inspect'   => [
+                'cmd'   => 'docker exec -i -t php_server /bin/bash',
+            ],
+            'restart'   => [
+                'cmd'   => [
+                    [
+                        'cmd'   => self::DEFAULT_SERVER_COMMAND. ' down',
+                        'message'   => 'Shutting down server...'
+                    ],
+                    [
+                        'cmd'   => self::DEFAULT_SERVER_COMMAND. ' up -d',
+                        'message'   => 'Server is starting...'
+                    ]
+                ],
+                'multiple'  => true,
+            ],
+            'list'      => [
+                'cmd'   => 'docker ps',
+            ]
+        ],
+    ];
+
+    private $env = [];
+
+    const NOT_FOUND_COMMAND = 'Not found command. Use \'php eden help\' for more details.';
+    const REQUIRE_OPTION_COMMAND = 'The [options] in this command is required.';
+
+    const DEFAULT_COMPOSER_COMMAND = 'docker run -it --rm --net=host -v $PWD/docker/.composer:$HOME/.composer -e COMPOSER_HOME="$HOME/.composer" -v $PWD/:/app composer/composer:master-alpine';
+    const DEFAULT_SERVER_COMMAND = 'docker-compose -f docker/docker-compose.yml';
+
+    public function __construct($args){
+        $this->convertEnv();
+        $this->commands['server']['inspect']['cmd'] = 'docker exec -i -t ' .$this->env['CONTAINER_NAME'] .'_php_server /bin/bash';
+        $this->commands['server']['start']['cmd'] = self::DEFAULT_SERVER_COMMAND. ' -p '.$this->env['CONTAINER_NAME'].' up -d';
+        $this->commands['server']['start:build']['cmd'] = self::DEFAULT_SERVER_COMMAND. ' -p '.$this->env['CONTAINER_NAME'].' up -d --build';
+        $this->commands['server']['stop']['cmd'] = self::DEFAULT_SERVER_COMMAND. ' -p '.$this->env['CONTAINER_NAME'].' down';
+        $this->commands['server']['restart']['cmd'] = [
+            [
+                'cmd'   => $this->commands['server']['stop']['cmd'],
+                'message'   => 'Shutting down server...'
+            ],
+            [
+                'cmd'   => $this->commands['server']['start']['cmd'],
+                'message'   => 'Server is starting...'
+            ]
+        ];
+        $this->validate($args);
+        $this->execute($args);
+    }
+
+    private function convertEnv(){
+        $env = file_get_contents(".env");
+        $envs = preg_split('/\r\n|\r|\n/', $env);
+        foreach ($envs as $e){
+            if(!empty($e) && $e = trim($e)){
+                if(substr($e,0,1) === '#'){
+                    continue;
+                }
+                $regex = '/([\w|\d|]*)=(.*)/';
+                preg_match_all($regex, $e, $matches, PREG_SET_ORDER, 0);
+                $matches[0][2] = empty($matches[0][2]) || $matches[0][2] === 'null' ? null : $matches[0][2];
+                $matches[0][2] = $matches[0][2] === 'true' ? true : $matches[0][2];
+                $matches[0][2] = $matches[0][2] === 'false' ? false : $matches[0][2];
+                if(!empty($matches[0][1])){
+                    $this->env[$matches[0][1]] = $matches[0][2];
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate user input command
+     * @param $args
+     */
+
+    private function validate($args){
+        if(empty($args[1]) || !array_key_exists($args[1],$this->commands)) {
+            $this->output(self::NOT_FOUND_COMMAND);
+        }
+
+        if(empty($args[2])){
+            $this->output(self::REQUIRE_OPTION_COMMAND);
+        }
+    }
+
+    /**
+     * Print output to console
+     * @param $output
+     * @param bool $exit
+     * @throws Exception
+     */
+    private function output($output, $exit = true){
+        print_r($output.PHP_EOL);
+        if($exit){
+            exit;
+        }
+    }
+
+    /**
+     * After validate complete, we process the command
+     * @param $args
+     */
+    private function execute($args){
+        try{
+            $container = $args[1];
+            $options = $this->mergeArgs($args);
+            $cmdSupported = !empty($this->commands[$container][$options]); // User input supported command that were defined in $command
+            $command =  $cmdSupported ? $this->commands[$container][$options] : $this->commands[$container]['default'];
+            $scripts = [];
+
+            if(empty($command['multiple'])){ // Run single command
+
+                $scripts[0]['cmd'] = $cmdSupported ? $command['cmd'] : $command['cmd']. ' '. $options;
+                $scripts[0]['message'] = empty($command['message']) ? null : $command['message'];
+            } else { // Run multiple command
+                foreach($command['cmd'] as $index => $cmd){
+                    $scripts[$index]['cmd'] = $cmd['cmd'];
+                    $scripts[$index]['message'] = empty($cmd['message']) ? null : $cmd['message'];
+                }
+            }
+
+            // Start to run all scripts
+            foreach($scripts as $script){
+                $this->output('We are processing command: '. $script['cmd'], false);
+                if (!empty($script['message'])){
+                    $this->output($script['message'], false);
+                }
+//                $last = system($script['cmd'], $output);
+                passthru($script['cmd'], $output);
+
+                $this->output($output, false);
+                $this->output('Return code: '. $output, false);
+            }
+        } catch (Exception $e){
+            $this->output($e->getMessage());
+        }
+    }
+
+    /**
+     * Merge all args from array (user input from console)
+     * @param $argv
+     * @return string
+     */
+    private function mergeArgs($argv){
+        $str = '';
+        for($i = 2; $i < count($argv); $i++){
+            $str .=$argv[$i];
+        }
+        return $str;
+    }
+}
+
+new Console($argv);
+exit;

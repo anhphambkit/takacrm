@@ -1,0 +1,4 @@
+sources/upload/vendor
+sources/upload/node_modules
+sources/smarttask/node_modules
+sources/smarttask/vendor

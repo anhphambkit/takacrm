@@ -1,0 +1,10 @@
+{
+    "name": "Newsletter",
+    "provider": "Plugins\\Newsletter\\Providers\\NewsletterServiceProvider",
+    "plugin": "Plugins\\Newsletter\\Plugin",
+    "author": "Trinh Le",
+    "version": "1.0",
+    "description": "Newsletter",
+    "namespace": "Plugins\\Newsletter\\",
+    "src": "plugins/newsletter/src"
+}

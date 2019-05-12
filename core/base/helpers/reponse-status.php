@@ -1,0 +1,17 @@
+<?php
+
+if (!defined('RESPONSE_STATUS_SUCCESS')) {
+    define('RESPONSE_STATUS_SUCCESS', 0);
+}
+
+if (!defined('RESPONSE_STATUS_VALIDATION_ERROR')) {
+    define('RESPONSE_STATUS_VALIDATION_ERROR', 1);
+}
+
+if (!defined('RESPONSE_STATUS_NOT_FOUND_ERROR')) {
+    define('RESPONSE_STATUS_NOT_FOUND_ERROR', 2);
+}
+
+if (!defined('RESPONSE_STATUS_UNEXPECTED_ERROR')) {
+    define('RESPONSE_STATUS_UNEXPECTED_ERROR', 99);
+}

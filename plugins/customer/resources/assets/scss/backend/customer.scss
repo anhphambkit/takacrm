@@ -1,0 +1,84 @@
+.action-add-contact {
+  font-size: 60px;
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+  border: 1px dashed #cccc;
+  padding: 20px;
+  background: #fff;
+  cursor: pointer;
+
+  &:hover {
+    background: #eee;
+    color: #1d99e9;
+  }
+}
+
+.image-item-select {
+  height: 30px;
+  margin-right: 5px;
+}
+
+.table-customer-checkbox {
+  padding: 20px;
+  text-align: center;
+}
+
+.dt_action_wrap {
+  width: calc(100vw - 136px);
+  margin: 10px 0;
+  position: sticky;
+  left: 0;
+  float: left;
+
+  &>.dt_action_bottom {
+    padding: 10px 0;
+  }
+
+  .dt_action_custom {
+    display: inline-block;
+  }
+
+  .dt_info_wrap {
+    float: right;
+    display: inline-block;
+
+    .dt_info_custom {
+      display: inline-block;
+      float: right;
+      margin: 0 10px;
+    }
+
+    .dt_info_length {
+      min-width: 250px;
+      top: 4px;
+      position: relative;
+    }
+  }
+}
+
+.btn-table-actions {
+  width: 30%;
+}
+
+.avatar img.avatar-table {
+  height: 32px;
+}
+
+.close-advanced-search, .btn-update-query, .btn-delete-query {
+  display: none;
+}
+
+.heading-element-left {
+  position: absolute;
+  left: 100px;
+  top: 10px;
+  max-width: 500px;
+}
+
+a.link-create-new-customer {
+  color: white;
+  &:hover {
+    color: white;
+  }
+}

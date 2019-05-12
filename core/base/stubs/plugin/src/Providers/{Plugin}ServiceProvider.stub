@@ -1,0 +1,40 @@
+<?php
+
+namespace Plugins\{Plugin}\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Plugins\{Plugin}\Repositories\Caches\Cache{Plugin}Repositories;
+use Plugins\{Plugin}\Repositories\Eloquent\Eloquent{Plugin}Repositories;
+use Plugins\{Plugin}\Repositories\Interfaces\{Plugin}Repositories;
+
+class {Plugin}ServiceProvider extends ServiceProvider
+{
+    /**
+     * @var \Illuminate\Foundation\Application
+     */
+    protected $app;
+
+    /**
+     * @author TrinhLe
+     */
+    public function register()
+    {
+        if (setting('enable_cache', false)) {
+            $this->app->singleton({Plugin}Repositories::class, function () {
+                return new Cache{Plugin}Repositories(new Eloquent{Plugin}Repositories(new \Plugins\{Plugin}\Models\{Plugin}()));
+            });
+        } else {
+            $this->app->singleton({Plugin}Repositories::class, function () {
+                return new Eloquent{Plugin}Repositories(new \Plugins\{Plugin}\Models\{Plugin}());
+            });
+        }
+    }
+
+    /**
+     * @author TrinhLe
+     */
+    public function boot()
+    {
+        
+    }
+}

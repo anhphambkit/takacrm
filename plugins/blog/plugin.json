@@ -1,0 +1,10 @@
+{
+    "name": "Blog",
+    "provider": "Plugins\\Blog\\Providers\\BlogServiceProvider",
+    "plugin": "Plugins\\Blog\\Plugin",
+    "author": "Trinh Le",
+    "version": "1.0",
+    "description": "Blog",
+    "namespace": "Plugins\\Blog\\",
+    "src": "plugins/blog/src"
+}

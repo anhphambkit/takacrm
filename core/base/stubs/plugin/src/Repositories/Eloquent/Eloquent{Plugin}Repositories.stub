@@ -1,0 +1,10 @@
+<?php
+
+namespace Plugins\{Plugin}\Repositories\Eloquent;
+
+use Core\Master\Repositories\Eloquent\RepositoriesAbstract;
+use Plugins\{Plugin}\Repositories\Interfaces\{Plugin}Repositories;
+
+class Eloquent{Plugin}Repositories extends RepositoriesAbstract implements {Plugin}Repositories
+{
+}

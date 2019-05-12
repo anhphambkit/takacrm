@@ -1,0 +1,38 @@
+server {
+    listen 80;
+    server_name _;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl ;
+    root /var/www/html/public;
+    ssl_certificate     /var/www/html/docker/ssl/server.crt;
+    ssl_certificate_key /var/www/html/docker/ssl/server.key;
+    index index.php index.html index.htm index.nginx-debian.html;
+    server_name _;
+
+    location / {
+        #try_files $uri $uri/ /index.php?$query_string;
+        try_files $uri /index.php?$query_string;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ~ \.php$ {
+       include snippets/fastcgi-php.conf;
+       fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+       proxy_set_header Host $host;
+       proxy_set_header X-Real-IP $remote_addr;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ~ /\.ht {
+           deny all;
+    }
+
+    client_max_body_size 500M;
+}

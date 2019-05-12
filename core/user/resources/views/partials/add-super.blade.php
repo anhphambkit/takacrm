@@ -1,0 +1,1 @@
+<button data-toggle="modal" class="btn-secondary" type="button" href="#add_super_user">{{ trans('core-base::system.user.add_user') }}</button>

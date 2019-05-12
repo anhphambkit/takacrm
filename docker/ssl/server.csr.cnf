@@ -1,0 +1,14 @@
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+
+[dn]
+C=VI
+ST=TanBinh
+L=HCM
+O=Bigin
+OU=International
+emailAddress=minh.truong@bigin.vn
+CN = localhost

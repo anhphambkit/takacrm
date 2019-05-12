@@ -1,0 +1,10 @@
+{
+    "name": "Faq",
+    "provider": "Plugins\\Faq\\Providers\\FaqServiceProvider",
+    "plugin": "Plugins\\Faq\\Plugin",
+    "author": "Trinh Le",
+    "version": "1.0",
+    "description": "Faq",
+    "namespace": "Plugins\\Faq\\",
+    "src": "plugins/faq/src"
+}

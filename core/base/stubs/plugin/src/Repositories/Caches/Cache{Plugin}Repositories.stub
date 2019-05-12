@@ -1,0 +1,26 @@
+<?php
+
+namespace Plugins\{Plugin}\Repositories\Caches;
+
+use Core\Master\Repositories\Cache\CacheAbstractDecorator;
+use Plugins\{Plugin}\Repositories\Interfaces\{Plugin}Repositories;
+
+class Cache{Plugin}Repositories extends CacheAbstractDecorator implements {Plugin}Repositories
+{
+    /**
+     * @var {Plugin}Repositories
+     */
+    protected $repository;
+
+    /**
+     * {Plugin}CacheDecorator constructor.
+     * @param {Plugin}Repositories $repository
+     * @author TrinhLe
+     */
+    public function __construct({Plugin}Repositories $repository)
+    {
+        parent::__construct();
+        $this->repository = $repository;
+        $this->entityName = "Cache-{Plugin}"; # Please setup reference name of cache.
+    }
+}

@@ -1,0 +1,64 @@
+.item-look-book {
+  width: 100%;
+  &.main-look-book, &.vertical-look-book  {
+    height: 845px;
+  }
+  &.normal-look-book {
+    height: 415px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.btn-link-custom {
+  color: inherit;
+  text-decoration: none;
+}
+
+.item-look-book {
+  position: relative;
+  &.look-book-box-tag {
+    width: 650px;
+    height: 500px;
+    float: left;
+  }
+  .tt-hotspot {
+    position: absolute;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    text-align: center;
+    .tt-btn {
+      opacity: 0;
+      visibility: hidden;
+      width: 38px;
+      height: 38px;
+      padding: 4px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      background: #00000057;
+      border-radius: 50%;
+      -moz-transition: padding 0.2s linear;
+      -o-transition: padding 0.2s linear;
+      -webkit-transition: padding 0.2s linear;
+      transition: padding 0.2s linear;
+      i.icon-tag {
+        position: relative;
+        top: 7px;
+        left: 1px;
+        font-size: 18px;
+      }
+    }
+  }
+  &:hover .tt-hotspot .tt-btn {
+    opacity: 1;
+    visibility: visible;
+  }
+}

@@ -1,0 +1,1 @@
+<i class="fas fa-plus"></i> {{ trans('core-base::forms.create') }}

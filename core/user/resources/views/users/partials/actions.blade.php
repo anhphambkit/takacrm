@@ -1,0 +1,2 @@
+<a href="#" class="btn btn-icon btn-pure success mr-1 tip" data-original-title="View user's profile"><i class="la la-pencil"></i></a>
+<button type="button" class="btn btn-icon btn-pure danger mr-1 deleteDialog tip" data-toggle="modal" data-section="" role="button" data-original-title="{{ __('Delete') }}"><i class="la la-archive"></i></button>
