@@ -59,8 +59,9 @@ class ManufacturerDataTable extends DataTableAbstract
         $query = $model->select(
             [
                 'product_manufacturers.id',
-                'product_manufacturers.manufacturer_image',
+                'product_manufacturers.logo',
                 'product_manufacturers.name',
+                'product_manufacturers.slug',
                 'product_manufacturers.created_by',
                 'product_manufacturers.created_at',
                 'product_manufacturers.status'
@@ -83,8 +84,8 @@ class ManufacturerDataTable extends DataTableAbstract
                 'width' => '20px',
                 'class' => 'searchable searchable_id',
             ],
-            'manufacturer_image' => [
-                'name' => 'product_manufacturers.manufacturer_image',
+            'logo' => [
+                'name' => 'product_manufacturers.logo',
                 'title' => trans('core-base::tables.image'),
                 'footer' => trans('core-base::tables.image'),
                 'class' => 'text-left',
@@ -95,6 +96,12 @@ class ManufacturerDataTable extends DataTableAbstract
                 'name' => 'product_manufacturers.name',
                 'title' => trans('core-base::tables.name'),
                 'footer' => trans('core-base::tables.name'),
+                'class' => 'text-left searchable',
+            ],
+            'slug' => [
+                'name' => 'product_manufacturers.slug',
+                'title' => trans('core-base::tables.slug'),
+                'footer' => trans('core-base::tables.slug'),
                 'class' => 'text-left searchable',
             ],
             'created_by' => [

@@ -10,12 +10,9 @@ namespace Plugins\Product\Models;
 
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductManufacturer extends Model
 {
-    use SoftDeletes;
-
     /**
      * The database table used by the model.
      *
@@ -25,8 +22,9 @@ class ProductManufacturer extends Model
 
     protected $fillable = [
         'name',
-        'manufacturer_image',
-        'policy',
+        'slug',
+        'logo',
+        'description',
         'status',
         'created_by',
         'updated_by',
@@ -37,6 +35,15 @@ class ProductManufacturer extends Model
      * @author AnhPham
      */
     public function createdByUser()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @author AnhPham
+     */
+    public function updatedByUser()
     {
         return $this->belongsTo(User::class, 'created_by');
     }

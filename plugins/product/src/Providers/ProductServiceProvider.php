@@ -28,8 +28,10 @@ use Plugins\Product\Repositories\Interfaces\BusinessTypeRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductCollectionRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductColorRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductMaterialRepositories;
+use Plugins\Product\Repositories\Interfaces\ProductOriginRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductSpaceRepositories;
+use Plugins\Product\Repositories\Interfaces\ProductUnitRepositories;
 use Plugins\Product\Services\BusinessTypeServices;
 use Plugins\Product\Services\Implement\ImplementBusinessTypeServices;
 use Plugins\Product\Services\Implement\ImplementLookBookServices;
@@ -71,10 +73,7 @@ class ProductServiceProvider extends ServiceProvider
     {
         register_repositories($this);
         $this->app->singleton(ProductServices::class, ImplementProductServices::class);
-        $this->app->singleton(BusinessTypeServices::class, ImplementBusinessTypeServices::class);
         $this->app->singleton(ProductCategoryServices::class, ImplementProductCategoryServices::class);
-        $this->app->singleton(LookBookServices::class, ImplementLookBookServices::class);
-        $this->app->singleton(ProductSpaceServices::class, ImplementProductSpaceServices::class);
     }
 
     /**
@@ -87,14 +86,9 @@ class ProductServiceProvider extends ServiceProvider
         return [
             ProductRepositories::class           => \Plugins\Product\Models\Product::class,
             ManufacturerRepositories::class      => \Plugins\Product\Models\ProductManufacturer::class,
-            ProductColorRepositories::class      => \Plugins\Product\Models\ProductColor::class,
-            ProductCollectionRepositories::class => \Plugins\Product\Models\ProductCollection::class,
-            ProductMaterialRepositories::class   => \Plugins\Product\Models\ProductMaterial::class,
-            BusinessTypeRepositories::class      => \Plugins\Product\Models\ProductBusinessType::class,
             ProductCategoryRepositories::class   => \Plugins\Product\Models\ProductCategory::class,
-            LookBookRepositories::class          => \Plugins\Product\Models\LookBook::class,
-            ProductSpaceRepositories::class      => \Plugins\Product\Models\ProductSpace::class,
-            ProductCouponRepositories::class     => \Plugins\Product\Models\ProductCoupon::class,
+            ProductUnitRepositories::class   => \Plugins\Product\Models\ProductUnit::class,
+            ProductOriginRepositories::class   => \Plugins\Product\Models\ProductOrigin::class,
         ];
     }
 

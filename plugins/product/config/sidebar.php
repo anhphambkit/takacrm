@@ -38,66 +38,21 @@ return [
         'permissions' => ['product_manufacturers.list']
     ],
     [
-        'id'          => 'menu-product-spaces',
-        'priority'    => 4,
+        'id'          => 'menu-product-units',
+        'priority'    => 3,
         'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-product::sidebar.space',
+        'name'        => 'plugins-product::sidebar.unit',
         'icon'        => 'fas fa-users-cog',
-        'url'         => 'admin.product.space.list',
-        'permissions' => ['product_spaces.list']
+        'url'         => 'admin.product.unit.list',
+        'permissions' => ['product_units.list']
     ],
     [
-        'id'          => 'menu-product-colors',
-        'priority'    => 5,
+        'id'          => 'menu-product-origins',
+        'priority'    => 3,
         'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-product::sidebar.color',
+        'name'        => 'plugins-product::sidebar.origin',
         'icon'        => 'fas fa-users-cog',
-        'url'         => 'admin.product.color.list',
-        'permissions' => ['product_colors.list']
-    ],
-    [
-        'id'          => 'menu-product-business-types',
-        'priority'    => 6,
-        'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-product::sidebar.business-type',
-        'icon'        => 'fas fa-users-cog',
-        'url'         => 'admin.product.business-type.list',
-        'permissions' => ['product_business_types.list']
-    ],
-    [
-        'id'          => 'menu-product-collections',
-        'priority'    => 7,
-        'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-product::sidebar.collection',
-        'icon'        => 'fas fa-users-cog',
-        'url'         => 'admin.product.collection.list',
-        'permissions' => ['product_collections.list']
-    ],
-    [
-        'id'          => 'menu-product-materials',
-        'priority'    => 8,
-        'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-product::sidebar.material',
-        'icon'        => 'fas fa-users-cog',
-        'url'         => 'admin.product.material.list',
-        'permissions' => ['product_materials.list']
-    ],
-    [
-        'id'          => 'menu-look-books',
-        'priority'    => 9,
-        'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-product::sidebar.look_book',
-        'icon'        => 'fas fa-users-cog',
-        'url'         => 'admin.product.look_book.list',
-        'permissions' => ['product_look_books.list']
-    ],
-    [
-        'id'          => 'menu-product-coupon',
-        'priority'    => 10,
-        'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-product::sidebar.coupon',
-        'icon'        => 'fas fa-users-cog',
-        'url'         => 'admin.product.coupon.list',
-        'permissions' => ['product_coupon.list']
+        'url'         => 'admin.product.origin.list',
+        'permissions' => ['product_origins.list']
     ],
 ];

@@ -13,14 +13,12 @@ use Core\Theme\Providers\ThemeServiceProvider;
 use Core\User\Providers\UserServiceProvider;
 use Core\Media\Providers\MediaServiceProvider;
 use Core\Slug\Providers\SlugServiceProvider;
-use Event;
 use Illuminate\Routing\Events\RouteMatched;
-use Illuminate\Support\Facades\Validator;
-
-# Plugin 
 use Core\Base\Repositories\Interfaces\PluginRepositories;
 use Core\Base\Repositories\Eloquent\EloquentPluginRepositories;
 use Core\Base\Repositories\Cache\CachePluginRepositories;
+use Illuminate\Support\Facades\Validator;
+use Event;
 
 class BaseServiceProvider extends ServiceProvider
 {	
@@ -69,6 +67,7 @@ class BaseServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{	
+		# load config important use helper.
 		$this->cmsLoadTranslates();
 		$this->cmsLoadConfigs();
 		$this->cmsLoadViews();
@@ -118,8 +117,8 @@ class BaseServiceProvider extends ServiceProvider
          * @return boolean
          */
         Validator::extend('mutiple_level_parent', function ($attribute, $value, $parameters, $validator) {
-			$primaryKey = array_get($validator->getData(), $parameters[0] ?? 'id', null);
-			$collection = $parameters[1];
+			$primaryKey = $parameters[0] ?? 0;
+			$collection = app($parameters[1])->all();
 			$parents    = get_array_parent_object($collection, $value);
 			return !in_array((int)$primaryKey, $parents);
         });
@@ -130,7 +129,7 @@ class BaseServiceProvider extends ServiceProvider
          * @return String
          */
         Validator::replacer('mutiple_level_parent', function ($message, $attribute, $rule, $parameters) {
-            return $message;
-        }, trans('core-base::validation.mutiple_level_parent'));
+        	return trans('core-base::validation.mutiple_level_parent');
+        });
     }
 }

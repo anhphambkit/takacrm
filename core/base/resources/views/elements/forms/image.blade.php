@@ -3,9 +3,6 @@
            name="{{ $name }}"
            value="{{ $value }}"
            class="image-data">
-<!--    --><?php
-//    dd($attributes);
-//    ?>
     <img src="{{ get_object_image($value, 'mediumThumb') }}"
         alt="preview image" class="preview_image">
     <div class="image-box-actions">

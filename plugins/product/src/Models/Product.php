@@ -3,18 +3,14 @@
 namespace Plugins\Product\Models;
 
 use Core\User\Models\User;
-use Eloquent;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Plugins\Product\Models\Product
- *
- * @mixin \Eloquent
+ * Class Product
+ * @package Plugins\Product\Models
  */
-class Product extends Eloquent
+class Product extends Model
 {
-    use SoftDeletes;
-
     /**
      * The database table used by the model.
      *
@@ -25,76 +21,28 @@ class Product extends Eloquent
     protected $fillable = [
         'name',
         'slug',
-        'upc',
         'sku',
         'image_feature',
         'short_description',
         'long_desc',
         'manufacturer_id',
+        'unit_id',
+        'origin_id',
+        'category_id',
+        'retail_price',
+        'wholesale_price',
+        'online_price',
+        'purchase_price',
+        'discount',
+        'wholesale_discount',
+        'purchase_discount',
+        'online_discount',
+        'vat',
         'is_feature',
-        'is_best_seller',
-        'is_free_ship',
-        'available_3d',
-        'is_outdoor',
-        'has_assembly',
-        'product_dimension',
-        'package_dimension',
-        'product_weight',
-        'package_weight',
-        'price',
-        'sale_price',
-        'inventory',
-        'rating',
-        'keywords',
         'created_by',
         'updated_by',
         'status',
     ];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     * @author TrinhLe
-     */
-    public function productCategories()
-    {
-        return $this->belongsToMany(ProductCategory::class, 'product_categories_relation');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     * @author TrinhLe
-     */
-    public function productBusinessTypes()
-    {
-        return $this->belongsToMany(ProductBusinessType::class, 'product_business_types_relation');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     * @author TrinhLe
-     */
-    public function productCollections()
-    {
-        return $this->belongsToMany(ProductCollection::class, 'product_collections_relation');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     * @author TrinhLe
-     */
-    public function productColors()
-    {
-        return $this->belongsToMany(ProductColor::class, 'product_colors_relation');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     * @author TrinhLe
-     */
-    public function productMaterials()
-    {
-        return $this->belongsToMany(ProductMaterial::class, 'product_materials_relation');
-    }
 
     /**
      * Get the gallery for the product.

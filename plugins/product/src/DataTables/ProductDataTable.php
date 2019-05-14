@@ -78,7 +78,7 @@ class ProductDataTable extends DataTableAbstract
                 'class' => 'searchable searchable_id',
             ],
             'image_feature' => [
-                'name' => 'product_manufacturers.manufacturer_image',
+                'name' => 'products.image_feature',
                 'title' => trans('core-base::tables.image'),
                 'footer' => trans('core-base::tables.image'),
                 'class' => 'text-left',

@@ -21,16 +21,15 @@ if (!function_exists('format_time')) {
 
 if (!function_exists('format_date_time')) {
     /**
-     * @param $datetime
+     * @param DateTime $datetime
      * @param string $timezone
      * @param string $format
-     * @param string $formatOutput
      * @return Carbon
      */
-    function format_date_time($datetime, string $timezone = 'Asia/Ho_Chi_Minh', string $format = 'Y-m-d H:i:s', string $formatOutput = "Y-m-d")
+    function format_date_time(DateTime $datetime, string $timezone = 'America/Eirunepe', string $format = 'Y-m-d H:i:s')
     {
         $serverTimezone = \Config::get('app.timezone');
-        return Carbon::createFromFormat($format, $datetime, $timezone)->setTimezone($serverTimezone)->format($formatOutput);
+        return Carbon::createFromFormat($format, $datetime, $timezone)->setTimezone($serverTimezone);
     }
 }
 
@@ -139,5 +138,39 @@ if (!function_exists('table_status')) {
             ];
         }
         return view('core-base::elements.tables.status', compact('selected', 'statuses'))->render();
+    }
+}
+
+if (function_exists('get_attribute_from_random_array') === false) {
+    /**
+     * @param array $array
+     * @param string $attr
+     * @param string $defaultNull
+     * @return string
+     */
+    function get_attribute_from_random_array(array $array, string $attr, $defaultNull = "")
+    {
+        $result = $defaultNull;
+        if(!empty($array)) {
+            $randomKey = array_rand($array);
+            $result = isset($array[$randomKey][$attr]) ? $array[$randomKey][$attr] : (isset($array[$randomKey]->{$attr}) ? isset($array[$randomKey]->{$attr}) : $defaultNull);
+        }
+        return $result;
+    }
+}
+
+if (function_exists('get_id_from_url') === false) {
+    /**
+     * Get id from url with delimiter default = "." (get last element of delimiter)
+     * Ex:
+     * url: http:example.com/this-09-is.456-url-test.123 => return id = 123
+     * @param string $url
+     * @param string $delimiter
+     * @return mixed
+     */
+    function get_id_from_url(string $url, string $delimiter = ".") {
+        $array = explode($delimiter, $url);
+        $id = end($array);
+        return (int)$id;
     }
 }

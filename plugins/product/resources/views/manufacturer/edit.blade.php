@@ -27,10 +27,10 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-md-12 mb-2 @if ($errors->has('policy')) has-error @endif">
-                                        <label for="name">{{ trans('plugins-product::manufacturer.form.policy') }}</label>
-                                        {!! render_editor('policy', $manufacturer->policy, true) !!}
-                                        {!! Form::error('policy', $errors) !!}
+                                    <div class="form-group col-md-12 mb-2 @if ($errors->has('description')) has-error @endif">
+                                        <label for="name">{{ trans('plugins-product::manufacturer.form.description') }}</label>
+                                        {!! Form::textarea('description', (!empty(old('description')) ? old('description') : $manufacturer->description), ['class' => 'form-control description-manufacturer', 'id' => 'description-manufacturer']) !!}
+                                        {!! Form::error('description', $errors) !!}
                                     </div>
                                 </div>
                             </div>
@@ -46,14 +46,14 @@
                 <div class="widget meta-boxes">
                     <div class="widget-title">
                         <h4>
-                            <span class="required @if ($errors->has('manufacturer_image')) has-error @endif">
-                                <label class="control-label required" for="role">{{ trans('plugins-product::manufacturer.form.manufacturer_image') }}</label>
+                            <span class="required @if ($errors->has('logo')) has-error @endif">
+                                <label class="control-label required" for="role">{{ trans('plugins-product::manufacturer.form.logo') }}</label>
                             </span>
                         </h4>
                     </div>
                     <div class="widget-body">
-                        {!! Form::mediaImage('manufacturer_image', $manufacturer->manufacturer_image, [ 'action' => 'select-image' ]) !!}
-                        {!! Form::error('manufacturer_image', $errors) !!}
+                        {!! Form::mediaImage('logo', $manufacturer->logo, [ 'action' => 'select-image' ]) !!}
+                        {!! Form::error('logo', $errors) !!}
                     </div>
                 </div>
                 {{--End Image--}}

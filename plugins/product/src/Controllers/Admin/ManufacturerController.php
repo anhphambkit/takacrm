@@ -64,7 +64,11 @@ class ManufacturerController extends BaseAdminController
      */
     public function postCreate(ManufacturerRequest $request)
     {
-        $manufacturer = $this->manufacturerRepository->createOrUpdate(array_merge($request->input(), ['created_by' => Auth::id()]));
+        $data = $request->input();
+        $data['slug'] = str_slug($data['name']);
+        $data['created_by'] = Auth::id();
+
+        $manufacturer = $this->manufacturerRepository->createOrUpdate($data);
 
         do_action(BASE_ACTION_AFTER_CREATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $manufacturer);
 
@@ -105,7 +109,12 @@ class ManufacturerController extends BaseAdminController
         if (empty($manufacturer)) {
             abort(404);
         }
-        $manufacturer->fill(array_merge($request->input(), ['updated_by' => Auth::id()]));
+
+        $data = $request->input();
+        $data['slug'] = str_slug($data['name']);
+        $data['updated_by'] = Auth::id();
+
+        $manufacturer->fill($data);
 
         $this->manufacturerRepository->createOrUpdate($manufacturer);
 

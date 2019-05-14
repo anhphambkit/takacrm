@@ -41,6 +41,21 @@ class FormServiceProvider extends ServiceProvider
             'attributes' => [],
         ]);
 
+        Form::component('onOffPretty', 'core-base::elements.forms.on-off-pretty', [
+            'name',
+            'value' => false,
+            'attributes' => [],
+            'classSwitch' => '',
+        ]);
+        
+        Form::component('radioPretty', 'core-base::elements.forms.radio-pretty', [
+            'name',
+            'value'      => false,
+            'title'      => '',
+            'attributes' => [],
+            'default'    => 0
+        ]);
+
         /**
          * Custom checkbox
          * Every checkbox will not have the same name
@@ -55,6 +70,20 @@ class FormServiceProvider extends ServiceProvider
              * ]
              */
             'values',
+        ]);
+
+        Form::component('lookBookImage', 'core-base::elements.forms.image-look-book', [
+            'name',
+            'value' => null,
+            'tags' => [],
+            'typeLayout' => 'normal',
+            'attributes' => [],
+        ]);
+
+        Form::component('mediaGallery', 'core-base::elements.forms.gallery', [
+            'name',
+            'value' => null,
+            'attributes' => [],
         ]);
     }
 }

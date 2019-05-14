@@ -39,34 +39,4 @@ class ProductController extends BaseAdminController
         $products = $category->products()->get();
         return response()->json($products);
     }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getSpacesByBusinessType(Request $request)
-    {
-        $businessTypeId = $request->get('business_type_id');
-        $businessType = ProductBusinessType::find($businessTypeId);
-        $spaces = $businessType->spaces()->get();
-        return response()->json($spaces);
-    }
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getDefaultBusinessType()
-    {
-        $businessType = ProductBusinessType::select('id', 'name as text')->get();
-        return response()->json($businessType);
-    }
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getAllSpaces()
-    {
-        $spaces = ProductSpace::select('id', 'name as text', 'image_feature')->get();
-        return response()->json($spaces);
-    }
 }

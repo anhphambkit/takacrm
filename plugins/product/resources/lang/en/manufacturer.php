@@ -12,7 +12,7 @@ return [
     'edit' => 'Edit manufacturer',
     'list' => 'List manufacturer',
     'form' => [
-        'manufacturer_image' => 'Manufacturer Image',
-        'policy' => 'Return/Refund Policy',
+        'logo' => 'Manufacturer Image',
+        'description' => 'Description',
     ]
 ];

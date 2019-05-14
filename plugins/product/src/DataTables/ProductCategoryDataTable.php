@@ -29,9 +29,6 @@ class ProductCategoryDataTable extends DataTableAbstract
             ->editColumn('created_by', function ($item) {
                 return $item->createdByUser ? $item->createdByUser->getFullName() : null;
             })
-            ->editColumn('image_feature', function ($item) {
-                return get_object_image($item->image_feature, 'mediumThumb');
-            })
             ->editColumn('created_at', function ($item) {
                 return date_from_database($item->created_at, config('core-base.cms.date_format.date'));
             })
@@ -62,9 +59,8 @@ class ProductCategoryDataTable extends DataTableAbstract
         $query = $model->select(
             [
                 'product_categories.id',
-                'product_categories.order',
                 'product_categories.name',
-                'product_categories.image_feature',
+                'product_categories.slug',
                 'product_categories.created_by',
                 'product_categories.created_at',
                 'product_categories.status'
@@ -87,18 +83,16 @@ class ProductCategoryDataTable extends DataTableAbstract
                 'width' => '20px',
                 'class' => 'searchable searchable_id',
             ],
-            'image_feature' => [
-                'name' => 'product_categories.image_feature',
-                'title' => trans('core-base::tables.image'),
-                'footer' => trans('core-base::tables.image'),
-                'class' => 'text-left',
-                'width' => '60px',
-                "render" => '"<img src=\"" + data + "\" height=\"50\"/>"',
-            ],
             'name' => [
                 'name' => 'product_categories.name',
                 'title' => trans('core-base::tables.name'),
                 'footer' => trans('core-base::tables.name'),
+                'class' => 'text-left searchable',
+            ],
+            'slug' => [
+                'name' => 'product_categories.slug',
+                'title' => trans('core-base::tables.slug'),
+                'footer' => trans('core-base::tables.slug'),
                 'class' => 'text-left searchable',
             ],
             'created_by' => [

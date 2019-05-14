@@ -7,11 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Plugins\Product\Models\ProductGallery;
 use Plugins\Product\Repositories\Interfaces\ManufacturerRepositories;
-use Plugins\Product\Repositories\Interfaces\BusinessTypeRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductCategoryRepositories;
-use Plugins\Product\Repositories\Interfaces\ProductCollectionRepositories;
-use Plugins\Product\Repositories\Interfaces\ProductColorRepositories;
-use Plugins\Product\Repositories\Interfaces\ProductMaterialRepositories;
 use Plugins\Product\Requests\ProductRequest;
 use Plugins\Product\Repositories\Interfaces\ProductRepositories;
 use Plugins\Product\DataTables\ProductDataTable;
@@ -37,47 +33,17 @@ class ProductController extends BaseAdminController
     protected $manufacturerRepositories;
 
     /**
-     * @var ProductColorRepositories
-     */
-    protected $productColorRepositories;
-
-    /**
-     * @var BusinessTypeRepositories
-     */
-    protected $businessTypeRepositories;
-
-    /**
-     * @var ProductCollectionRepositories
-     */
-    protected $productCollectionRepositories;
-
-    /**
-     * @var ProductMaterialRepositories
-     */
-    protected $productMaterialRepositories;
-
-    /**
      * ProductController constructor.
      * @param ProductRepositories $productRepository
      * @param ProductCategoryRepositories $productCategoryRepositories
      * @param ManufacturerRepositories $manufacturerRepositories
-     * @param ProductColorRepositories $productColorRepositories
-     * @param BusinessTypeRepositories $businessTypeRepositories
-     * @param ProductCollectionRepositories $productCollectionRepositories
-     * @param ProductMaterialRepositories $productMaterialRepositories
      */
     public function __construct(ProductRepositories $productRepository, ProductCategoryRepositories $productCategoryRepositories,
-                                ManufacturerRepositories $manufacturerRepositories, ProductColorRepositories $productColorRepositories,
-                                BusinessTypeRepositories $businessTypeRepositories, ProductCollectionRepositories $productCollectionRepositories,
-                                ProductMaterialRepositories $productMaterialRepositories)
+                                ManufacturerRepositories $manufacturerRepositories)
     {
         $this->productRepository = $productRepository;
         $this->productCategoryRepositories = $productCategoryRepositories;
         $this->manufacturerRepositories = $manufacturerRepositories;
-        $this->productColorRepositories = $productColorRepositories;
-        $this->businessTypeRepositories = $businessTypeRepositories;
-        $this->productCollectionRepositories = $productCollectionRepositories;
-        $this->productMaterialRepositories = $productMaterialRepositories;
     }
 
     /**
@@ -105,19 +71,11 @@ class ProductController extends BaseAdminController
 
         $manufacturer = $this->manufacturerRepositories->pluck('name', 'id');
 
-        $colors = $this->productColorRepositories->pluck('name', 'id');
-
-        $businessTypes = $this->businessTypeRepositories->pluck('name', 'id');
-
-        $collections = $this->productCollectionRepositories->pluck('name', 'id');
-
-        $materials = $this->productMaterialRepositories->pluck('name', 'id');
-
         page_title()->setTitle(trans('plugins-product::product.create'));
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.create', compact('categories', 'manufacturer', 'colors', 'businessTypes', 'collections', 'materials'));
+        return view('plugins-product::product.create', compact('categories', 'manufacturer'));
     }
 
     /**
@@ -147,26 +105,8 @@ class ProductController extends BaseAdminController
             foreach ($galleries as $gallery) {
                 $product->galleries()->create([
                     'media' => $gallery,
-//                    'description' => $gallery->description,
                 ]);
             }
-
-            $categoryIds = $request->input('category_id', []);
-            $product->productCategories()->attach($categoryIds);
-
-            $businessTypeIds = $request->input('business_type_id', []);
-            $product->productBusinessTypes()->attach($businessTypeIds);
-
-            $collectionIds = $request->input('collection_id', []);
-            $product->productCollections()->attach($collectionIds);
-
-            $colorIds = $request->input('color_id', []);
-            $product->productColors()->attach($colorIds);
-
-            $materialIds = $request->input('material_id', []);
-            $product->productMaterials()->attach($materialIds);
-
-            $product->sku .= $product->id;
 
             return $product->save();
         }, 3);
@@ -193,40 +133,7 @@ class ProductController extends BaseAdminController
 
         $manufacturer = $this->manufacturerRepositories->pluck('name', 'id');
 
-        $colors = $this->productColorRepositories->pluck('name', 'id');
-
-        $businessTypes = $this->businessTypeRepositories->pluck('name', 'id');
-
-        $collections = $this->productCollectionRepositories->pluck('name', 'id');
-
-        $materials = $this->productMaterialRepositories->pluck('name', 'id');
-
         $product = $this->productRepository->findById($id);
-
-        $selectedProductCategories = [];
-        if ($product->productCategories != null) {
-            $selectedProductCategories = $product->productCategories->pluck('id')->all();
-        }
-
-        $selectedProductBusinessTypes = [];
-        if ($product->productBusinessTypes != null) {
-            $selectedProductBusinessTypes = $product->productBusinessTypes->pluck('id')->all();
-        }
-
-        $selectedProductCollections = [];
-        if ($product->productCollections != null) {
-            $selectedProductCollections = $product->productCollections->pluck('id')->all();
-        }
-
-        $selectedProductColors = [];
-        if ($product->productColors != null) {
-            $selectedProductColors = $product->productColors->pluck('id')->all();
-        }
-
-        $selectedProductMaterials = [];
-        if ($product->productMaterials != null) {
-            $selectedProductMaterials = $product->productMaterials->pluck('id')->all();
-        }
 
         $galleries = [];
         if ($product->galleries != null) {
@@ -241,9 +148,7 @@ class ProductController extends BaseAdminController
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'colors',
-                    'businessTypes', 'collections', 'materials', 'selectedProductCategories', 'selectedProductBusinessTypes',
-                    'selectedProductCollections', 'selectedProductColors', 'selectedProductMaterials', 'galleries'));
+        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries'));
     }
 
     /**
@@ -258,7 +163,6 @@ class ProductController extends BaseAdminController
         if (empty($product)) {
             abort(404);
         }
-
 
         $data = $request->input();
 
@@ -289,22 +193,6 @@ class ProductController extends BaseAdminController
             $categoryIds = $request->input('category_id', []);
             $product->productCategories()->detach();
             $product->productCategories()->attach($categoryIds);
-
-            $businessTypeIds = $request->input('business_type_id', []);
-            $product->productBusinessTypes()->detach();
-            $product->productBusinessTypes()->attach($businessTypeIds);
-
-            $collectionIds = $request->input('collection_id', []);
-            $product->productCollections()->detach();
-            $product->productCollections()->attach($collectionIds);
-
-            $colorIds = $request->input('color_id', []);
-            $product->productColors()->detach();
-            $product->productColors()->attach($colorIds);
-
-            $materialIds = $request->input('material_id', []);
-            $product->productMaterials()->detach();
-            $product->productMaterials()->attach($materialIds);
 
             return $product;
         }, 3);

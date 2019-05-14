@@ -23,7 +23,6 @@ class ProductCategoryRequest extends CoreRequest
     {
         return [
             'name' => 'required',
-            'image_feature' => 'required',
         ];
     }
 }

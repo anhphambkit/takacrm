@@ -23,7 +23,7 @@ class ManufacturerRequest extends CoreRequest
     {
         return [
             'name' => 'required',
-            'manufacturer_image' => 'required',
+//            'logo' => 'required',
         ];
     }
 }

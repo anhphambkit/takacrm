@@ -9,8 +9,10 @@ return [
     'image_placeholder'       => 'Insert path of image or click upload button',
     'create'                  => 'Create',
     'edit'                    => 'Edit',
+    'delete'                  => 'Delete',
     'permalink'               => 'Permalink',
     'parent_category'         => 'Parent Category',
+    'category'                => 'Category',
     'ok'                      => 'OK',
     'cancel'                  => 'Cancel',
     'character_remain'        => 'character(s) remain',
@@ -48,5 +50,5 @@ return [
     'show_hide_editor'        => 'Show/Hide Editor',
     'basic_info_title'        => 'Basic information',
     'code_placeholder'        => 'Code',
-    'code'                    => 'Code',
+    'code'        => 'Code',
 ];
