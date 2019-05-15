@@ -71,7 +71,6 @@ class CreateProductTable extends Migration
             $table->increments('id');
             $table->string('name', 120);
             $table->string('slug', 150);
-            $table->string('sku', 30);
             $table->text('image_feature');
             $table->string('short_description', 255)->nullable();
             $table->text('long_desc')->nullable();

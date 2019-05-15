@@ -60,4 +60,13 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @author AnhPham
+     */
+    public function updatedByUser()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

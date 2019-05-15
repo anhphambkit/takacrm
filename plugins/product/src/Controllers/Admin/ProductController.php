@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Plugins\Product\Models\ProductGallery;
 use Plugins\Product\Repositories\Interfaces\ManufacturerRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductCategoryRepositories;
+use Plugins\Product\Repositories\Interfaces\ProductOriginRepositories;
+use Plugins\Product\Repositories\Interfaces\ProductUnitRepositories;
 use Plugins\Product\Requests\ProductRequest;
 use Plugins\Product\Repositories\Interfaces\ProductRepositories;
 use Plugins\Product\DataTables\ProductDataTable;
@@ -33,17 +35,33 @@ class ProductController extends BaseAdminController
     protected $manufacturerRepositories;
 
     /**
+     * @var ProductUnitRepositories
+     */
+    protected $productUnitRepositories;
+
+    /**
+     * @var ProductOriginRepositories
+     */
+    protected $productOriginRepositories;
+
+    /**
      * ProductController constructor.
      * @param ProductRepositories $productRepository
      * @param ProductCategoryRepositories $productCategoryRepositories
      * @param ManufacturerRepositories $manufacturerRepositories
+     * @param ProductUnitRepositories $productUnitRepositories
+     * @param ProductOriginRepositories $productOriginRepositories
      */
     public function __construct(ProductRepositories $productRepository, ProductCategoryRepositories $productCategoryRepositories,
-                                ManufacturerRepositories $manufacturerRepositories)
+                                ManufacturerRepositories $manufacturerRepositories, ProductUnitRepositories $productUnitRepositories,
+                                ProductOriginRepositories $productOriginRepositories
+    )
     {
         $this->productRepository = $productRepository;
         $this->productCategoryRepositories = $productCategoryRepositories;
         $this->manufacturerRepositories = $manufacturerRepositories;
+        $this->productUnitRepositories = $productUnitRepositories;
+        $this->productOriginRepositories = $productOriginRepositories;
     }
 
     /**
@@ -68,14 +86,22 @@ class ProductController extends BaseAdminController
     public function getCreate()
     {
         $categories = $this->productCategoryRepositories->pluck('name', 'id');
+        $categories = [ 0 => "Please select a product category" ] + $categories;
 
         $manufacturer = $this->manufacturerRepositories->pluck('name', 'id');
+        $manufacturer = [ 0 => "Please select a manufacturer" ] + $manufacturer;
+
+        $units = $this->productUnitRepositories->pluck('name', 'id');
+        $units = [ 0 => "Please select a unit" ] + $units;
+
+        $origins = $this->productOriginRepositories->pluck('name', 'id');
+        $origins = [ 0 => "Please select a product origin" ] + $origins;
 
         page_title()->setTitle(trans('plugins-product::product.create'));
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.create', compact('categories', 'manufacturer'));
+        return view('plugins-product::product.create', compact('categories', 'manufacturer', 'units', 'origins'));
     }
 
     /**
@@ -90,12 +116,8 @@ class ProductController extends BaseAdminController
         $data = $request->input();
 
         $data['slug'] = str_slug($data['name']);
-        $data['is_best_seller'] = $request->input('is_best_seller', false);
-        $data['available_3d'] = $request->input('available_3d', false);
-        $data['has_assembly'] = $request->input('has_assembly', false);
-        $data['is_outdoor'] = $request->input('is_outdoor', false);
-        $data['sku'] = "{$data['manufacturer_id']}{$data['sku']}";
         $data['created_by'] = Auth::id();
+        $data['is_feature'] = (isset($data['is_feature']) ? $data['is_feature'] : false);
 
         $product = DB::transaction(function () use ($data, $request) {
             $product = $this->productRepository->createOrUpdate($data);
@@ -130,8 +152,16 @@ class ProductController extends BaseAdminController
     public function getEdit($id)
     {
         $categories = $this->productCategoryRepositories->pluck('name', 'id');
+        $categories = [ 0 => "Please select a product category" ] + $categories;
 
         $manufacturer = $this->manufacturerRepositories->pluck('name', 'id');
+        $manufacturer = [ 0 => "Please select a manufacturer" ] + $manufacturer;
+
+        $units = $this->productUnitRepositories->pluck('name', 'id');
+        $units = [ 0 => "Please select a unit" ] + $units;
+
+        $origins = $this->productOriginRepositories->pluck('name', 'id');
+        $origins = [ 0 => "Please select a product origin" ] + $origins;
 
         $product = $this->productRepository->findById($id);
 
@@ -148,7 +178,7 @@ class ProductController extends BaseAdminController
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries'));
+        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries', 'units', 'origins'));
     }
 
     /**
@@ -167,11 +197,7 @@ class ProductController extends BaseAdminController
         $data = $request->input();
 
         $data['slug'] = str_slug($data['name']);
-        $data['is_best_seller'] = $request->input('is_best_seller', false);
-        $data['available_3d'] = $request->input('available_3d', false);
-        $data['has_assembly'] = $request->input('has_assembly', false);
-        $data['is_outdoor'] = $request->input('is_outdoor', false);
-        $data['sku'] = "{$data['manufacturer_id']}{$data['sku']}{$id}";
+        $data['is_feature'] = (isset($data['is_feature']) ? $data['is_feature'] : false);
         $data['updated_by'] = Auth::id();
 
         $product = DB::transaction(function () use ($data, $product, $request) {
@@ -186,13 +212,8 @@ class ProductController extends BaseAdminController
             foreach ($galleries as $gallery) {
                 $product->galleries()->create([
                     'media' => $gallery,
-//                    'description' => $gallery->description,
                 ]);
             }
-
-            $categoryIds = $request->input('category_id', []);
-            $product->productCategories()->detach();
-            $product->productCategories()->attach($categoryIds);
 
             return $product;
         }, 3);
@@ -267,5 +288,8 @@ class ProductController extends BaseAdminController
         AssetPipeline::requireJs('switchery-js');
         AssetPipeline::requireJs('form-select2-js');
         AssetPipeline::requireJs('switch-js');
+
+        AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
+        AssetPipeline::requireCss('pretty-checkbox');
     }
 }
