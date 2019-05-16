@@ -121,6 +121,12 @@
 					                            	{!! Form::error('secondary_phone', $errors) !!}
 						                        </div>
 					                        </div>
+											<div class="row">
+												<div class="form-group col-md-6">
+													<label class="control-label required" for="role">Role</label>
+													{!! Form::select('role_id', $roles, $user->roles->first()->id, ['class' => 'form-control roles-list']) !!}
+												</div>
+											</div>
 										</div>
 										<div class="form-body">
 											<h4 class="form-section"><i class="la la-eye"></i> Social media</h4>

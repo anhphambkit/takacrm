@@ -255,4 +255,10 @@ class User extends Authenticatable
         $this->attributes['permissions'] = $permissions ? json_encode($permissions) : '';
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles() {
+        return $this->belongsToMany(Role::class, 'role_users', 'user_id', 'role_id');
+    }
 }

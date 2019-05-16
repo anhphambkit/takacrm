@@ -21,15 +21,16 @@ if (!function_exists('format_time')) {
 
 if (!function_exists('format_date_time')) {
     /**
-     * @param DateTime $datetime
+     * @param $datetime
      * @param string $timezone
      * @param string $format
-     * @return Carbon
+     * @param string $formatOutput
+     * @return string
      */
-    function format_date_time(DateTime $datetime, string $timezone = 'America/Eirunepe', string $format = 'Y-m-d H:i:s')
+    function format_date_time($datetime, string $timezone = 'Asia/Ho_Chi_Minh', string $format = 'Y-m-d H:i:s', string $formatOutput = "Y-m-d")
     {
         $serverTimezone = \Config::get('app.timezone');
-        return Carbon::createFromFormat($format, $datetime, $timezone)->setTimezone($serverTimezone);
+        return Carbon::createFromFormat($format, $datetime, $timezone)->setTimezone($serverTimezone)->format($formatOutput);
     }
 }
 

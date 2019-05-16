@@ -9,6 +9,7 @@ use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Plugins\Customer\Repositories\Interfaces\CustomerJobRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerQueryListRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRelationRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerSourceRepositories;
@@ -45,6 +46,11 @@ class CustomerController extends BaseAdminController
     protected $customerRelationRepositories;
 
     /**
+     * @var CustomerJobRepositories
+     */
+    protected $customerJobRepositories;
+
+    /**
      * @var AddressGeneralInfoService
      */
     protected $addressGeneralInfoService;
@@ -74,11 +80,12 @@ class CustomerController extends BaseAdminController
      * @param CustomerRelationRepositories $customerRelationRepositories
      * @param UserInterface $userRepository
      * @param CustomerQueryListRepositories $customerQueryListRepositories
+     * @param CustomerJobRepositories $customerJobRepositories
      */
     public function __construct(CustomerRepositories $customerRepository, AddressGeneralInfoService $addressGeneralInfoService,
                                 ReferenceServices $referenceServices, GroupCustomerRepositories $groupCustomerRepositories,
                                 CustomerSourceRepositories $customerSourceRepositories, CustomerRelationRepositories $customerRelationRepositories,
-                                UserInterface $userRepository, CustomerQueryListRepositories $customerQueryListRepositories)
+                                UserInterface $userRepository, CustomerQueryListRepositories $customerQueryListRepositories, CustomerJobRepositories $customerJobRepositories)
     {
         $this->customerRepository = $customerRepository;
         $this->addressGeneralInfoService = $addressGeneralInfoService;
@@ -87,6 +94,7 @@ class CustomerController extends BaseAdminController
         $this->customerSourceRepositories = $customerSourceRepositories;
         $this->customerRelationRepositories = $customerRelationRepositories;
         $this->customerQueryListRepositories = $customerQueryListRepositories;
+        $this->customerJobRepositories = $customerJobRepositories;
         $this->userRepository = $userRepository;
     }
 
@@ -144,6 +152,7 @@ class CustomerController extends BaseAdminController
 
         $introducePersonIds = [];
 
+        $customerJobs = $this->customerJobRepositories->pluck('name', 'id');
         $customerGroups = $this->groupCustomerRepositories->pluck('name', 'id');
         $customerSources = $this->customerSourceRepositories->pluck('name', 'id');
         $customerRelationships = $this->customerRelationRepositories->all();
@@ -151,7 +160,8 @@ class CustomerController extends BaseAdminController
 
         page_title()->setTitle(trans('plugins-customer::customer.create'));
         $this->addCreateEditAssets();
-        return view('plugins-customer::create', compact('provincesCities', 'genders', 'typeReferenceData', 'customerGroups', 'customerSources', 'customerRelationships', 'introducePersonIds', 'users'));
+        return view('plugins-customer::create', compact('provincesCities', 'genders', 'typeReferenceData', 'customerJobs',
+            'customerGroups', 'customerSources', 'customerRelationships', 'introducePersonIds', 'users'));
     }
 
     /**
@@ -231,6 +241,7 @@ class CustomerController extends BaseAdminController
 
         $introducePersonIds = [];
 
+        $customerJobs = $this->customerJobRepositories->pluck('name', 'id');
         $customerGroups = $this->groupCustomerRepositories->pluck('name', 'id');
         $customerSources = $this->customerSourceRepositories->pluck('name', 'id');
         $customerRelationshipIds = $this->customerRelationRepositories->all();
@@ -260,7 +271,8 @@ class CustomerController extends BaseAdminController
         return view('plugins-customer::edit', compact('customer', 'customerContacts', 'provincesCities',
                                                                     'genders', 'typeReferenceData', 'introducePersonIds',
                                                                     'customerRelationshipIds', 'customerGroups', 'customerSources',
-                                                                    'users', 'selectedCustomerJobs', 'selectedCustomerGroups', 'selectedCustomerSources')
+                                                                    'users', 'selectedCustomerJobs', 'selectedCustomerGroups',
+                                                                    'selectedCustomerSources', 'customerJobs')
         );
     }
 

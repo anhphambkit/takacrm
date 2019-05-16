@@ -19,6 +19,7 @@ return [
         'manufacturer' => 'Manufacturer',
         'units' => 'Unit',
         'origins' => 'Origins',
+        'category' => 'Category',
         'online_price' => 'Online Price',
         'purchase_price' => 'Purchase Price',
         'retail_price' => 'Retail Price',

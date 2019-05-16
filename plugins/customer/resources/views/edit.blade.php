@@ -104,7 +104,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-2 @if ($errors->has('customer_job_id')) has-error @endif">
                                         <label class="control-label required" for="select-job_id-list">{{ trans('plugins-customer::customer.form.jobs') }}</label>
-                                        {!! Form::select('customer_job_id[]', $customerGroups, $selectedCustomerJobs, ['class' => 'select2-placeholder-multiple form-control job_id-list', "id" => "select-job_id-list", "multiple" => "multiple" ]) !!}
+                                        {!! Form::select('customer_job_id[]', $customerJobs, $selectedCustomerJobs, ['class' => 'select2-placeholder-multiple form-control job_id-list', "id" => "select-job_id-list", "multiple" => "multiple" ]) !!}
                                         {!! Form::error('customer_job_id', $errors) !!}
                                     </div>
                                 </div>

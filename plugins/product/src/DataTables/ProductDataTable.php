@@ -26,6 +26,31 @@ class ProductDataTable extends DataTableAbstract
             ->editColumn('created_by', function ($item) {
                 return $item->createdByUser ? $item->createdByUser->getFullName() : null;
             })
+            ->editColumn('category', function ($item) {
+                return $item->productCategory
+                    ? $item->productCategory->name
+                    : null;
+            })
+            ->editColumn('manufacturer', function ($item) {
+                return $item->productManufacturer
+                    ? $item->productManufacturer->name
+                    : null;
+            })
+            ->editColumn('unit', function ($item) {
+                return $item->productUnit
+                    ? $item->productUnit->name
+                    : null;
+            })
+            ->editColumn('origin', function ($item) {
+                return $item->productOrigin
+                    ? $item->productOrigin->name
+                    : null;
+            })
+            ->editColumn('feature', function ($item) {
+                return $item->is_feature
+                    ? 'On'
+                    : 'Off';
+            })
             ->editColumn('status', function ($item) {
                 return table_status($item->status);
             });
@@ -55,6 +80,20 @@ class ProductDataTable extends DataTableAbstract
            'products.image_feature',
            'products.name',
            'products.sku',
+           'products.manufacturer_id',
+           'products.unit_id',
+           'products.origin_id',
+           'products.category_id',
+           'products.retail_price',
+           'products.wholesale_price',
+           'products.online_price',
+           'products.purchase_price',
+           'products.discount',
+           'products.wholesale_discount',
+           'products.purchase_discount',
+           'products.online_discount',
+           'products.vat',
+           'products.is_feature',
            'products.created_by',
            'products.created_at',
            'products.status'
@@ -95,6 +134,90 @@ class ProductDataTable extends DataTableAbstract
                 'name' => 'products.sku',
                 'title' => trans('plugins-product::product.form.sku'),
                 'footer' => trans('plugins-product::product.form.sku'),
+                'class' => 'text-left searchable',
+            ],
+            'category' => [
+                'name' => 'products.category_id',
+                'title' => trans('plugins-product::product.form.category'),
+                'footer' => trans('plugins-product::product.form.category'),
+                'class' => 'text-left searchable',
+            ],
+            'manufacturer' => [
+                'name' => 'products.manufacturer_id',
+                'title' => trans('plugins-product::product.form.manufacturer'),
+                'footer' => trans('plugins-product::product.form.manufacturer'),
+                'class' => 'text-left searchable',
+            ],
+            'unit' => [
+                'name' => 'products.unit_id',
+                'title' => trans('plugins-product::product.form.units'),
+                'footer' => trans('plugins-product::product.form.units'),
+                'class' => 'text-left searchable',
+            ],
+            'origin' => [
+                'name' => 'products.origin_id',
+                'title' => trans('plugins-product::product.form.origins'),
+                'footer' => trans('plugins-product::product.form.origins'),
+                'class' => 'text-left searchable',
+            ],
+            'retail_price' => [
+                'name' => 'products.retail_price',
+                'title' => trans('plugins-product::product.form.retail_price'),
+                'footer' => trans('plugins-product::product.form.retail_price'),
+                'class' => 'text-left searchable',
+            ],
+            'wholesale_price' => [
+                'name' => 'products.sku',
+                'title' => trans('plugins-product::product.form.wholesale_price'),
+                'footer' => trans('plugins-product::product.form.wholesale_price'),
+                'class' => 'text-left searchable',
+            ],
+            'online_price' => [
+                'name' => 'products.online_price',
+                'title' => trans('plugins-product::product.form.online_price'),
+                'footer' => trans('plugins-product::product.form.online_price'),
+                'class' => 'text-left searchable',
+            ],
+            'purchase_price' => [
+                'name' => 'products.purchase_price',
+                'title' => trans('plugins-product::product.form.purchase_price'),
+                'footer' => trans('plugins-product::product.form.purchase_price'),
+                'class' => 'text-left searchable',
+            ],
+            'discount' => [
+                'name' => 'products.discount',
+                'title' => trans('plugins-product::product.form.discount'),
+                'footer' => trans('plugins-product::product.form.discount'),
+                'class' => 'text-left searchable',
+            ],
+            'wholesale_discount' => [
+                'name' => 'products.wholesale_discount',
+                'title' => trans('plugins-product::product.form.wholesale_discount'),
+                'footer' => trans('plugins-product::product.form.wholesale_discount'),
+                'class' => 'text-left searchable',
+            ],
+            'purchase_discount' => [
+                'name' => 'products.purchase_discount',
+                'title' => trans('plugins-product::product.form.purchase_discount'),
+                'footer' => trans('plugins-product::product.form.purchase_discount'),
+                'class' => 'text-left searchable',
+            ],
+            'online_discount' => [
+                'name' => 'products.online_discount',
+                'title' => trans('plugins-product::product.form.online_discount'),
+                'footer' => trans('plugins-product::product.form.online_discount'),
+                'class' => 'text-left searchable',
+            ],
+            'vat' => [
+                'name' => 'products.vat',
+                'title' => trans('plugins-product::product.form.vat'),
+                'footer' => trans('plugins-product::product.form.vat'),
+                'class' => 'text-left searchable',
+            ],
+            'feature' => [
+                'name' => 'products.is_feature',
+                'title' => trans('plugins-product::product.form.is_feature'),
+                'footer' => trans('plugins-product::product.form.is_feature'),
                 'class' => 'text-left searchable',
             ],
             'created_by' => [

@@ -45,6 +45,42 @@ class Product extends Model
     ];
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @author AnhPham
+     */
+    public function productCategory()
+    {
+        return $this->belongsTo(ProductCategory::class, 'category_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @author AnhPham
+     */
+    public function productManufacturer()
+    {
+        return $this->belongsTo(ProductManufacturer::class, 'manufacturer_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @author AnhPham
+     */
+    public function productUnit()
+    {
+        return $this->belongsTo(ProductUnit::class, 'unit_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @author AnhPham
+     */
+    public function productOrigin()
+    {
+        return $this->belongsTo(ProductOrigin::class, 'origin_id');
+    }
+
+    /**
      * Get the gallery for the product.
      */
     public function galleries()

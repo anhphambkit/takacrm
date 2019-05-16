@@ -21,11 +21,10 @@ manageConsumer.options = {
     fixedColumns: {
         leftColumns: 3
     },
-    fixedHeader: {
-        header: true,
-        headerOffset: $('.header-navbar').outerHeight(),
-        footer: true,
-    },
+    // fixedHeader: {
+    //     header: true,
+    //     headerOffset: $('.header-navbar.navbar-fixed').outerHeight(),
+    // },
     dom: 'lBfrtipF',
     buttons: [ 'print', 'csv', 'excel' ],
     rowCallback: function (row, data, index) {

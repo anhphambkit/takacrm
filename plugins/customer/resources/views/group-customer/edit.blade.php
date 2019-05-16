@@ -38,13 +38,13 @@
                                         {!! Form::error('order', $errors) !!}
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-12 mb-2 @if ($errors->has('description')) has-error @endif">
-                                        <label for="name">{{ trans('core-base::forms.description') }}</label>
-                                        {!! render_editor('description', $customerGroup->description, true) !!}
-                                        {!! Form::error('description', $errors) !!}
-                                    </div>
-                                </div>
+                                {{--<div class="row">--}}
+                                    {{--<div class="form-group col-md-12 mb-2 @if ($errors->has('description')) has-error @endif">--}}
+                                        {{--<label for="name">{{ trans('core-base::forms.description') }}</label>--}}
+                                        {{--{!! render_editor('description', $customerGroup->description, true) !!}--}}
+                                        {{--{!! Form::error('description', $errors) !!}--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
                             </div>
                         </div>
                     </div>

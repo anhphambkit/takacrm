@@ -102,8 +102,10 @@ class UserController extends BaseAdminController{
         if(!$user)
             return redirect()->route('admin.user.index')
                 ->with('error_msg', trans('core-user::users.not_found'));
-            
-        return view('core-user::admin.user.profile')
+
+        $roles = $this->roleRepository->pluck('name', 'id');
+
+        return view('core-user::admin.user.profile', compact('roles'))
             ->with('user', $user);
     }
 
@@ -149,6 +151,8 @@ class UserController extends BaseAdminController{
         $user->fill($request->input());
         $user->completed_profile = 1;
         $this->userRepository->createOrUpdate($user);
+        $user->roles()->sync([$request->role_id]);
+
         do_action(USER_ACTION_AFTER_UPDATE_PROFILE, USER_MODULE_SCREEN_NAME, $request, $user);
 
         return redirect()->route('admin.user.profile', [$id])
