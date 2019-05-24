@@ -10,6 +10,7 @@ use Plugins\Product\Repositories\Eloquent\EloquentLookBookRepositories;
 use Plugins\Product\Repositories\Eloquent\EloquentProductCategoryRepositories;
 use Plugins\Product\Repositories\Eloquent\EloquentProductSpaceRepositories;
 use Plugins\Product\Repositories\Interfaces\LookBookRepositories;
+use Plugins\Product\Repositories\Interfaces\PaymentMethodRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductCategoryRepositories;
 use Plugins\Product\Repositories\Caches\CacheManufacturerRepositories;
 use Plugins\Product\Repositories\Caches\CacheBusinessTypeRepositories;
@@ -89,6 +90,7 @@ class ProductServiceProvider extends ServiceProvider
             ProductCategoryRepositories::class   => \Plugins\Product\Models\ProductCategory::class,
             ProductUnitRepositories::class   => \Plugins\Product\Models\ProductUnit::class,
             ProductOriginRepositories::class   => \Plugins\Product\Models\ProductOrigin::class,
+            PaymentMethodRepositories::class => \Plugins\Product\Models\PaymentMethod::class,
         ];
     }
 

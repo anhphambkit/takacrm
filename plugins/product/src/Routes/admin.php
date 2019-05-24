@@ -182,6 +182,41 @@ $router->group(['prefix' => 'product'], function (Router $router) {
 
     });
 
+
+
+    $router->group(['prefix' => 'payment'], function (Router $router) {
+
+        $router->get('/', [
+            'as' => 'admin.payment.method.list',
+            'uses' => 'PaymentMethodController@getList',
+        ]);
+
+        $router->get('/create', [
+            'as' => 'admin.payment.method.create',
+            'uses' => 'PaymentMethodController@getCreate',
+        ]);
+
+        $router->post('/create', [
+            'as' => 'admin.payment.method.create',
+            'uses' => 'PaymentMethodController@postCreate',
+        ]);
+
+        $router->get('/edit/{id}', [
+            'as' => 'admin.payment.method.edit',
+            'uses' => 'PaymentMethodController@getEdit',
+        ]);
+
+        $router->post('/edit/{id}', [
+            'as' => 'admin.payment.method.edit',
+            'uses' => 'PaymentMethodController@postEdit',
+        ]);
+
+        $router->get('/delete/{id}', [
+            'as' => 'admin.payment.method.delete',
+            'uses' => 'PaymentMethodController@getDelete',
+        ]);
+
+    });
+
 });
 
-	

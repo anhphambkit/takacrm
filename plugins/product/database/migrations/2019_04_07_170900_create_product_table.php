@@ -17,7 +17,7 @@ class CreateProductTable extends Migration
         // manufacturer Table:
         Schema::create('product_manufacturers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 120)->unique();
+            $table->string('name', 120);
             $table->string('slug', 150)->unique();
             $table->text('logo')->nullable();
             $table->text('description')->nullable();

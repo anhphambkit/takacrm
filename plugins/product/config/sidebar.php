@@ -55,4 +55,13 @@ return [
         'url'         => 'admin.product.origin.list',
         'permissions' => ['product_origins.list']
     ],
+    [
+        'id'          => 'menu-product-payment',
+        'priority'    => 3,
+        'parent_id'   => 'menu-product-administrator',
+        'name'        => 'plugins-product::sidebar.payment',
+        'icon'        => 'fas fa-users-cog',
+        'url'         => 'admin.payment.method.list',
+        'permissions' => ['product_payment_method.list']
+    ]
 ];
