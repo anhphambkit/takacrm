@@ -53,7 +53,8 @@
             "Plugins\\Product\\": "plugins/product/src",
             "Plugins\\Blog\\": "plugins/blog/src",
             "Plugins\\Addresscode\\": "plugins/addresscode/src",
-            "Plugins\\Address\\": "plugins/address/src"
+            "Plugins\\Address\\": "plugins/address/src",
+            "Plugins\\Order\\": "plugins/order/src"
         },
         "files": [
             "helpers.php"
