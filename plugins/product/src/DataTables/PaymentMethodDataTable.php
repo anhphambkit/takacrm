@@ -48,7 +48,7 @@ class PaymentMethodDataTable extends DataTableAbstract
      * Get the query object to be processed by datatables.
      *
      * @return \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
-     * @author AnhPham
+     * @author Tu Nguyen
      */
     public function query()
     {
@@ -96,7 +96,7 @@ class PaymentMethodDataTable extends DataTableAbstract
                 'class' => 'text-left searchable',
             ],
             'created_by' => [
-                'name' => 'Tu Nguyen',
+                'name' => 'payment_method.created_by',
                 'title' => trans('core-base::tables.created_by'),
                 'footer' => trans('core-base::tables.created_by'),
                 'class' => 'text-left searchable',
