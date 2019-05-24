@@ -69,10 +69,10 @@ abstract class DataTableAbstract extends YajraTable
                     var column = this;
                 
                     index++;
-                    $(document.createElement("th")).appendTo($(tr));
+                    $(document.createElement("th")).appendTo($(tr)).addClass("text-center");
                     if (index == totalLength) {
                         var searchBtn = document.createElement("a");
-                        $(searchBtn).addClass("btn btn-info btn-sm btn-search-table tip").attr("data-original-title", "Search").appendTo($(tr).find("th:nth-child(" + index + ")")).html("<i class=\'fa fa-search\'></i>");
+                        $(searchBtn).addClass("btn btn-info btn-sm btn-search-table tip").attr("data-original-title", "Search").appendTo($(tr).find("th:nth-child(" + index + ")")).html("<i class=\'fa fa-search\'></i>").css("margin-right","5px");
                         var clearBtn = document.createElement("a");
                         $(clearBtn).addClass("btn btn-warning btn-sm btn-reset-table tip").attr("data-original-title", "Clear search").appendTo($(tr).find("th:nth-child(" + index + ")")).html("<i class=\'fa fa-times\'></i>");
                     } else if ($(column.footer()).hasClass("searchable")) {

@@ -12,6 +12,7 @@ use Core\Base\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Plugins\Product\DataTables\PaymentMethodDataTable;
+use Plugins\Product\Models\PaymentMethod;
 use Plugins\Product\Repositories\Interfaces\PaymentMethodRepositories;
 use Plugins\Product\Requests\PaymentMethodRequest;
 
@@ -33,33 +34,33 @@ class PaymentMethodController extends BaseAdminController
     }
 
     /**
-     * Display all unit
-     * @param ProductUnitDataTable $dataTable
+     * Display all payment
+     * @param ProductPaymentMethodDataTable $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @author AnhPham
      */
     public function getList(PaymentMethodDataTable $dataTable)
     {
 
-        page_title()->setTitle(trans('plugins-product::unit.list'));
+        page_title()->setTitle(trans('plugins-product::payment.list'));
 
-        return $dataTable->renderTable(['title' => trans('plugins-product::unit.list')]);
+        return $dataTable->renderTable(['title' => trans('plugins-product::payment.list')]);
     }
 
     /**
      * Show create form
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @author AnhPham
+     * @author Tu Nguyen
      */
     public function getCreate()
     {
-        page_title()->setTitle(trans('plugins-product::unit.create'));
+        page_title()->setTitle(trans('plugins-product::payment.create'));
 
         return view('plugins-product::payment.create');
     }
 
     /**
-     * @param ProductUnitRequest $request
+     * @param PaymentMethodRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postCreate(PaymentMethodRequest $request)
@@ -84,7 +85,7 @@ class PaymentMethodController extends BaseAdminController
      *
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @author AnhPham
+     * @author Tu Nguyen
      */
     public function getEdit($id)
     {
@@ -93,14 +94,14 @@ class PaymentMethodController extends BaseAdminController
             abort(404);
         }
 
-        page_title()->setTitle(trans('plugins-product::unit.edit') . ' #' . $id);
+        page_title()->setTitle(trans('plugins-product::payment.edit') . ' #' . $id);
 
         return view('plugins-product::payment.edit', compact('paymentMethod'));
     }
 
     /**
      * @param $id
-     * @param ProductUnitRequest $request
+     * @param PaymentMethodRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postEdit($id, PaymentMethodRequest $request)
@@ -137,7 +138,7 @@ class PaymentMethodController extends BaseAdminController
     {
         try {
             $paymentMethod = $this->paymentMethodRepository->findById($id);
-            if (empty($productUnit)) {
+            if (empty($paymentMethod)) {
                 abort(404);
             }
             $this->paymentMethodRepository->delete($paymentMethod);

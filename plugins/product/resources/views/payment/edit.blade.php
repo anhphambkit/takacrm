@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('content')
-    {!! Form::open(['route' => ['admin.product.unit.edit', $paymentMethod->id]]) !!}
+    {!! Form::open(['route' => ['admin.payment.method.edit', $paymentMethod->id]]) !!}
         @php do_action(BASE_FILTER_BEFORE_RENDER_FORM, PRODUCT_MODULE_SCREEN_NAME, request(), $paymentMethod) @endphp
         <div class="row">
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" id="from-actions-bottom-right">{{ trans('plugins-product::unit.edit') }}</h4>
+                        <h4 class="card-title" id="from-actions-bottom-right">{{ trans('plugins-product::payment.edit') }}</h4>
                         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -28,8 +28,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-2 @if ($errors->has('description')) has-error @endif">
-                                        <label for="name">{{ trans('plugins-product::unit.form.description') }}</label>
-                                        {!! Form::textarea('description', (!empty(old('description')) ? old('description') : $paymentMethod->description), ['class' => 'form-control description-unit', 'id' => 'description-unit']) !!}
+                                        <label for="name">{{ trans('plugins-product::payment.form.description') }}</label>
+                                        {!! Form::textarea('description', (!empty(old('description')) ? old('description') : $paymentMethod->description), ['class' => 'form-control description-payment', 'id' => 'description-payment']) !!}
                                         {!! Form::error('description', $errors) !!}
                                     </div>
                                 </div>

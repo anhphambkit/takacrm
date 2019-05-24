@@ -60,7 +60,7 @@ return [
         'priority'    => 3,
         'parent_id'   => 'menu-product-administrator',
         'name'        => 'plugins-product::sidebar.payment',
-        'icon'        => 'fas fa-users-cog',
+        'icon'        => 'fas fa-money-check',
         'url'         => 'admin.payment.method.list',
         'permissions' => ['product_payment_method.list']
     ]

@@ -72,10 +72,10 @@ class DashboardMenu
             throw new RuntimeException('Menu id not specified: ' . $calledClass);
         }
 
-        if (isset($this->links[$id])) {
-            $calledClass = isset(debug_backtrace()[1]) ? debug_backtrace()[1]['class'] . '@' . debug_backtrace()[1]['function'] : null;
-            throw new RuntimeException('Menu id already exists: ' . $id . ' on class ' . $calledClass);
-        }
+//        if (isset($this->links[$id])) {
+//            $calledClass = isset(debug_backtrace()[1]) ? debug_backtrace()[1]['class'] . '@' . debug_backtrace()[1]['function'] : null;
+//            throw new RuntimeException('Menu id already exists: ' . $id . ' on class ' . $calledClass);
+//        }
 
         $this->links[$id] = $options;
 
