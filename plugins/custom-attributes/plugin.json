@@ -1,0 +1,10 @@
+{
+    "name": "CustomAttributes",
+    "provider": "Plugins\\CustomAttributes\\Providers\\CustomAttributesServiceProvider",
+    "plugin": "Plugins\\CustomAttributes\\Plugin",
+    "author": "Trinh Le",
+    "version": "1.0",
+    "description": "CustomAttributes",
+    "namespace": "Plugins\\CustomAttributes\\",
+    "src": "plugins/custom-attributes/src"
+}

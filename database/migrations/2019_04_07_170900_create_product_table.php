@@ -17,14 +17,13 @@ class CreateProductTable extends Migration
         // manufacturer Table:
         Schema::create('product_manufacturers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 120)->unique();
+            $table->string('name', 120);
             $table->string('slug', 150)->unique();
             $table->text('logo')->nullable();
             $table->text('description')->nullable();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->boolean('status')->unsigned()->default(1);
-            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -37,7 +36,6 @@ class CreateProductTable extends Migration
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->boolean('status')->unsigned()->default(1);
-            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -51,7 +49,6 @@ class CreateProductTable extends Migration
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->boolean('status')->unsigned()->default(1);
-            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -74,7 +71,6 @@ class CreateProductTable extends Migration
             $table->increments('id');
             $table->string('name', 120);
             $table->string('slug', 150);
-            $table->string('upc', 150)->unique();
             $table->string('sku', 30);
             $table->text('image_feature');
             $table->string('short_description', 255)->nullable();
@@ -98,7 +94,6 @@ class CreateProductTable extends Migration
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->boolean('status')->unsigned()->default(1)->comment('true: Published, false: Draft');
-            $table->softDeletes();
             $table->timestamps();
         });
 
