@@ -32,7 +32,7 @@ return [
 		'priority'    => 3,
 		'parent_id'   => 'cms-core-administrator',
 		'name'        => 'core-user::sidebar.super-user',
-		'icon'        => 'fas fa-cogs',
+		'icon'        => 'fas fa-user-shield',
 		'url'         => 'admin.super-user.index',
 		'permissions' => ['superuser']
     ]

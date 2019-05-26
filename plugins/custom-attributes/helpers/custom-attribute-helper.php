@@ -21,7 +21,7 @@ if (!function_exists('table_attribute_actions')) {
     }
 }
 
-if (!function_exists('table_attribute_value_actions')) {
+if (!function_exists('table_custom_attribute_actions')) {
     /**
      * @param $edit
      * @param $delete
@@ -29,8 +29,8 @@ if (!function_exists('table_attribute_value_actions')) {
      * @return string
      * @throws Throwable
      */
-    function table_attribute_value_actions($edit, $delete, $item)
+    function table_custom_attribute_actions($edit, $delete, $item)
     {
-        return view('plugins-custom-attributes::tables.attribute-value-actions', compact('edit', 'delete', 'item'))->render();
+        return view('plugins-custom-attributes::tables.custom-attribute-actions', compact('edit', 'delete', 'item'))->render();
     }
 }

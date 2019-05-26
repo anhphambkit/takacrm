@@ -23,4 +23,17 @@ interface CustomAttributeServices
      * @return array
      */
     public function getAttributesValueByAttributeIdAndTypeValue(int $attributeId, string $typeValue);
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function createOrUpdateCustomAttribute($data);
+
+    /**
+     * @param $data
+     * @param bool $isModeCreate
+     * @return mixed
+     */
+    public function prepareDataForCreateOrUpdateCustomAttribute($data, $isModeCreate = true);
 }

@@ -7,4 +7,11 @@ use Plugins\CustomAttributes\Repositories\Interfaces\CustomAttributesRepositorie
 
 class EloquentCustomAttributesRepositories extends RepositoriesAbstract implements CustomAttributesRepositories
 {
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function createOrUpdateCustomAttribute(array $data) {
+        return $this->createOrUpdate($data);
+    }
 }

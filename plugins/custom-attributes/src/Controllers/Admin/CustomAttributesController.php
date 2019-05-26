@@ -18,13 +18,14 @@ use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
 use Plugins\CustomAttributes\DataTables\CustomAttributesDataTable;
 use Plugins\CustomAttributes\Repositories\Interfaces\CustomAttributesRepositories;
 use Plugins\CustomAttributes\Requests\CustomAttributesRequest;
+use Plugins\CustomAttributes\Services\CustomAttributeServices;
 
 class CustomAttributesController extends BaseAdminController
 {
     /**
      * @var CustomAttributesRepositories
      */
-    protected $productColorRepository;
+    protected $customAttributesRepositories;
 
     /**
      * @var ReferenceServices
@@ -32,14 +33,21 @@ class CustomAttributesController extends BaseAdminController
     protected $referenceServices;
 
     /**
-     * CustomAttributesController constructor.
-     * @param CustomAttributesRepositories $productColorRepository
-     * @param ReferenceServices $referenceServices
+     * @var CustomAttributeServices
      */
-    public function __construct(CustomAttributesRepositories $productColorRepository, ReferenceServices $referenceServices)
+    protected $customAttributeServices;
+
+    /**
+     * CustomAttributesController constructor.
+     * @param CustomAttributesRepositories $customAttributesRepositories
+     * @param ReferenceServices $referenceServices
+     * @param CustomAttributeServices $customAttributeServices
+     */
+    public function __construct(CustomAttributesRepositories $customAttributesRepositories, ReferenceServices $referenceServices, CustomAttributeServices $customAttributeServices)
     {
-        $this->productColorRepository = $productColorRepository;
+        $this->customAttributesRepositories = $customAttributesRepositories;
         $this->referenceServices = $referenceServices;
+        $this->customAttributeServices = $customAttributeServices;
         parent::__construct();
     }
 
@@ -54,6 +62,18 @@ class CustomAttributesController extends BaseAdminController
         page_title()->setTitle(trans('plugins-custom-attributes::custom-attributes.list'));
         $this->addManageAssets();
         return $dataTable->renderTable(['title' => trans('plugins-custom-attributes::custom-attributes.list')]);
+    }
+
+    /**
+     * @param $typeEntity
+     * @param CustomAttributesDataTable $dataTable
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function getListByEntity($typeEntity, CustomAttributesDataTable $dataTable)
+    {
+        page_title()->setTitle(trans('plugins-custom-attributes::custom-attributes.list'));
+        $this->addManageAssets();
+        return $dataTable->with('typeEntity', $typeEntity)->renderTable(['title' => trans('plugins-custom-attributes::custom-attributes.list')]);
     }
 
     /**
@@ -77,25 +97,56 @@ class CustomAttributesController extends BaseAdminController
     }
 
     /**
+     * @param $typeEntity
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getCreateByEntity($typeEntity)
+    {
+        $typeEntities = $this->referenceServices->getReferenceFromAttributeType(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY, ucfirst($typeEntity))
+            ->pluck('value', 'slug')
+            ->toArray();
+
+        $typeRenders = $this->referenceServices->getReferenceFromAttributeType(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER)
+            ->pluck('value', 'slug')
+            ->toArray();
+
+        page_title()->setTitle(trans('plugins-custom-attributes::custom-attributes.create'));
+        $this->addDetailAssets();
+        return view("plugins-{$typeEntity}::custom-attributes.create", compact('typeEntity', 'typeEntities', 'typeRenders'));
+    }
+
+    /**
      * @param CustomAttributesRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postCreate(CustomAttributesRequest $request)
     {
-        $data = $request->all();
+        $customAttribute = $this->customAttributeServices->createOrUpdateCustomAttribute($request->all());
 
-        $data['slug'] = str_slug($data['name']);
-        $data['created_by'] = Auth::id();
-        $data['type_value'] = str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_STRING, '_');
-
-        $color = $this->productColorRepository->createOrUpdate($data);
-
-        do_action(BASE_ACTION_AFTER_CREATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $color);
+        do_action(BASE_ACTION_AFTER_CREATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $customAttribute);
 
         if ($request->input('submit') === 'save') {
             return redirect()->route('admin.custom-attributes.list')->with('success_msg', trans('core-base::notices.create_success_message'));
         } else {
-            return redirect()->route('admin.custom-attributes.edit', $color->id)->with('success_msg', trans('core-base::notices.create_success_message'));
+            return redirect()->route('admin.custom-attributes.edit', $customAttribute->id)->with('success_msg', trans('core-base::notices.create_success_message'));
+        }
+    }
+
+    /**
+     * @param $typeEntity
+     * @param CustomAttributesRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postCreateByEntity($typeEntity, CustomAttributesRequest $request)
+    {
+        $customAttribute = $this->customAttributeServices->createOrUpdateCustomAttribute($request->all());
+
+        do_action(BASE_ACTION_AFTER_CREATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $customAttribute);
+
+        if ($request->input('submit') === 'save') {
+            return redirect()->route('admin.custom-attributes.entity.list', [ 'typeEntity' => $typeEntity ])->with('success_msg', trans('core-base::notices.create_success_message'));
+        } else {
+            return redirect()->route('admin.custom-attributes.entity.edit', [ 'typeEntity' => $typeEntity, 'id' => $customAttribute->id ])->with('success_msg', trans('core-base::notices.create_success_message'));
         }
     }
 
@@ -108,13 +159,45 @@ class CustomAttributesController extends BaseAdminController
      */
     public function getEdit($id)
     {
-        $color = $this->productColorRepository->findById($id);
-        if (empty($color)) {
+        $customAttribute = $this->customAttributesRepositories->findById($id);
+        if (empty($customAttribute)) {
             abort(404);
         }
+        $typeEntities = $this->referenceServices->getReferenceFromAttributeType(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY)
+            ->pluck('value', 'slug')
+            ->toArray();
+
+        $typeRenders = $this->referenceServices->getReferenceFromAttributeType(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER)
+            ->pluck('value', 'slug')
+            ->toArray();
+
         page_title()->setTitle(trans('plugins-custom-attributes::custom-attributes.edit') . ' #' . $id);
         $this->addDetailAssets();
-        return view('plugins-custom-attributes::custom-attributes.edit', compact('color'));
+        return view('plugins-custom-attributes::edit', compact('customAttribute', 'typeEntities', 'typeRenders'));
+    }
+
+    /**
+     * @param $typeEntity
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getEditByEntity($typeEntity, $id)
+    {
+        $customAttribute = $this->customAttributesRepositories->findById($id);
+        if (empty($customAttribute)) {
+            abort(404);
+        }
+        $typeEntities = $this->referenceServices->getReferenceFromAttributeType(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY, ucfirst($typeEntity))
+            ->pluck('value', 'slug')
+            ->toArray();
+
+        $typeRenders = $this->referenceServices->getReferenceFromAttributeType(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER)
+            ->pluck('value', 'slug')
+            ->toArray();
+
+        page_title()->setTitle(trans('plugins-custom-attributes::custom-attributes.edit') . ' #' . $id);
+        $this->addDetailAssets();
+        return view("plugins-{$typeEntity}::custom-attributes.edit", compact('typeEntity','customAttribute', 'typeEntities', 'typeRenders'));
     }
 
     /**
@@ -124,20 +207,51 @@ class CustomAttributesController extends BaseAdminController
      */
     public function postEdit($id, CustomAttributesRequest $request)
     {
-        $color = $this->productColorRepository->findById($id);
-        if (empty($color)) {
+        $customAttribute = $this->customAttributesRepositories->findById($id);
+        if (empty($customAttribute)) {
             abort(404);
         }
-        $color->fill(array($request->input(), ['updated_by' => Auth::id()]));
 
-        $this->productColorRepository->createOrUpdate($color);
+        $dataUpdate = $this->customAttributeServices->prepareDataForCreateOrUpdateCustomAttribute($request->input(), false);
 
-        do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $color);
+        $customAttribute->fill($dataUpdate);
+
+        $this->customAttributesRepositories->createOrUpdate($customAttribute);
+
+        do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $customAttribute);
 
         if ($request->input('submit') === 'save') {
             return redirect()->route('admin.custom-attributes.list')->with('success_msg', trans('core-base::notices.update_success_message'));
         } else {
             return redirect()->route('admin.custom-attributes.edit', $id)->with('success_msg', trans('core-base::notices.update_success_message'));
+        }
+    }
+
+    /**
+     * @param $typeEntity
+     * @param $id
+     * @param CustomAttributesRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postEditByEntity($typeEntity, $id, CustomAttributesRequest $request)
+    {
+        $customAttribute = $this->customAttributesRepositories->findById($id);
+        if (empty($customAttribute)) {
+            abort(404);
+        }
+
+        $dataUpdate = $this->customAttributeServices->prepareDataForCreateOrUpdateCustomAttribute($request->input(), false);
+
+        $customAttribute->fill($dataUpdate);
+
+        $this->customAttributesRepositories->createOrUpdate($customAttribute);
+
+        do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $customAttribute);
+
+        if ($request->input('submit') === 'save') {
+            return redirect()->route('admin.custom-attributes.entity.list', [ 'typeEntity' => $typeEntity ])->with('success_msg', trans('core-base::notices.update_success_message'));
+        } else {
+            return redirect()->route('admin.custom-attributes.entity.edit', [ 'typeEntity' => $typeEntity, 'id' => $id ])->with('success_msg', trans('core-base::notices.update_success_message'));
         }
     }
 
@@ -150,13 +264,13 @@ class CustomAttributesController extends BaseAdminController
     public function getDelete(Request $request, $id)
     {
         try {
-            $color = $this->productColorRepository->findById($id);
-            if (empty($color)) {
+            $customAttribute = $this->customAttributesRepositories->findById($id);
+            if (empty($customAttribute)) {
                 abort(404);
             }
-            $this->productColorRepository->delete($color);
+            $this->customAttributesRepositories->delete($customAttribute);
 
-            do_action(BASE_ACTION_AFTER_DELETE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $color);
+            do_action(BASE_ACTION_AFTER_DELETE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $customAttribute);
 
             return [
                 'error' => false,

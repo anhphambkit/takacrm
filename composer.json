@@ -54,7 +54,8 @@
             "Plugins\\Blog\\": "plugins/blog/src",
             "Plugins\\Addresscode\\": "plugins/addresscode/src",
             "Plugins\\Address\\": "plugins/address/src",
-            "Plugins\\Order\\": "plugins/order/src"
+            "Plugins\\Order\\": "plugins/order/src",
+            "Plugins\\CustomAttributes\\": "plugins/custom-attributes/src"
         },
         "files": [
             "helpers.php"

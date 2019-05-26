@@ -45,7 +45,7 @@ class CustomAttributesServiceProvider extends ServiceProvider
     {
         return [
             CustomAttributesRepositories::class  => \Plugins\CustomAttributes\Models\CustomAttributes::class,
-            AttributeValueStringRepositories::class  => \Plugins\CustomAttributes\Models\AttributeValueString::class,
+            AttributeValueStringRepositories::class  => \Plugins\CustomAttributes\Models\CustomAttributeValueString::class,
         ];
     }
 

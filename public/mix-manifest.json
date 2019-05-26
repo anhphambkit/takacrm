@@ -1,9 +1,3 @@
 {
-    "/backend/plugins/customer/assets/js/customer-list.js": "/backend/plugins/customer/assets/js/customer-list.js",
-    "/backend/plugins/customer/assets/css/customer-color.css": "/backend/plugins/customer/assets/css/customer-color.css",
-    "/backend/plugins/customer/assets/css/customer.css": "/backend/plugins/customer/assets/css/customer.css",
-    "/backend/plugins/customer/assets/css/detail-customer.css": "/backend/plugins/customer/assets/css/detail-customer.css",
-    "/backend/plugins/customer/assets/js/customer-table.js": "/backend/plugins/customer/assets/js/customer-table.js",
-    "/backend/plugins/customer/assets/js/customer.js": "/backend/plugins/customer/assets/js/customer.js",
-    "/backend/plugins/customer/assets/js/detail-customer.js": "/backend/plugins/customer/assets/js/detail-customer.js"
+    "/backend/plugins/custom-attributes/assets/css/custom-attributes.css": "/backend/plugins/custom-attributes/assets/css/custom-attributes.css"
 }

@@ -23,4 +23,12 @@ class CacheCustomAttributesRepositories extends CacheAbstractDecorator implement
         $this->repository = $repository;
         $this->entityName = "Cache-CustomAttributes"; # Please setup reference name of cache.
     }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function createOrUpdateCustomAttribute(array $data) {
+        return $this->flushCacheAndUpdateData(__FUNCTION__, func_get_args());
+    }
 }

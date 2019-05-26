@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    {!! Form::open(['route' => 'admin.custom-attributes.create']) !!}
+    {!! Form::open(['route' => ['admin.custom-attributes.entity.create', 'typeEntity' => $typeEntity ]]) !!}
         @php do_action(BASE_FILTER_BEFORE_RENDER_FORM, CUSTOM_ATTRIBUTES_MODULE_SCREEN_NAME, request(), null) @endphp
         <div class="row">
             <div class="col-md-9">
@@ -27,7 +27,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-md-3 mb-2 @if ($errors->has('type_entity')) has-error @endif">
+                                    <div class="form-group hidden col-md-3 mb-2 @if ($errors->has('type_entity')) has-error @endif">
                                         <label class="control-label required" for="role">{{ trans('plugins-custom-attributes::custom-attributes.form.type_entity') }}</label>
                                         {!! Form::select('type_entity', $typeEntities, old('type_entity'), ['class' => 'select2-placeholder-multiple form-control type-entity-list', "id" => "select-type-entity-list" ]) !!}
                                         {!! Form::error('type_entity', $errors) !!}

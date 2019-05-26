@@ -46,38 +46,31 @@ $router->group(['prefix' => 'custom-attributes'], function (Router $router) {
         'uses' => 'CustomAttributesController@getDelete',
     ]);
 
-    $router->group(['prefix' => 'manage-attribute/{attributeId}'], function (Router $router) {
-
+    $router->group(['prefix' => '{typeEntity}'], function (Router $router) {
         $router->get('/', [
-            'as' => 'admin.custom-attributes.manage-attribute.list',
-            'uses' => 'AttributeController@getList',
+            'as' => 'admin.custom-attributes.entity.list',
+            'uses' => 'CustomAttributesController@getListByEntity',
         ]);
 
         $router->get('/create', [
-            'as' => 'admin.custom-attributes.manage-attribute.create',
-            'uses' => 'AttributeController@getCreate',
+            'as' => 'admin.custom-attributes.entity.create',
+            'uses' => 'CustomAttributesController@getCreateByEntity',
         ]);
 
         $router->post('/create', [
-            'as' => 'admin.custom-attributes.manage-attribute.create',
-            'uses' => 'AttributeController@postCreate',
+            'as' => 'admin.custom-attributes.entity.create',
+            'uses' => 'CustomAttributesController@postCreateByEntity',
         ]);
 
         $router->get('/edit/{id}', [
-            'as' => 'admin.custom-attributes.manage-attribute.edit',
-            'uses' => 'AttributeController@getEdit',
+            'as' => 'admin.custom-attributes.entity.edit',
+            'uses' => 'CustomAttributesController@getEditByEntity',
         ]);
 
         $router->post('/edit/{id}', [
-            'as' => 'admin.custom-attributes.manage-attribute.edit',
-            'uses' => 'AttributeController@postEdit',
+            'as' => 'admin.custom-attributes.entity.edit',
+            'uses' => 'CustomAttributesController@postEditByEntity',
         ]);
-
-        $router->get('/delete/{id}', [
-            'as' => 'admin.custom-attributes.manage-attribute.delete',
-            'uses' => 'AttributeController@getDelete',
-        ]);
-
     });
 });
 

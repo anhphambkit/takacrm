@@ -6,7 +6,7 @@ return [
         'priority'    => 1,
         'parent_id'   => null,
         'name'        => 'plugins-product::sidebar.administrator',
-        'icon'        => 'fas fa-users-cog',
+        'icon'        => 'fab fa-product-hunt',
         'url'         => null,
         'permissions' => ['products.list']
     ],
@@ -15,7 +15,7 @@ return [
         'priority'    => 1,
         'parent_id'   => 'menu-product-administrator',
         'name'        => 'plugins-product::sidebar.product',
-        'icon'        => 'fas fa-users-cog',
+        'icon'        => 'fas fa-boxes',
         'url'         => 'admin.product.list',
         'permissions' => ['products.list']
     ],
@@ -24,7 +24,7 @@ return [
         'priority'    => 2,
         'parent_id'   => 'menu-product-administrator',
         'name'        => 'plugins-product::sidebar.category',
-        'icon'        => 'fas fa-users-cog',
+        'icon'        => 'fas fa-sitemap',
         'url'         => 'admin.product.category.list',
         'permissions' => ['product_categories.list']
     ],
@@ -33,35 +33,45 @@ return [
         'priority'    => 3,
         'parent_id'   => 'menu-product-administrator',
         'name'        => 'plugins-product::sidebar.manufacturer',
-        'icon'        => 'fas fa-users-cog',
+        'icon'        => 'fas fa-industry',
         'url'         => 'admin.product.manufacturer.list',
         'permissions' => ['product_manufacturers.list']
     ],
     [
         'id'          => 'menu-product-units',
-        'priority'    => 3,
+        'priority'    => 4,
         'parent_id'   => 'menu-product-administrator',
         'name'        => 'plugins-product::sidebar.unit',
-        'icon'        => 'fas fa-users-cog',
+        'icon'        => 'fab fa-uniregistry',
         'url'         => 'admin.product.unit.list',
         'permissions' => ['product_units.list']
     ],
     [
         'id'          => 'menu-product-origins',
-        'priority'    => 3,
+        'priority'    => 5,
         'parent_id'   => 'menu-product-administrator',
         'name'        => 'plugins-product::sidebar.origin',
-        'icon'        => 'fas fa-users-cog',
+        'icon'        => 'fas fa-flag',
         'url'         => 'admin.product.origin.list',
         'permissions' => ['product_origins.list']
     ],
     [
         'id'          => 'menu-product-payment',
-        'priority'    => 3,
+        'priority'    => 6,
         'parent_id'   => 'menu-product-administrator',
         'name'        => 'plugins-product::sidebar.payment',
         'icon'        => 'fas fa-money-check',
         'url'         => 'admin.payment.method.list',
         'permissions' => ['product_payment_method.list']
-    ]
+    ],
+    [
+        'id'          => 'menu-custom-attribute-product',
+        'priority'    => 7,
+        'parent_id'   => 'menu-product-administrator',
+        'name'        => 'plugins-custom-attributes::sidebar.custom_attributes',
+        'icon'        => 'far fa-list-alt',
+        'url'         => 'admin.custom-attributes.entity.list',
+        'params_url'  => [ 'typeEntity' => 'product' ],
+        'permissions' => ['custom-attributes.list']
+    ],
 ];

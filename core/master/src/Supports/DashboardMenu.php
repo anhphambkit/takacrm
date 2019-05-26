@@ -175,7 +175,7 @@ class DashboardMenu
             if($menus = config("{$namespace}.sidebar")){
                 foreach ($menus as $menu) {
                     # code...
-                    if($menu['url'] ?? false) $menu['url'] = route($menu['url']);
+                    if($menu['url'] ?? false) $menu['url'] = route($menu['url'], (!empty($menu['params_url'])) ? $menu['params_url'] : []);
                     $menu['name'] = trans($menu['name'] ?? '');
                     $this->registerItem($menu);
                 }

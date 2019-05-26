@@ -28,6 +28,7 @@ class CustomAttributes extends Model
         'type_value',
         'type_render',
         'is_required',
+        'is_unique',
         'status',
         'created_by',
         'updated_by',
@@ -56,6 +57,6 @@ class CustomAttributes extends Model
      */
     public function stringAttributes()
     {
-        return $this->hasMany(AttributeValueString::class);
+        return $this->hasMany(CustomAttributeValueString::class);
     }
 }

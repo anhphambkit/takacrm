@@ -1,6 +1,6 @@
 <?php
 /**
- * AttributeValueString repository implemented
+ * CustomAttributeValueString repository implemented
  */
 namespace Plugins\CustomAttributes\Repositories\Eloquent;
 use Plugins\CustomAttributes\Repositories\Interfaces\AttributeValueStringRepositories;

@@ -18,7 +18,11 @@ class CustomAttributesDataTable extends DataTableAbstract
         $data = $this->datatables
             ->eloquent($this->query())
             ->editColumn('name', function ($item) {
-                return anchor_link(route('admin.custom-attributes.edit', $item->id), $item->name);
+                $link = route('admin.custom-attributes.edit', $item->id);
+                if ($this->typeEntity) {
+                    $link = route('admin.custom-attributes.entity.edit', [ 'typeEntity' => $this->typeEntity, 'id' => $item->id ] );
+                }
+                return anchor_link($link, $item->name);
             })
             ->editColumn('type_entity', function ($item) {
                 return ucfirst($item->type_entity);
@@ -29,6 +33,9 @@ class CustomAttributesDataTable extends DataTableAbstract
             ->editColumn('is_required', function ($item) {
                 return (!empty($item->is_required) ? 'True' : 'False');
             })
+            ->editColumn('is_unique', function ($item) {
+                return (!empty($item->is_unique) ? 'True' : 'False');
+            })
             ->editColumn('created_at', function ($item) {
                 return date_from_database($item->created_at, config('core-base.cms.date_format.date'));
             })
@@ -38,7 +45,12 @@ class CustomAttributesDataTable extends DataTableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, CUSTOM_ATTRIBUTES_MODULE_SCREEN_NAME)
             ->addColumn('operations', function ($item) {
-                return table_attribute_actions('admin.custom-attributes.edit', 'admin.custom-attributes.delete', 'admin.custom-attributes.manage-attribute.list', $item);
+                $link = route('admin.custom-attributes.edit', $item->id);
+                if ($this->typeEntity) {
+                    $link = route('admin.custom-attributes.entity.edit', [ 'typeEntity' => $this->typeEntity, 'id' => $item->id ] );
+                }
+
+                return table_custom_attribute_actions($link, route('admin.custom-attributes.delete', [ 'id' => $item->id ]), $item);
             })
             ->escapeColumns([])
             ->make(true);
@@ -62,9 +74,13 @@ class CustomAttributesDataTable extends DataTableAbstract
            'custom_attributes.type_entity',
            'custom_attributes.type_render',
            'custom_attributes.is_required',
+           'custom_attributes.is_unique',
            'custom_attributes.created_at',
            'custom_attributes.status'
        ]);
+       if ($this->typeEntity) {
+           $query = $query->where('type_entity', $this->typeEntity);
+       }
        return $query;
     }
 
@@ -107,6 +123,12 @@ class CustomAttributesDataTable extends DataTableAbstract
                 'footer' => trans('plugins-custom-attributes::custom-attributes.form.is_required'),
                 'class' => 'text-left searchable',
             ],
+            'is_unique' => [
+                'name' => 'custom_attributes.is_unique',
+                'title' => trans('plugins-custom-attributes::custom-attributes.form.is_unique'),
+                'footer' => trans('plugins-custom-attributes::custom-attributes.form.is_unique'),
+                'class' => 'text-left searchable',
+            ],
             'created_at' => [
                 'name' => 'custom_attributes.created_at',
                 'title' => trans('core-base::tables.created_at'),
@@ -124,14 +146,18 @@ class CustomAttributesDataTable extends DataTableAbstract
     }
 
     /**
-     * @return array
-     * @author TrinhLe
+     * @return array|mixed
+     * @throws \Throwable
      */
     public function buttons()
     {
+        $link = route('admin.custom-attributes.create');
+        if ($this->typeEntity) {
+            $link = route('admin.custom-attributes.entity.create', [ 'typeEntity' => $this->typeEntity] );
+        }
         $buttons = [
             'create' => [
-                'link' => route('admin.custom-attributes.create'),
+                'link' => $link,
                 'text' => view('core-base::elements.tables.actions.create')->render(),
             ],
         ];

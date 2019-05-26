@@ -42,8 +42,17 @@ class DataSettingReferenceSeeder extends Seeder
             ]
         ];
 
-        DB::table('references')->where('type', ReferenceConfig::REFERENCE_TYPE_GENDER)->delete();
-        DB::table('references')->insert($genders);
+        foreach ($genders as $reference) {
+            \Core\Setting\Models\Reference::updateOrCreate(
+                [
+                    'value' => $reference['value'],
+                    'type' => $reference['type']
+                ],
+                [
+                    'slug' => $reference['slug'],
+                ]
+            );
+        }
 
         // Delete + Insert Reference Data:
         $referenceDataCustomer = [
@@ -62,7 +71,17 @@ class DataSettingReferenceSeeder extends Seeder
                 'updated_at' => $now
             ]
         ];
-        DB::table('references')->where('type', ReferenceConfig::REFERENCE_TYPE_CUSTOMER_DATA)->delete();
-        DB::table('references')->insert($referenceDataCustomer);
+
+        foreach ($referenceDataCustomer as $reference) {
+            \Core\Setting\Models\Reference::updateOrCreate(
+                [
+                    'value' => $reference['value'],
+                    'type' => $reference['type']
+                ],
+                [
+                    'slug' => $reference['slug'],
+                ]
+            );
+        }
     }
 }

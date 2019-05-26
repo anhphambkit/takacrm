@@ -28,7 +28,7 @@ class CreateCustomAttributesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('custom_attribute_value_string', function (Blueprint $table) {
+        Schema::create('attribute_value_string', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('custom_attribute_id');
             $table->string('name');
@@ -56,6 +56,6 @@ class CreateCustomAttributesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('custom_attributes');
-        Schema::dropIfExists('custom_attribute_value_string');
+        Schema::dropIfExists('attribute_value_string');
     }
 }

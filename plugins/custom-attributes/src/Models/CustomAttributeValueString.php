@@ -11,19 +11,18 @@ namespace Plugins\CustomAttributes\Models;
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
-class AttributeValueString extends Model
+class CustomAttributeValueString extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'attribute_value_string';
+    protected $table = 'custom_attribute_value_string';
 
     protected $fillable = [
         'custom_attribute_id',
         'value',
-        'name',
         'image_feature',
         'status',
         'created_by',

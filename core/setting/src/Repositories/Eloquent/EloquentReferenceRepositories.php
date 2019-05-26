@@ -43,7 +43,7 @@ class EloquentReferenceRepositories extends RepositoriesAbstract implements Refe
                     ->where('type', $type)
                     ->where('value', $value)
                     ->where('publish', true)
-                    ->first();
+                    ->get();
             else
                 return $this->model
                     ->select('*')
