@@ -13,7 +13,7 @@ class CreateOrderTable extends Migration
     public function up()
     {
         $this->down();
-        
+
         Schema::create('order', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 120);

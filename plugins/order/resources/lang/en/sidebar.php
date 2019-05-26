@@ -1,2 +1,5 @@
 <?php
-return [];
+return [
+    'administrator' => 'Orders',
+    'order'       => 'Manage Orders',
+];
