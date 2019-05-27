@@ -5,6 +5,7 @@
  * Date: 2019-04-21
  * Time: 17:24
  */
+$value = !empty($value) ? ((!is_array($value)) ? json_decode($value) : $value) : [];
 ?>
 {!! Form::hidden($name, $value ? json_encode($value) : null, ['id' => 'gallery-data', 'class' => 'form-control']) !!}
 <div>

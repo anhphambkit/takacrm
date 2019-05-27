@@ -25,15 +25,31 @@ interface CustomAttributeServices
     public function getAttributesValueByAttributeIdAndTypeValue(int $attributeId, string $typeValue);
 
     /**
-     * @param $data
+     * @param array $data
+     * @param null $customAttributeId
      * @return mixed
      */
-    public function createOrUpdateCustomAttribute($data);
+    public function createOrUpdateCustomAttribute(array $data, $customAttributeId = null);
 
     /**
-     * @param $data
+     * @param array $data
      * @param bool $isModeCreate
      * @return mixed
      */
-    public function prepareDataForCreateOrUpdateCustomAttribute($data, $isModeCreate = true);
+    public function prepareDataForCreateOrUpdateCustomAttribute(array $data, bool $isModeCreate = true);
+
+    /**
+     * @param array $conditions
+     * @param array $with
+     * @param array $select
+     * @return mixed
+     */
+    public function getAllCustomAttributeByConditions(array $conditions = [], array $with = [], array $select = ['*']);
+
+    /**
+     * @param array $conditions
+     * @param array $with
+     * @param array $select
+     */
+    public function parseRequestForCustomAttributeByConditions(array $conditions = [], array $with = [], array $select = ['*']);
 }

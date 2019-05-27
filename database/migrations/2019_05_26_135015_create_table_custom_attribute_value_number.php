@@ -16,10 +16,12 @@ class CreateTableCustomAttributeValueNumber extends Migration
         Schema::create('custom_attribute_value_number', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('custom_attribute_id');
-            $table->string('value');
+            $table->integer('entity_id');
+            $table->float('value');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->boolean('status')->unsigned()->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

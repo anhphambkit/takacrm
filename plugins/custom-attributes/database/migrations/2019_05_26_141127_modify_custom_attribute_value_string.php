@@ -14,13 +14,15 @@ class ModifyCustomAttributeValueString extends Migration
     public function up()
     {
         Schema::dropIfExists('custom_attribute_value_string');
-        Schema::create('custom_custom_attribute_value_string', function (Blueprint $table) {
+        Schema::create('custom_attribute_value_string', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('custom_attribute_id');
+            $table->integer('entity_id');
             $table->string('value');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->boolean('status')->unsigned()->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ class ModifyCustomAttributeValueString extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('custom_custom_attribute_value_string');
+        Schema::dropIfExists('custom_attribute_value_string');
     }
 }

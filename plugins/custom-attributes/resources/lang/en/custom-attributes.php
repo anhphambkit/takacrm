@@ -10,5 +10,6 @@ return [
         'type_render' => 'Type',
         'is_required' => 'Is required',
         'is_unique' => 'Is unique',
+        'option' => 'Option',
     ]
 ];

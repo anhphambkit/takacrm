@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableCustomAttributeValueDate extends Migration
+class CreateTableCustomAttributeValueText extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateTableCustomAttributeValueDate extends Migration
      */
     public function up()
     {
-        Schema::create('custom_attribute_value_date_time', function (Blueprint $table) {
+        Schema::create('custom_attribute_value_text', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('custom_attribute_id');
             $table->integer('entity_id');
-            $table->dateTime('value');
+            $table->text('value');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->boolean('status')->unsigned()->default(1);
@@ -33,6 +33,6 @@ class CreateTableCustomAttributeValueDate extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('custom_attribute_value_date_time');
+        Schema::dropIfExists('custom_attribute_value_text');
     }
 }

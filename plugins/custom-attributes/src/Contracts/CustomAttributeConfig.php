@@ -28,4 +28,10 @@ interface CustomAttributeConfig
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_URL_INPUT              = 'Url Input';
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_DATE_TIME_INPUT        = 'Datetime Input';
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_COLOR_PICKER           = 'Color Picker';
+
+    const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_STRING                  = 'string';
+    const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_TEXT                    = 'text';
+    const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_NUMBER                  = 'number';
+    const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE_TIME               = 'date_time';
+    const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_OPTION                  = 'option';
 }

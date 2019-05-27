@@ -10,9 +10,11 @@ namespace Plugins\CustomAttributes\Models;
 
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomAttributeValueString extends Model
 {
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -22,6 +24,7 @@ class CustomAttributeValueString extends Model
 
     protected $fillable = [
         'custom_attribute_id',
+        'entity_id',
         'value',
         'image_feature',
         'status',
