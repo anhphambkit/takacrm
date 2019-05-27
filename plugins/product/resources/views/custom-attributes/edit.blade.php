@@ -46,6 +46,7 @@
                                         {!! Form::onOffPretty('is_unique', empty(old('is_unique')) ? $customAttribute->is_unique : old('is_unique'), ['id' => 'is_unique' ], 'is-main-switch checkbox-large') !!}
                                     </div>
                                 </div>
+                                @include('plugins-custom-attributes::partials.attribute-options')
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-2 @if ($errors->has('description')) has-error @endif">
                                         <label for="name">{{ trans('core-base::forms.description') }}</label>
@@ -67,4 +68,10 @@
             </div>
         </div>
     {!! Form::close() !!}
+@stop
+
+@section('variable-scripts')
+    <script>
+        let optionIndex = {{ sizeof($attributeOptions) }};
+    </script>
 @stop

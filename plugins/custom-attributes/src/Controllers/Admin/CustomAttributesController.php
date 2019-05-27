@@ -200,9 +200,14 @@ class CustomAttributesController extends BaseAdminController
             ->pluck('value', 'slug')
             ->toArray();
 
+        $attributeOptions = [];
+        if ($customAttribute->attributeOptions() != null) {
+            $attributeOptions = $customAttribute->attributeOptions()->select('option_text')->get()->pluck('option_text')->toArray();
+        }
+
         page_title()->setTitle(trans('plugins-custom-attributes::custom-attributes.edit') . ' #' . $id);
         $this->addDetailAssets();
-        return view("plugins-{$typeEntity}::custom-attributes.edit", compact('typeEntity','customAttribute', 'typeEntities', 'typeRenders'));
+        return view("plugins-{$typeEntity}::custom-attributes.edit", compact('typeEntity','customAttribute', 'typeEntities', 'typeRenders', 'attributeOptions'));
     }
 
     /**
