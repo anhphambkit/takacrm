@@ -148,7 +148,7 @@ class ImplementCustomAttributeServices implements CustomAttributeServices
                 $data['type_value'] = CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_OPTION;
                 break;
             case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_DATE_TIME_INPUT, '_'):
-                $data['type_value'] = CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE_TIME;
+                $data['type_value'] = CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE;
                 break;
             case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_URL_INPUT, '_'):
             case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_TEXT_INPUT, '_'):
@@ -182,33 +182,49 @@ class ImplementCustomAttributeServices implements CustomAttributeServices
         $customAttributes = $this->getAllCustomAttributeByConditions($conditions, $with, $select);
         $request = [];
         foreach ($customAttributes as $customAttribute) {
+            if ($customAttribute->type_render === str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_MULTIPLE_SELECT, '_') || $customAttribute->type_render === str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_CHECKBOX, '_')) {
+                if ($customAttribute->is_required)
+                    $request["cf_$customAttribute->slug"] = "required";
+                if ($customAttribute->is_unique)
+                    $request["cf_{$customAttribute->slug}.*"] = "unique:custom_attribute_value_{$customAttribute->type_value},value,{$customAttribute->id},custom_attribute_id,deleted_at,NULL";
+            }
+            else if ($customAttribute->type_render !== str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_DATE_TIME_INPUT, '_')) {
+                if ($customAttribute->is_required && $customAttribute->is_unique)
+                    $request["cf_$customAttribute->slug"] = "required|unique:custom_attribute_value_{$customAttribute->type_value},value,{$customAttribute->id},custom_attribute_id,deleted_at,NULL";
+                else if ($customAttribute->is_required)
+                    $request["cf_$customAttribute->slug"] = "required";
+                else if ($customAttribute->is_unique)
+                    $request["cf_$customAttribute->slug"] = "unique:custom_attribute_value_{$customAttribute->type_value},value,{$customAttribute->id},custom_attribute_id,deleted_at,NULL";
+            }
+            else {
+//                if ($customAttribute->is_required && $customAttribute->is_unique)
+//                    $request["cf_$customAttribute->slug"] = "required|unique:custom_attribute_value_{$customAttribute->type_value},value,{$customAttribute->id},custom_attribute_id,deleted_at,NULL";
+                if ($customAttribute->is_required)
+                    $request["cf_$customAttribute->slug"] = "required";
+//                else if ($customAttribute->is_unique)
+//                    $request["cf_$customAttribute->slug"] = "unique:custom_attribute_value_{$customAttribute->type_value},value,{$customAttribute->id},custom_attribute_id,deleted_at,NULL";
+            }
+
             // validation type data
             switch ($customAttribute->type_value) {
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_TEXT:
-                    $request[$customAttribute->slug] = '';
+                    $request["cf_$customAttribute->slug"] .= '';
                     break;
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_NUMBER:
-                    $request[$customAttribute->slug] = 'numeric';
+                    $request["cf_$customAttribute->slug"] .= '|numeric';
                     break;
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_OPTION:
-                    $request[$customAttribute->slug] = '';
+                    $request["cf_$customAttribute->slug"] .= '';
                     break;
-                case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE_TIME:
-                    $request[$customAttribute->slug] = '';
+                case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE:
+                    $request["cf_$customAttribute->slug"] .= '';
                     break;
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_STRING:
-                    $request[$customAttribute->slug] = 'max:255';
+                    $request["cf_$customAttribute->slug"] .= '|max:255';
                     if ($customAttribute->type_render === str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_URL_INPUT, '_'))
-                        $request[$customAttribute->slug] .= '|url';
+                        $request["cf_$customAttribute->slug"] .= '|url';
                     break;
             }
-
-            if ($customAttribute->is_required && $customAttribute->is_unique)
-                $request[$customAttribute->slug] .= "|required|unique:custom_attribute_value_{$customAttribute->type_value},value,{$customAttribute->id},custom_attribute_id,deleted_at,NULL";
-            else if ($customAttribute->is_required)
-                $request[$customAttribute->slug] .= "|required";
-            else if ($customAttribute->is_unique)
-                $request[$customAttribute->slug] .= "|unique:custom_attribute_value_{$customAttribute->type_value},value,{$customAttribute->id},custom_attribute_id,deleted_at,NULL";
         }
         return $request;
     }

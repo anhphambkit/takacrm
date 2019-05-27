@@ -1,4 +1,17 @@
 {
-    "/backend/plugins/custom-attributes/assets/js/custom-attribute.js": "/backend/plugins/custom-attributes/assets/js/custom-attribute.js",
-    "/backend/plugins/custom-attributes/assets/css/custom-attributes.css": "/backend/plugins/custom-attributes/assets/css/custom-attributes.css"
+    "/backend/core/base/assets/js/card-action.js": "/backend/core/base/assets/js/card-action.js",
+    "/backend/core/base/assets/css/cms-custom.css": "/backend/core/base/assets/css/cms-custom.css",
+    "/backend/core/base/assets/css/look-book-component.css": "/backend/core/base/assets/css/look-book-component.css",
+    "/backend/core/base/assets/scripts/switch.min.js": "/backend/core/base/assets/scripts/switch.min.js",
+    "/backend/core/base/assets/scripts/switch.js": "/backend/core/base/assets/scripts/switch.js",
+    "/backend/core/base/assets/scripts/picker-color.min.js": "/backend/core/base/assets/scripts/picker-color.min.js",
+    "/backend/core/base/assets/scripts/picker-color.js": "/backend/core/base/assets/scripts/picker-color.js",
+    "/backend/core/base/assets/scripts/pick-a-datetime.min.js": "/backend/core/base/assets/scripts/pick-a-datetime.min.js",
+    "/backend/core/base/assets/scripts/pick-a-datetime.js": "/backend/core/base/assets/scripts/pick-a-datetime.js",
+    "/backend/core/base/assets/scripts/form-select2.min.js": "/backend/core/base/assets/scripts/form-select2.min.js",
+    "/backend/core/base/assets/scripts/form-select2.js": "/backend/core/base/assets/scripts/form-select2.js",
+    "/backend/core/base/assets/scripts/custom-field.js": "/backend/core/base/assets/scripts/custom-field.js",
+    "/backend/core/base/assets/js/script.js": "/backend/core/base/assets/js/script.js",
+    "/backend/core/base/assets/js/editor.js": "/backend/core/base/assets/js/editor.js",
+    "/backend/core/base/assets/js/datatables.js": "/backend/core/base/assets/js/datatables.js"
 }

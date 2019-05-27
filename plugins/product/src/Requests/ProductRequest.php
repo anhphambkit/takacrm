@@ -23,6 +23,8 @@ class ProductRequest extends CoreRequest
                 ]
             ]
         );
+//        dd($customAttributeRequest);
+//        dd(request()->all());
         return array_merge([
             'name' => 'required',
             'sku' => 'required',

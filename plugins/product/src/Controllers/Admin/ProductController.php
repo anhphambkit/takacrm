@@ -18,6 +18,7 @@ use Plugins\Product\DataTables\ProductDataTable;
 use Core\Base\Controllers\Admin\BaseAdminController;
 use AssetManager;
 use AssetPipeline;
+use Plugins\Product\Services\ProductServices;
 
 class ProductController extends BaseAdminController
 {
@@ -52,6 +53,11 @@ class ProductController extends BaseAdminController
     protected $customAttributeServices;
 
     /**
+     * @var ProductServices
+     */
+    protected $productServices;
+
+    /**
      * ProductController constructor.
      * @param ProductRepositories $productRepository
      * @param ProductCategoryRepositories $productCategoryRepositories
@@ -59,10 +65,12 @@ class ProductController extends BaseAdminController
      * @param ProductUnitRepositories $productUnitRepositories
      * @param ProductOriginRepositories $productOriginRepositories
      * @param CustomAttributeServices $customAttributeServices
+     * @param ProductServices $productServices
      */
     public function __construct(ProductRepositories $productRepository, ProductCategoryRepositories $productCategoryRepositories,
                                 ManufacturerRepositories $manufacturerRepositories, ProductUnitRepositories $productUnitRepositories,
-                                ProductOriginRepositories $productOriginRepositories, CustomAttributeServices $customAttributeServices
+                                ProductOriginRepositories $productOriginRepositories, CustomAttributeServices $customAttributeServices,
+                                ProductServices $productServices
     )
     {
         $this->productRepository = $productRepository;
@@ -71,6 +79,7 @@ class ProductController extends BaseAdminController
         $this->productUnitRepositories = $productUnitRepositories;
         $this->productOriginRepositories = $productOriginRepositories;
         $this->customAttributeServices = $customAttributeServices;
+        $this->productServices = $productServices;
     }
 
     /**
@@ -110,7 +119,7 @@ class ProductController extends BaseAdminController
             [
                 'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
             ]
-        ]);
+        ], ['attributeOptions']);
 
         page_title()->setTitle(trans('plugins-product::product.create'));
 
@@ -128,28 +137,7 @@ class ProductController extends BaseAdminController
      */
     public function postCreate(ProductRequest $request)
     {
-        $data = $request->input();
-
-        $data['slug'] = str_slug($data['name']);
-        $data['created_by'] = Auth::id();
-        $data['is_feature'] = (isset($data['is_feature']) ? $data['is_feature'] : false);
-
-        $product = DB::transaction(function () use ($data, $request) {
-            $product = $this->productRepository->createOrUpdate($data);
-
-            $galleries = json_decode($request->input('image_gallery', "[]"));
-
-            foreach ($galleries as $gallery) {
-                $product->galleries()->create([
-                    'media' => $gallery,
-                ]);
-            }
-
-            $product->save();
-
-            return $product;
-        }, 3);
-
+        $product = $this->productServices->createOrUpdateProduct($request->all());
         do_action(BASE_ACTION_AFTER_CREATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $product);
 
         if ($request->input('submit') === 'save') {
@@ -206,35 +194,7 @@ class ProductController extends BaseAdminController
      */
     public function postEdit($id, ProductRequest $request)
     {
-        $product = $this->productRepository->findById($id);
-        if (empty($product)) {
-            abort(404);
-        }
-
-        $data = $request->input();
-
-        $data['slug'] = str_slug($data['name']);
-        $data['is_feature'] = (isset($data['is_feature']) ? $data['is_feature'] : false);
-        $data['updated_by'] = Auth::id();
-
-        $product = DB::transaction(function () use ($data, $product, $request) {
-            $product->fill($data);
-
-            $this->productRepository->createOrUpdate($product);
-
-            $galleries = json_decode($request->input('image_gallery', "[]"));
-
-            ProductGallery::with('product')->where('product_id', $product->id)->delete();
-
-            foreach ($galleries as $gallery) {
-                $product->galleries()->create([
-                    'media' => $gallery,
-                ]);
-            }
-
-            return $product;
-        }, 3);
-
+        $product = $this->productServices->createOrUpdateProduct($request->all(), $id);
 
         do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $product);
 
