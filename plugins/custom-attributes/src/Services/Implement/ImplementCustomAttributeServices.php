@@ -228,4 +228,64 @@ class ImplementCustomAttributeServices implements CustomAttributeServices
         }
         return $request;
     }
+
+    /**
+     * @param $entity
+     * @param $allEntityCustomAttributes
+     * @param array $dataEntity
+     */
+    public function createOrUpdateDataEntityCustomAttributes(&$entity, $allEntityCustomAttributes, array $dataEntity) {
+        // Delete Old Value Custom Field:
+        foreach (CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUES as $typeValue) {
+            $typeValue = ucfirst($typeValue);
+            app("\Plugins\CustomAttributes\Models\CustomAttributeValue{$typeValue}")::with('customAttribute')->where('entity_id', $entity->id)->delete();
+        }
+        foreach ($allEntityCustomAttributes as $allEntityCustomAttribute) {
+            $methodAttributeRelation = "{$allEntityCustomAttribute->type_value}ValueAttributes";
+            switch ($allEntityCustomAttribute->type_value) {
+                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_STRING, '_'):
+                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_TEXT, '_'):
+                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_NUMBER, '_'):
+                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE, '_'):
+                    $allEntityCustomAttribute->$methodAttributeRelation()->create([
+                        'entity_id' => $entity->id,
+                        'value' => $dataEntity["cf_{$allEntityCustomAttribute->slug}"],
+                        'created_by' => Auth::id(),
+                    ]);
+                    break;
+                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_OPTION, '_'):
+                    switch ($allEntityCustomAttribute->type_render) {
+                        case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_MULTIPLE_SELECT, '_'):
+                            foreach ($dataEntity["cf_{$allEntityCustomAttribute->slug}"] as $valueOptionAttribute) {
+                                $allEntityCustomAttribute->$methodAttributeRelation()->create([
+                                    'entity_id' => $entity->id,
+                                    'value' => $valueOptionAttribute,
+                                    'created_by' => Auth::id(),
+                                ]);
+                            }
+                            break;
+                        case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_CHECKBOX, '_'):
+                            foreach ($dataEntity["cf_{$allEntityCustomAttribute->slug}"] as $valueReferenceOption => $valueOptionAttribute) {
+                                if ($valueOptionAttribute) {
+                                    $allEntityCustomAttribute->$methodAttributeRelation()->create([
+                                        'entity_id' => $entity->id,
+                                        'value' => $valueReferenceOption,
+                                        'created_by' => Auth::id(),
+                                    ]);
+                                }
+                            }
+                            break;
+                        case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_RADIO, '_'):
+                        case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_SINGLE_SELECT, '_'):
+                        $allEntityCustomAttribute->$methodAttributeRelation()->create([
+                            'entity_id' => $entity->id,
+                            'value' => $dataEntity["cf_{$allEntityCustomAttribute->slug}"],
+                            'created_by' => Auth::id(),
+                        ]);
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
 }

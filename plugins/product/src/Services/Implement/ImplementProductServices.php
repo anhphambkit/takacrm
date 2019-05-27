@@ -90,7 +90,7 @@ class ImplementProductServices implements ProductServices {
                         'media' => $gallery,
                     ]);
                 }
-                $this->createOrUpdateDataProductCustomAttributes($product, $allProductCustomAttributes, $dataProduct);
+                $this->customAttributeServices->createOrUpdateDataEntityCustomAttributes($product, $allProductCustomAttributes, $dataProduct);
                 $product->save();
                 return $product;
             }, 3);
@@ -115,7 +115,7 @@ class ImplementProductServices implements ProductServices {
                         'media' => $gallery,
                     ]);
                 }
-                $this->createOrUpdateDataProductCustomAttributes($product, $allProductCustomAttributes, $dataProduct);
+                $this->customAttributeServices->createOrUpdateDataEntityCustomAttributes($product, $allProductCustomAttributes, $dataProduct);
                 $product->save();
                 return $product;
             }, 3);
@@ -138,54 +138,5 @@ class ImplementProductServices implements ProductServices {
         else
             $data['updated_by'] = Auth::id();
         return $data;
-    }
-
-    /**
-     * @param $product
-     * @param $allProductCustomAttributes
-     * @param array $dataProduct
-     */
-    public function createOrUpdateDataProductCustomAttributes(&$product, $allProductCustomAttributes, array $dataProduct) {
-        foreach ($allProductCustomAttributes as $allProductCustomAttribute) {
-            $methodAttributeRelation = "{$allProductCustomAttribute->type_value}ValueAttributes";
-            $typeValue = ucfirst($allProductCustomAttribute->type_value);
-            app("\Plugins\CustomAttributes\Models\CustomAttributeValue{$typeValue}")::with('customAttribute')->where('entity_id', $product->id)->delete();
-            switch ($allProductCustomAttribute->type_value) {
-                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_STRING, '_'):
-                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_TEXT, '_'):
-                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_NUMBER, '_'):
-                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE, '_'):
-                    $allProductCustomAttribute->$methodAttributeRelation()->create([
-                        'entity_id' => $product->id,
-                        'value' => $dataProduct["cf_{$allProductCustomAttribute->slug}"],
-                        'created_by' => $dataProduct["created_by"],
-                    ]);
-                    break;
-                case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_OPTION, '_'):
-                    switch ($allProductCustomAttribute->type_render) {
-                        case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_MULTIPLE_SELECT, '_'):
-                            foreach ($dataProduct["cf_{$allProductCustomAttribute->slug}"] as $valueOptionAttribute) {
-                                $allProductCustomAttribute->$methodAttributeRelation()->create([
-                                    'entity_id' => $product->id,
-                                    'value' => $valueOptionAttribute,
-                                    'created_by' => $dataProduct["created_by"],
-                                ]);
-                            }
-                            break;
-                        case str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_CHECKBOX, '_'):
-                            foreach ($dataProduct["cf_{$allProductCustomAttribute->slug}"] as $valueReferenceOption => $valueOptionAttribute) {
-                                if ($valueOptionAttribute) {
-                                    $allProductCustomAttribute->$methodAttributeRelation()->create([
-                                        'entity_id' => $product->id,
-                                        'value' => $valueOptionAttribute,
-                                        'created_by' => $dataProduct["created_by"],
-                                    ]);
-                                }
-                            }
-                            break;
-                    }
-                    break;
-            }
-        }
     }
 }

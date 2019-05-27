@@ -52,4 +52,11 @@ interface CustomAttributeServices
      * @param array $select
      */
     public function parseRequestForCustomAttributeByConditions(array $conditions = [], array $with = [], array $select = ['*']);
+
+    /**
+     * @param $entity
+     * @param $allEntityCustomAttributes
+     * @param array $dataEntity
+     */
+    public function createOrUpdateDataEntityCustomAttributes(&$entity, $allEntityCustomAttributes, array $dataEntity);
 }

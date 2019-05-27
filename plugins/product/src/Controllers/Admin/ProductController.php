@@ -170,20 +170,26 @@ class ProductController extends BaseAdminController
 
         $product = $this->productRepository->findById($id);
 
+        if (empty($product)) {
+            abort(404);
+        }
+
         $galleries = [];
         if ($product->galleries != null) {
             $galleries = $product->galleries->pluck('media')->all();
         }
 
-        if (empty($product)) {
-            abort(404);
-        }
+        $allProductCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
+            ]
+        ], ['attributeOptions']);
 
         page_title()->setTitle(trans('plugins-product::product.edit') . ' #' . $id);
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries', 'units', 'origins'));
+        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries', 'units', 'origins', 'allProductCustomAttributes'));
     }
 
     /**
@@ -253,7 +259,7 @@ class ProductController extends BaseAdminController
         AssetManager::addAsset('bootstrap-switch-js', 'libs/plugins/product/js/toggle/bootstrap-switch.min.js');
         AssetManager::addAsset('bootstrap-checkbox-js', 'libs/plugins/product/js/toggle/bootstrap-checkbox.min.js');
         AssetManager::addAsset('switchery-js', 'libs/plugins/product/js/toggle/switchery.min.js');
-        AssetManager::addAsset('form-select2-js', 'backend/plugins/product/assets/scripts/form-select2.min.js');
+        AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
         AssetManager::addAsset('switch-js', 'backend/plugins/product/assets/scripts/switch.min.js');
         AssetManager::addAsset('mini-colors-js', 'libs/core/base/js/miniColors/jquery.minicolors.min.js');
         AssetManager::addAsset('spectrum-js', 'libs/core/base/js/spectrum/spectrum.js');

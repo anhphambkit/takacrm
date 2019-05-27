@@ -16,7 +16,7 @@
 
     // Single Select Placeholder
     $(".select2-placeholder").select2({
-      placeholder: "Select a state",
+      placeholder: "Select a option",
       allowClear: true
     });
 

@@ -35,12 +35,12 @@
                                     <div class="row">
                                         <div class="form-group col-md-6 mb-2 @if ($errors->has('category_id')) has-error @endif">
                                             <label class="control-label required" for="role">{{ trans('core-base::forms.parent_category') }}</label>
-                                            {!! Form::select('category_id', $categories, null, ['class' => 'select2-placeholder-multiple form-control category-list', "id" => "select-category-list" ]) !!}
+                                            {!! Form::select('category_id', $categories, old('category_id'), ['class' => 'select2-placeholder-multiple form-control category-list', "id" => "select-category-list" ]) !!}
                                             {!! Form::error('category_id', $errors) !!}
                                         </div>
                                         <div class="form-group col-md-6 mb-2 @if ($errors->has('manufacturer_id')) has-error @endif">
                                             <label class="control-label required" for="role">{{ trans('plugins-product::product.form.manufacturer') }}</label>
-                                            {!! Form::select('manufacturer_id', $manufacturer, null, ['class' => 'select2-placeholder-multiple form-control manufacturer-list', "id" => "select-manufacturer-list" ]) !!}
+                                            {!! Form::select('manufacturer_id', $manufacturer, old('manufacturer_id'), ['class' => 'select2-placeholder-multiple form-control manufacturer-list', "id" => "select-manufacturer-list" ]) !!}
                                             {!! Form::error('manufacturer_id', $errors) !!}
                                         </div>
                                     </div>
@@ -48,12 +48,12 @@
                                     <div class="row">
                                         <div class="form-group col-md-6 mb-2 @if ($errors->has('unit_id')) has-error @endif">
                                             <label class="control-label required" for="role">{{ trans('plugins-product::product.form.units') }}</label>
-                                            {!! Form::select('unit_id', $units, null, ['class' => 'select2-placeholder-multiple form-control units-list', "id" => "select-units-list" ]) !!}
+                                            {!! Form::select('unit_id', $units, old('unit_id'), ['class' => 'select2-placeholder-multiple form-control units-list', "id" => "select-units-list" ]) !!}
                                             {!! Form::error('unit_id', $errors) !!}
                                         </div>
                                         <div class="form-group col-md-6 mb-2 @if ($errors->has('origin_id')) has-error @endif">
                                             <label class="control-label required" for="role">{{ trans('plugins-product::product.form.origins') }}</label>
-                                            {!! Form::select('origin_id', $origins, null, ['class' => 'select2-placeholder-multiple form-control origins-list', "id" => "select-origins-list" ]) !!}
+                                            {!! Form::select('origin_id', $origins, old('origin_id'), ['class' => 'select2-placeholder-multiple form-control origins-list', "id" => "select-origins-list" ]) !!}
                                             {!! Form::error('origin_id', $errors) !!}
                                         </div>
                                     </div>

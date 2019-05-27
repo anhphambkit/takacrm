@@ -34,4 +34,11 @@ interface CustomAttributeConfig
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_NUMBER                  = 'number';
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE                    = 'date';
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_OPTION                  = 'option';
+    const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUES                        = [
+        'string',
+        'text',
+        'number',
+        'date',
+        'option',
+    ];
 }

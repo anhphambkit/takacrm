@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomAttributeValueString extends Model
 {
-    use SoftDeletes;
+//    use SoftDeletes;
     /**
      * The database table used by the model.
      *
