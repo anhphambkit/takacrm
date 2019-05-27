@@ -97,5 +97,7 @@ class ProductServiceProvider extends ServiceProvider
     /**
      * @author AnhPham
      */
-    public function boot(){}
+    public function boot(){
+        $this->publishes([ base_path('plugins/product/resources/app-assets') => public_path('plugins/product/app-assets')], 'product');
+    }
 }

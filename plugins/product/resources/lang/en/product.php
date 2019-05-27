@@ -5,6 +5,7 @@ return [
     'create' => 'New product',
     'edit' => 'Edit product',
     'list' => 'List product',
+    'detail' =>'Product Detail',
     'form' => [
         'upc' => 'UPC',
         'upc_placeholder' => 'UPC',
