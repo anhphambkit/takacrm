@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: AnhPham
- * Date: 2019-05-19
- * Time: 09:12
+ * Date: 2019-05-27
+ * Time: 16:42
  */
 
 namespace Plugins\CustomAttributes\Models;
@@ -12,7 +12,7 @@ use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CustomAttributeValueString extends Model
+class CustomAttributeValueDate extends Model
 {
 //    use SoftDeletes;
     /**
@@ -20,13 +20,12 @@ class CustomAttributeValueString extends Model
      *
      * @var string
      */
-    protected $table = 'custom_attribute_value_string';
+    protected $table = 'custom_attribute_value_date';
 
     protected $fillable = [
         'custom_attribute_id',
         'entity_id',
         'value',
-        'image_feature',
         'status',
         'created_by',
         'updated_by',
@@ -56,5 +55,13 @@ class CustomAttributeValueString extends Model
     public function customAttribute()
     {
         return $this->belongsTo(CustomAttributes::class);
+    }
+
+    /**
+     * @param $value
+     */
+    public function setValueAttribute($value)
+    {
+        $this->attributes['value'] = (empty($value)) ? null : format_date_time($value, 'Asia/Ho_Chi_Minh', 'd/m/Y', 'Y-m-d');
     }
 }

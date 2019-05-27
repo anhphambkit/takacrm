@@ -10,9 +10,12 @@ namespace Plugins\CustomAttributes\Models;
 
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
 
 class CustomAttributes extends Model
 {
+//    use SoftDeletes;
     /**
      * The database table used by the model.
      *
@@ -53,10 +56,50 @@ class CustomAttributes extends Model
     }
 
     /**
-     * Get the look book tags for the look book.
+     * Get the value string of custom attribute.
      */
-    public function stringAttributes()
+    public function stringValueAttributes()
     {
-        return $this->hasMany(CustomAttributeValueString::class);
+        return $this->hasMany(CustomAttributeValueString::class, 'custom_attribute_id');
+    }
+
+    /**
+     * Get the value number of custom attribute.
+     */
+    public function numberValueAttributes()
+    {
+        return $this->hasMany(CustomAttributeValueNumber::class, 'custom_attribute_id');
+    }
+
+    /**
+     * Get the value text of custom attribute.
+     */
+    public function textValueAttributes()
+    {
+        return $this->hasMany(CustomAttributeValueText::class, 'custom_attribute_id');
+    }
+
+    /**
+     * Get the value date of custom attribute.
+     */
+    public function dateValueAttributes()
+    {
+        return $this->hasMany(CustomAttributeValueDate::class, 'custom_attribute_id');
+    }
+
+    /**
+     * Get the value option of custom attribute.
+     */
+    public function optionValueAttributes()
+    {
+        return $this->hasMany(CustomAttributeValueOption::class, 'custom_attribute_id');
+    }
+
+    /**
+     * Get the options of attribute.
+     */
+    public function attributeOptions()
+    {
+        return $this->hasMany(CustomAttributeOptions::class, 'custom_attribute_id');
     }
 }

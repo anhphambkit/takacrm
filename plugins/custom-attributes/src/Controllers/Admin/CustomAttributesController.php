@@ -171,9 +171,14 @@ class CustomAttributesController extends BaseAdminController
             ->pluck('value', 'slug')
             ->toArray();
 
+        $attributeOptions = [];
+        if ($customAttribute->attributeOptions() != null) {
+            $attributeOptions = $customAttribute->attributeOptions()->select('option_text')->get()->pluck('option_text')->toArray();
+        }
+
         page_title()->setTitle(trans('plugins-custom-attributes::custom-attributes.edit') . ' #' . $id);
         $this->addDetailAssets();
-        return view('plugins-custom-attributes::edit', compact('customAttribute', 'typeEntities', 'typeRenders'));
+        return view('plugins-custom-attributes::edit', compact('customAttribute', 'typeEntities', 'typeRenders', 'attributeOptions'));
     }
 
     /**
@@ -195,9 +200,14 @@ class CustomAttributesController extends BaseAdminController
             ->pluck('value', 'slug')
             ->toArray();
 
+        $attributeOptions = [];
+        if ($customAttribute->attributeOptions() != null) {
+            $attributeOptions = $customAttribute->attributeOptions()->select('option_text')->get()->pluck('option_text')->toArray();
+        }
+
         page_title()->setTitle(trans('plugins-custom-attributes::custom-attributes.edit') . ' #' . $id);
         $this->addDetailAssets();
-        return view("plugins-{$typeEntity}::custom-attributes.edit", compact('typeEntity','customAttribute', 'typeEntities', 'typeRenders'));
+        return view("plugins-{$typeEntity}::custom-attributes.edit", compact('typeEntity','customAttribute', 'typeEntities', 'typeRenders', 'attributeOptions'));
     }
 
     /**
@@ -207,16 +217,7 @@ class CustomAttributesController extends BaseAdminController
      */
     public function postEdit($id, CustomAttributesRequest $request)
     {
-        $customAttribute = $this->customAttributesRepositories->findById($id);
-        if (empty($customAttribute)) {
-            abort(404);
-        }
-
-        $dataUpdate = $this->customAttributeServices->prepareDataForCreateOrUpdateCustomAttribute($request->input(), false);
-
-        $customAttribute->fill($dataUpdate);
-
-        $this->customAttributesRepositories->createOrUpdate($customAttribute);
+        $customAttribute = $this->customAttributeServices->createOrUpdateCustomAttribute($request->all(), $id);
 
         do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $customAttribute);
 
@@ -235,16 +236,7 @@ class CustomAttributesController extends BaseAdminController
      */
     public function postEditByEntity($typeEntity, $id, CustomAttributesRequest $request)
     {
-        $customAttribute = $this->customAttributesRepositories->findById($id);
-        if (empty($customAttribute)) {
-            abort(404);
-        }
-
-        $dataUpdate = $this->customAttributeServices->prepareDataForCreateOrUpdateCustomAttribute($request->input(), false);
-
-        $customAttribute->fill($dataUpdate);
-
-        $this->customAttributesRepositories->createOrUpdate($customAttribute);
+        $customAttribute = $this->customAttributeServices->createOrUpdateCustomAttribute($request->all(), $id);
 
         do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $customAttribute);
 
@@ -308,12 +300,14 @@ class CustomAttributesController extends BaseAdminController
         AssetManager::addAsset('mini-colors-js', 'libs/plugins/product/js/miniColors/jquery.minicolors.min.js');
         AssetManager::addAsset('spectrum-js', 'libs/plugins/product/js/spectrum/spectrum.js');
         AssetManager::addAsset('picker-color-js', 'backend/plugins/product/assets/scripts/picker-color.min.js');
+        AssetManager::addAsset('custom-attribute-js', 'backend/plugins/custom-attributes/assets/js/custom-attribute.js');
 
         AssetPipeline::requireCss('mini-colors-css');
         AssetPipeline::requireCss('product-color-css');
         AssetPipeline::requireJs('mini-colors-js');
         AssetPipeline::requireJs('spectrum-js');
         AssetPipeline::requireJs('picker-color-js');
+        AssetPipeline::requireJs('custom-attribute-js');
     }
 
     /**

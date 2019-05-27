@@ -28,18 +28,6 @@ class CreateCustomAttributesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('custom_attribute_value_string', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('custom_attribute_id');
-            $table->string('name');
-            $table->string('value');
-            $table->text('image_feature')->nullable();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->boolean('status')->unsigned()->default(1);
-            $table->timestamps();
-        });
-
         if(Schema::hasTable('references')) {
             // Insert Reference:
             Artisan::call('db:seed', [
@@ -56,6 +44,5 @@ class CreateCustomAttributesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('custom_attributes');
-        Schema::dropIfExists('custom_attribute_value_string');
     }
 }

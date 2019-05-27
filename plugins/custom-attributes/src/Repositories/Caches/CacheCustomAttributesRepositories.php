@@ -31,4 +31,14 @@ class CacheCustomAttributesRepositories extends CacheAbstractDecorator implement
     public function createOrUpdateCustomAttribute(array $data) {
         return $this->flushCacheAndUpdateData(__FUNCTION__, func_get_args());
     }
+
+    /**
+     * @param array $conditions
+     * @param array $with
+     * @param array $select
+     * @return mixed
+     */
+    public function getAllCustomAttributeByConditions(array $conditions = [], array $with = [], array $select = ['*']) {
+        return$this->getDataIfExistCache(__FUNCTION__, func_get_args());
+    }
 }

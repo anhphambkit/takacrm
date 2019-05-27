@@ -366,7 +366,6 @@ class CustomerController extends BaseAdminController
         AssetManager::addAsset('pick-date-css', 'libs/core/base/css/date-picker/pickadate.css');
         AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
         AssetManager::addAsset('customer-css', 'backend/plugins/customer/assets/css/customer.css');
-        AssetManager::addAsset('customer-color-css', 'backend/plugins/customer/assets/css/customer-color.css');
 
         AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
         AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
@@ -379,7 +378,6 @@ class CustomerController extends BaseAdminController
         AssetPipeline::requireCss('pick-date-css');
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('customer-css');
-        AssetPipeline::requireCss('customer-color-css');
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('form-select2-js');
         AssetPipeline::requireJs('picker-js');
@@ -397,7 +395,6 @@ class CustomerController extends BaseAdminController
         AssetManager::addAsset('pick-date-css', 'libs/core/base/css/date-picker/pickadate.css');
         AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
         AssetManager::addAsset('customer-css', 'backend/plugins/customer/assets/css/customer.css');
-        AssetManager::addAsset('customer-color-css', 'backend/plugins/customer/assets/css/customer-color.css');
         AssetManager::addAsset('picker-js', 'libs/core/base/js/date-picker/picker.js');
         AssetManager::addAsset('picker-date-js', 'libs/core/base/js/date-picker/picker.date.js');
         AssetManager::addAsset('picker-time-js', 'libs/core/base/js/date-picker/picker.time.js');
@@ -409,7 +406,6 @@ class CustomerController extends BaseAdminController
         AssetPipeline::requireCss('pick-date-css');
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('customer-css');
-        AssetPipeline::requireCss('customer-color-css');
         AssetPipeline::requireJs('picker-js');
         AssetPipeline::requireJs('picker-date-js');
         AssetPipeline::requireJs('picker-time-js');

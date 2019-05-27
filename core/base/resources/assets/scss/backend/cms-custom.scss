@@ -38,3 +38,67 @@
   border-radius: 3px;
   position: absolute;
 }
+
+.meta-box-custom {
+  border: 1px solid #aa970c;
+  .widget-body {
+    min-height: 100px;
+  }
+}
+
+.minicolor-preview {
+  background-image: url(/media/plugins/customer/jquery.minicolors.png);
+  /* top: 5px; */
+  /* left: 5px; */
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  vertical-align: middle;
+  background-position: -80px 0;
+  border: solid 1px #ccc;
+  cursor: text;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.minicolors-theme-bootstrap .minicolors-swatch {
+  top: 6px !important;
+  left: 6px !important;
+}
+
+.minicolor-preview .minicolor-square-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  position: absolute;
+}
+
+.customer-color-attr {
+  padding-left: 44px;
+}
+
+.action-option-area {
+  display: block;
+  padding: 10px 0;
+}
+
+.delete-option-action {
+  color: #ac1313 !important;
+  font-weight: 600;
+}
+
+.list-option-area {
+  padding: 20px;
+  border: 1px solid #aa970c;
+  margin-bottom: 20px;
+}
+
+.add-option {
+  color: #1e9ff2 !important;
+  font-weight: 600;
+}
+
+.action-add-option-attribute {
+  margin-bottom: 0 !important;
+}

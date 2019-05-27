@@ -2,17 +2,16 @@
 /**
  * Created by PhpStorm.
  * User: AnhPham
- * Date: 2019-05-19
- * Time: 09:12
+ * Date: 2019-05-27
+ * Time: 16:42
  */
-
 namespace Plugins\CustomAttributes\Models;
 
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CustomAttributeValueString extends Model
+class CustomAttributeValueText extends Model
 {
 //    use SoftDeletes;
     /**
@@ -20,13 +19,12 @@ class CustomAttributeValueString extends Model
      *
      * @var string
      */
-    protected $table = 'custom_attribute_value_string';
+    protected $table = 'custom_attribute_value_text';
 
     protected $fillable = [
         'custom_attribute_id',
         'entity_id',
         'value',
-        'image_feature',
         'status',
         'created_by',
         'updated_by',

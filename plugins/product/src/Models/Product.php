@@ -4,6 +4,8 @@ namespace Plugins\Product\Models;
 
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
+use Plugins\CustomAttributes\Models\CustomAttributes;
 
 /**
  * Class Product
@@ -42,6 +44,15 @@ class Product extends Model
         'created_by',
         'updated_by',
         'status',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'custom_attributes_value'
     ];
 
     /**
@@ -104,5 +115,35 @@ class Product extends Model
     public function updatedByUser()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function productValueStringCustomAttribute() {
+        return $this->belongsToMany(CustomAttributes::class, 'custom_attribute_value_string', 'entity_id', 'custom_attribute_id');
+    }
+
+    /**
+     * Get the value of custom attribute.
+     */
+    public function getCustomAttributesValueAttribute()
+    {
+        $typeValue = ucfirst($this->type_value);
+        $methodAttribute = "productValue{$typeValue}Attribute";
+        switch ($this->type_value) {
+            case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_STRING:
+                return (!empty($this->$methodAttribute()) ? $this->$methodAttribute() : null);
+                break;
+            case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_NUMBER:
+                return null;
+                break;
+            case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE:
+                return null;
+                break;
+            case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_OPTION:
+                return null;
+                break;
+        }
     }
 }

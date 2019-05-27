@@ -14,4 +14,18 @@ interface ProductServices {
      * @return mixed
      */
     public function getAllProductsOfCategoryById(int $categoryId);
+
+    /**
+     * @param array $data
+     * @param null $productId
+     * @return mixed
+     */
+    public function createOrUpdateProduct(array $data, $productId = null);
+
+    /**
+     * @param array $data
+     * @param bool $isModeCreate
+     * @return mixed
+     */
+    public function prepareDataForCreateOrUpdateProduct(array $data, bool $isModeCreate = true);
 }

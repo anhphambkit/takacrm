@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: AnhPham
- * Date: 2019-05-19
- * Time: 09:12
+ * Date: 2019-05-27
+ * Time: 12:23
  */
 
 namespace Plugins\CustomAttributes\Models;
@@ -11,22 +11,22 @@ namespace Plugins\CustomAttributes\Models;
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
 
-class CustomAttributeValueString extends Model
+class CustomAttributeOptions extends Model
 {
-//    use SoftDeletes;
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'custom_attribute_value_string';
+    protected $table = 'custom_attribute_options';
 
     protected $fillable = [
         'custom_attribute_id',
-        'entity_id',
-        'value',
-        'image_feature',
+        'option_text',
+        'is_default',
+        'is_option_header',
         'status',
         'created_by',
         'updated_by',
@@ -51,7 +51,7 @@ class CustomAttributeValueString extends Model
     }
 
     /**
-     * Get the custom attribute set that owns the attribute.
+     * Get the custom of attribute.
      */
     public function customAttribute()
     {
