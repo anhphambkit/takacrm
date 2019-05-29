@@ -5,10 +5,14 @@ return [
     'create' => 'New product',
     'edit' => 'Edit product',
     'list' => 'List product',
+
+    'detail' =>'Product Detail',
+
     'general' => 'General Information',
     'description_info' => 'Description Information',
     'price_info' => 'Price Information',
     'custom_attributes' => 'Custom Attributes',
+
     'form' => [
         'upc' => 'UPC',
         'upc_placeholder' => 'UPC',

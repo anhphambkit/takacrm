@@ -241,6 +241,26 @@ class ProductController extends BaseAdminController
     }
 
     /**
+     * @param $productId
+     * @return mixed
+     * @author Tu Nguyen
+     */
+    public function getDetail($id){
+        page_title()->setTitle(trans('plugins-product::product.detail') . ' #' . $id);
+        $product = $this->productRepository->findById($id);
+
+        $galleries = [];
+        if ($product->galleries != null)
+            $galleries = $product->galleries->pluck('media')->all();
+
+        if (empty($product))
+            abort(404);
+
+        $this->addDetailAssets();
+        return view('plugins-product::product.detail', compact('product', 'galleries'));
+    }
+
+    /**
      * Add frontend plugins for layout
      * @author AnhPham
      */
@@ -261,6 +281,22 @@ class ProductController extends BaseAdminController
         AssetManager::addAsset('switchery-js', 'libs/plugins/product/js/toggle/switchery.min.js');
         AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
         AssetManager::addAsset('switch-js', 'backend/plugins/product/assets/scripts/switch.min.js');
+
+        AssetManager::addAsset('product-detail', 'plugins/product/app-assets/backend/ecommerce-shop.min.css');
+
+        AssetManager::addAsset('product-detail-slider-js', 'plugins/product/app-assets/backend/slick/slick.js');
+        AssetManager::addAsset('product-detail-slider-css', 'plugins/product/app-assets/backend/slick/slick.css');
+        AssetManager::addAsset('product-detail-slider-theme-css', 'plugins/product/app-assets/backend/slick/slick-theme.css');
+        AssetManager::addAsset('product-js', 'backend/plugins/product/assets/scripts/product.js');
+
+
+        AssetPipeline::requireCss('product-detail');
+        AssetPipeline::requireJs('product-detail-slider-js');
+        AssetPipeline::requireCss('product-detail-slider-css');
+        AssetPipeline::requireCss('product-detail-slider-theme-css');
+        AssetPipeline::requireJs('product-js');
+
+
         AssetManager::addAsset('mini-colors-js', 'libs/core/base/js/miniColors/jquery.minicolors.min.js');
         AssetManager::addAsset('spectrum-js', 'libs/core/base/js/spectrum/spectrum.js');
         AssetManager::addAsset('picker-color-js', 'backend/core/base/assets/scripts/picker-color.min.js');
@@ -271,6 +307,7 @@ class ProductController extends BaseAdminController
         AssetManager::addAsset('custom-field-js', 'backend/core/base/assets/scripts/custom-field.js');
 
         AssetPipeline::requireCss('mini-colors-css');
+
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('bootstrap-switch-css');
         AssetPipeline::requireCss('switchery-css');

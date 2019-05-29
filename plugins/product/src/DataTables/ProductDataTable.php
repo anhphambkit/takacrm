@@ -18,7 +18,7 @@ class ProductDataTable extends DataTableAbstract
         $data = $this->datatables
             ->eloquent($this->query())
             ->editColumn('name', function ($item) {
-                return anchor_link(route('admin.product.edit', $item->id), $item->name);
+                return anchor_link(route('admin.product.detail', $item->id), $item->name);
             })
             ->editColumn('created_at', function ($item) {
                 return date_from_database($item->created_at, config('core-base.cms.date_format.date'));
