@@ -1,5 +1,5 @@
-import Helper from '@coreComponents/setting/js/helper';
-import SearchTable from '@coreComponents/setting/js/search-table';
+import Helper from '@coreComponents/base/js/helper';
+import SearchTable from '@coreComponents/base/js/search-table';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

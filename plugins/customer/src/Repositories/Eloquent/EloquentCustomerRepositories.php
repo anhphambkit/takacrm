@@ -5,6 +5,7 @@ namespace Plugins\Customer\Repositories\Eloquent;
 use Core\Base\Traits\ParseFilterSearch;
 use Core\Master\Repositories\Eloquent\RepositoriesAbstract;
 use Core\Setting\Contracts\ReferenceConfig;
+use Illuminate\Support\Facades\DB;
 use Plugins\Customer\Repositories\Interfaces\CustomerRepositories;
 
 class EloquentCustomerRepositories extends RepositoriesAbstract implements CustomerRepositories
@@ -195,5 +196,33 @@ class EloquentCustomerRepositories extends RepositoriesAbstract implements Custo
                 break;
         }
         return $result;
+    }
+
+    /**
+     * @param array $filters
+     * @return mixed
+     */
+    public function searchAjaxCustomer(array $filters) {
+        $query = $this->model->select('id', 'full_name', 'customer_code', 'phone', 'email', 'avatar');
+        if ($filters['search_key']) {
+            $query->where('full_name', 'ILIKE', "%{$filters['search_key']}%")
+                ->orWhere('customer_code', 'ILIKE', "%{$filters['search_key']}%")
+                ->orWhere('phone', 'ILIKE', "%{$filters['search_key']}%")
+                ->orWhere('email', 'ILIKE', "%{$filters['search_key']}%");
+        }
+
+        // Total:
+        $total = $query->count();
+
+        if ($filters['offset'])
+            $query->offset($filters['offset']);
+
+        if ($filters['limit'])
+            $query->limit($filters['limit']);
+
+        return [
+            'items' => $query->get(),
+            'total' => $total,
+        ];
     }
 }

@@ -54,4 +54,9 @@ $router->group(['prefix' => 'admin'], function (Router $router) {
         'uses' => 'Admin\CustomerController@deleteCustomerQueryList',
     ]);
 
+    $router->get('/search-ajax-customer', [
+        'as' => 'ajax.admin.search_ajax_customer',
+        'uses' => 'Admin\CustomerController@searchAjaxCustomer',
+    ]);
+
 });

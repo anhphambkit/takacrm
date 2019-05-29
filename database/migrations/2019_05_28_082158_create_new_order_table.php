@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateOrderTable extends Migration
+class CreateNewOrderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +13,8 @@ class CreateOrderTable extends Migration
      */
     public function up()
     {
-        $this->down();
-
-        Schema::create('order', function (Blueprint $table) {
+        Schema::dropIfExists('order');
+        Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 120);
             $table->string('order_code', 120)->unique();
@@ -58,6 +58,6 @@ class CreateOrderTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order');
+        Schema::dropIfExists('orders');
     }
 }

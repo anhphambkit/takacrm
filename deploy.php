@@ -29,7 +29,7 @@ if($env->getEnv('DEPLOY_ENV') === 'production'){
 
 task('deploy:dev', [
 //    'deploy:chown-directory',
-//    'deploy:git',
+    'deploy:git',
 //    'deploy:migrate-rollback',
 //    'deploy:migrate',
 //    'deploy:install-server',

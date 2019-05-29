@@ -19,9 +19,8 @@ trait ParseFilterSearch
     ];
 
     /**
-     * Description
-     * @param type|array $filters
-     * @return type
+     * @param array $filters
+     * @return array
      */
     protected function getDataPageLoad($filters = []){
 
@@ -39,6 +38,23 @@ trait ParseFilterSearch
             'limit' => empty($filters['limit']) ? null : intval($filters['limit']),
             'orderBy' => $orderBy,
             'sortOrder' => $sortOrder
+        ];
+    }
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    protected function getFilterAjaxSearch($filters = []){
+        $page = empty($filters['page']) ? 0 : intval($filters['page']);
+        $limit = empty($filters['limit']) ? 0 : intval($filters['limit']);
+        $offset = ($page<2) ? 0 : ($page-1)*$limit;
+        $searchKey = empty($filters['searchKey']) ? null : trim($filters['searchKey']);
+        return [
+            'page'  => $page,
+            'offset'  => $offset,
+            'limit'  => $limit,
+            'search_key' => $searchKey,
         ];
     }
 
