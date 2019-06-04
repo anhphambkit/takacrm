@@ -6,7 +6,7 @@
  * Time: 23:03
  */
 
-namespace Plugins\Product\Models;
+namespace Plugins\Order\Models;
 
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;

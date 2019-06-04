@@ -2,8 +2,13 @@
 return [
     [
         'name' => 'Order',
-        'flag' => 'order.list',
-        'is_feature' => true,
+        'flag' => 'plugins.order',
+    ],
+
+    [
+        'name'        => 'Manage Orders',
+        'flag'        => 'order.list',
+        'parent_flag' => 'plugins.order',
     ],
     [
         'name' => 'Create',
@@ -19,5 +24,27 @@ return [
         'name' => 'Delete',
         'flag' => 'order.delete',
         'parent_flag' => 'order.list',
-    ]
+    ],
+
+    //Payment
+    [
+        'name'        => 'Payments',
+        'flag'        => 'payments.list',
+        'parent_flag' => 'plugins.order',
+    ],
+    [
+        'name'        => 'Create',
+        'flag'        => 'payments.create',
+        'parent_flag' => 'payments.list',
+    ],
+    [
+        'name'        => 'Edit',
+        'flag'        => 'payments.edit',
+        'parent_flag' => 'payments.list',
+    ],
+    [
+        'name'        => 'Delete',
+        'flag'        => 'payments.delete',
+        'parent_flag' => 'payments.list',
+    ],
 ];

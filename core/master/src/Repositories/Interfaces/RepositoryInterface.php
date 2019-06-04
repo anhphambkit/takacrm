@@ -48,14 +48,12 @@ interface RepositoryInterface
     public function getFirstBy(array $condition = [], array $select = [], array $with = []);
 
     /**
-     * Retrieve model by id regardless of status.
-     *
      * @param $id
      * @param array $with
+     * @param array $select
      * @return mixed
-     * @author TrinhLe
      */
-    public function findById($id, array $with = []);
+    public function findById($id, array $with = [], array $select = ['*']);
 
     /**
      * @param $id

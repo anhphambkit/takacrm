@@ -2,15 +2,14 @@
 
 namespace Plugins\Order\Models;
 
-use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Plugins\Order\Models\Order
- *
- * @mixin \Eloquent
+ * Class Order
+ * @package Plugins\Order\Models
  */
-class Order extends Eloquent
+class Order extends Model
 {
     use SoftDeletes;
 

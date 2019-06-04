@@ -6,7 +6,7 @@
  * Time: 23:04
  */
 
-namespace Plugins\Product\Requests;
+namespace Plugins\Order\Requests;
 
 use Core\Master\Requests\CoreRequest;
 

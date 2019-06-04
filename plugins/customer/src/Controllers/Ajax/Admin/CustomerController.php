@@ -196,4 +196,14 @@ class CustomerController extends BaseAdminController
         $result = $this->customerServices->searchAjaxCustomer($request->all());
         return response()->json($result);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getInfoWithContactOfCustomer(Request $request)
+    {
+        $result = $this->customerServices->getInfoWithContactOfCustomer((int)$request->get('customer_id'));
+        return response()->json($result);
+    }
 }

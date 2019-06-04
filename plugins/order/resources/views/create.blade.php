@@ -25,17 +25,11 @@
                                         {!! Form::select('customer_id', [], old('customer_id'), ['class' => 'custom-select select2-placeholder-single form-control customer-list', "id" => "select-customer-list" ]) !!}
                                         {!! Form::error('customer_id', $errors) !!}
                                     </div>
-                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_contact')) has-error @endif">
-                                        <label class="control-label required" for="role">{{ trans('plugins-order::order.form.customer_contact') }}</label>
-                                        {!! Form::select('customer_contact', [], old('customer_contact'), ['class' => 'custom-select select2-placeholder-single form-control customer-contact-list', "contact" => "select-customer-contact-list" ]) !!}
-                                        {!! Form::error('customer_contact', $errors) !!}
-                                    </div>
-                                    <div class="form-group hidden col-md-6 mb-2 @if ($errors->has('customer_name')) has-error @endif">
+                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_name')) has-error @endif">
                                         <label for="customer_name">{{ trans('plugins-order::order.form.customer_name') }}</label>
                                         {!! Form::text('customer_name', old('customer_name'), ['class' => 'form-control', 'id' => 'customer_name', 'placeholder' => trans('plugins-order::order.form.customer_name'), 'readonly' => "readonly", 'data-counter' => 255]) !!}
                                         {!! Form::error('customer_name', $errors) !!}
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_phone')) has-error @endif">
@@ -54,6 +48,13 @@
                                         <label for="customer_address">{{ trans('plugins-order::order.form.customer_address') }}</label>
                                         {!! Form::text('customer_address', old('customer_address'), ['class' => 'form-control', 'id' => 'customer_address', 'readonly' => "readonly", 'placeholder' => trans('plugins-order::order.form.customer_address')]) !!}
                                         {!! Form::error('customer_address', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_contact')) has-error @endif">
+                                        <label class="control-label required" for="role">{{ trans('plugins-order::order.form.customer_contact') }}</label>
+                                        {!! Form::select('customer_contact', [], old('customer_contact'), ['class' => 'custom-select select2-placeholder-single form-control customer-contact-list', "id" => "select-customer-contact-list" ]) !!}
+                                        {!! Form::error('customer_contact', $errors) !!}
                                     </div>
                                 </div>
                             </div>
@@ -203,6 +204,9 @@
                                         {!! Form::textarea('description', old('description'), ['class' => 'form-control description-origin', 'id' => 'description-origin', 'rows' => '2']) !!}
                                     </div>
                                 </div>
+                                <button type="button" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-plus"></i> Add note
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -325,6 +329,7 @@
     <script>
         const API = {
             SEARCH_AJAX_CUSTOMER : "{{ route('ajax.admin.search_ajax_customer') }}",
+            GET_INFO_WITH_CONTACT_OF_CUSTOMER : "{{ route('ajax.admin.get_info_with_contact_of_customer') }}",
         };
     </script>
 @stop

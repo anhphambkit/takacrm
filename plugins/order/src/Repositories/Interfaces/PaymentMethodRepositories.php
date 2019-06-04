@@ -1,5 +1,5 @@
 <?php
-namespace Plugins\Product\Repositories\Interfaces;
+namespace Plugins\Order\Repositories\Interfaces;
 use Core\Master\Repositories\Interfaces\RepositoryInterface;
 
 interface PaymentMethodRepositories extends RepositoryInterface{

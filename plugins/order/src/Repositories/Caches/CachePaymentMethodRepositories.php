@@ -1,7 +1,7 @@
 <?php
-namespace Plugins\Product\Repositories\Caches;
+namespace Plugins\Order\Repositories\Caches;
 use Core\Master\Repositories\Cache\CacheAbstractDecorator;
-use Plugins\Product\Repositories\Interfaces\PaymentMethodRepositories;
+use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
 
 class CachePaymentMethodRepositories extends CacheAbstractDecorator implements PaymentMethodRepositories
 {

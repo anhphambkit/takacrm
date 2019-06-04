@@ -56,15 +56,6 @@ return [
         'permissions' => ['product_origins.list']
     ],
     [
-        'id'          => 'menu-product-payment',
-        'priority'    => 6,
-        'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-product::sidebar.payment',
-        'icon'        => 'fas fa-money-check',
-        'url'         => 'admin.payment.method.list',
-        'permissions' => ['product_payment_method.list']
-    ],
-    [
         'id'          => 'menu-custom-attribute-product',
         'priority'    => 7,
         'parent_id'   => 'menu-product-administrator',

@@ -2,12 +2,12 @@
 
 namespace Plugins\Order\Controllers\Admin;
 
+use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
 use Plugins\Order\Requests\OrderRequest;
 use Plugins\Order\Repositories\Interfaces\OrderRepositories;
 use Plugins\Order\DataTables\OrderDataTable;
 use Core\Base\Controllers\Admin\BaseAdminController;
-
 use AssetManager;
 use AssetPipeline;
 
@@ -19,13 +19,19 @@ class OrderController extends BaseAdminController
     protected $orderRepository;
 
     /**
+     * @var UserInterface|UserRepository
+     */
+    protected $userRepository;
+
+    /**
      * OrderController constructor.
      * @param OrderRepositories $orderRepository
-     * @author TrinhLe
+     * @param UserInterface $userRepository
      */
-    public function __construct(OrderRepositories $orderRepository)
+    public function __construct(OrderRepositories $orderRepository, UserInterface $userRepository)
     {
         $this->orderRepository = $orderRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -36,7 +42,6 @@ class OrderController extends BaseAdminController
      */
     public function getList(OrderDataTable $dataTable)
     {
-
         page_title()->setTitle(trans('plugins-order::order.list'));
 
         return $dataTable->renderTable(['title' => trans('plugins-order::order.list')]);
@@ -49,11 +54,13 @@ class OrderController extends BaseAdminController
      */
     public function getCreate()
     {
+        $users = $this->userRepository->getAllUsers();
+
         page_title()->setTitle(trans('plugins-order::order.create'));
 
         $this->addDetailAssets();
 
-        return view('plugins-order::create');
+        return view('plugins-order::create', compact('users'));
     }
 
     /**
@@ -155,11 +162,11 @@ class OrderController extends BaseAdminController
      */
     private function addDetailAssets()
     {
-        AssetManager::addAsset('select2-css', 'libs/plugins/product/css/select2/select2.min.css');
-        //AssetManager::addAsset('bootstrap-switch-css', 'libs/plugins/product/css/toggle/bootstrap-switch.min.css');
-        //AssetManager::addAsset('switchery-css', 'libs/plugins/product/css/toggle/switchery.min.css');
+        AssetManager::addAsset('select2-css', 'libs/plugins/Order/css/select2/select2.min.css');
+        //AssetManager::addAsset('bootstrap-switch-css', 'libs/plugins/Order/css/toggle/bootstrap-switch.min.css');
+        //AssetManager::addAsset('switchery-css', 'libs/plugins/Order/css/toggle/switchery.min.css');
         AssetManager::addAsset('admin-gallery-css', 'libs/core/base/css/gallery/admin-gallery.css');
-        //AssetManager::addAsset('product-css', 'backend/plugins/product/assets/css/product.css');
+        //AssetManager::addAsset('Order-css', 'backend/plugins/Order/assets/css/Order.css');
 
         AssetManager::addAsset('select2-js', 'libs/plugins/product/js/select2/select2.full.min.js');
         //AssetManager::addAsset('bootstrap-switch-js', 'libs/plugins/product/js/toggle/bootstrap-switch.min.js');

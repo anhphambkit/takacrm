@@ -59,4 +59,9 @@ $router->group(['prefix' => 'admin'], function (Router $router) {
         'uses' => 'Admin\CustomerController@searchAjaxCustomer',
     ]);
 
+    $router->get('/get-info-with-contact-of-customer', [
+        'as' => 'ajax.admin.get_info_with_contact_of_customer',
+        'uses' => 'Admin\CustomerController@getInfoWithContactOfCustomer',
+    ]);
+
 });

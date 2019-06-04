@@ -19,5 +19,14 @@ return [
         'icon'        => 'fas fa-users-cog',
         'url'         => 'admin.order.list',
         'permissions' => ['orders.list']
-    ]
+    ],
+    [
+        'id'          => 'menu-order-payment',
+        'priority'    => 3,
+        'parent_id'   => 'menu-order-administrator',
+        'name'        => 'plugins-order::sidebar.payment',
+        'icon'        => 'fas fa-money-check',
+        'url'         => 'admin.payment.method.list',
+        'permissions' => ['order_payment_method.list']
+    ],
 ];

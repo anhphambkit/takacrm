@@ -6,9 +6,9 @@
  * Time: 08:48
  */
 
-namespace Plugins\Product\DataTables;
+namespace Plugins\Order\DataTables;
 
-use Plugins\Product\Repositories\Interfaces\PaymentMethodRepositories;
+use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
 use Core\Base\DataTables\DataTableAbstract;
 
 class PaymentMethodDataTable extends DataTableAbstract

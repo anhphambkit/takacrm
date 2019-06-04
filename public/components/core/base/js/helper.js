@@ -52,4 +52,30 @@ export default {
                         </button>
                     </div>`;
     },
+
+    // window.iconFormat = function(icon) {
+    //     if (!icon.id) return icon.text;
+    //     let imageFeature = '/vendor/core/images/default-avatar.jpg';
+    //     if (icon.image_feature !== undefined && icon.image_feature !== null && icon.image_feature !== '')
+    //         imageFeature = icon.image_feature;
+    //     let $icon = `<img class="image-item-select" src="${imageFeature}" />${icon.text}`
+    //     return $icon;
+    // }
+
+    // Format icon
+    iconFormat(item, keyValue = 'text') {
+        let avatar = '/vendor/core/images/default-avatar.jpg';
+        if (item.avatar)
+            avatar = item.avatar;
+        return `<img class="image-item-select" src="${avatar}" />${item.full_name || item[keyValue]}`;
+    },
+
+    // Format color:
+    colorFormat(item) {
+        let html = `<span class="minicolor-preview">
+                           <span class="minicolor-square-box" style="background-color: ${item.code};"></span>
+                       </span>
+                       <span class="customer-color-attr">${item.text}</span>`;
+        return html;
+    }
 }

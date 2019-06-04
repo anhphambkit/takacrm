@@ -2,8 +2,8 @@
 /**
  * Payment Method repository implemented
  */
-namespace Plugins\Product\Repositories\Eloquent;
-use Plugins\Product\Repositories\Interfaces\PaymentMethodRepositories;
+namespace Plugins\Order\Repositories\Eloquent;
+use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
 use Core\Master\Repositories\Eloquent\RepositoriesAbstract;
 
 class EloquentPaymentMethodRepositories extends RepositoriesAbstract implements PaymentMethodRepositories {

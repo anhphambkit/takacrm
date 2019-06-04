@@ -62,13 +62,7 @@
         </td>
     </tr>
     </tbody>
-    <tfoot>
-    <tr>
-        <th>
-            <button type="button" class="btn btn-sm btn-primary">
-                <i class="fa fa-plus"></i> Thêm sản phẩm
-            </button>
-        </th>
-    </tr>
-    </tfoot>
 </table>
+<button type="button" class="btn btn-sm btn-primary">
+    <i class="fa fa-plus"></i> Thêm sản phẩm
+</button>

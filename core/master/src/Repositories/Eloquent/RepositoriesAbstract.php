@@ -128,17 +128,15 @@ abstract class RepositoriesAbstract implements RepositoryInterface
     }
 
     /**
-     * Retrieve model by id regardless of status.
-     *
      * @param $id
      * @param array $with
+     * @param array $select
      * @return mixed
-     * @author TrinhLe
      */
-    public function findById($id, array $with = [])
+    public function findById($id, array $with = [], array $select = ['*'])
     {
 
-        $data = $this->make($with)->where('id', $id)->first();
+        $data = $this->make($with)->where('id', $id)->select($select)->first();
         $this->resetModel();
         return $data;
     }

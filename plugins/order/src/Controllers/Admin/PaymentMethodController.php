@@ -6,15 +6,14 @@
  * Time: 22:57
  */
 
-namespace Plugins\Product\Controllers\Admin;
+namespace Plugins\Order\Controllers\Admin;
 
 use Core\Base\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Plugins\Product\DataTables\PaymentMethodDataTable;
-use Plugins\Product\Models\PaymentMethod;
-use Plugins\Product\Repositories\Interfaces\PaymentMethodRepositories;
-use Plugins\Product\Requests\PaymentMethodRequest;
+use Plugins\Order\DataTables\PaymentMethodDataTable;
+use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
+use Plugins\Order\Requests\PaymentMethodRequest;
 
 class PaymentMethodController extends BaseAdminController
 {
@@ -34,17 +33,15 @@ class PaymentMethodController extends BaseAdminController
     }
 
     /**
-     * Display all payment
-     * @param ProductPaymentMethodDataTable $dataTable
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @author AnhPham
+     * @param PaymentMethodDataTable $dataTable
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function getList(PaymentMethodDataTable $dataTable)
     {
 
-        page_title()->setTitle(trans('plugins-product::payment.list'));
+        page_title()->setTitle(trans('plugins-order::payment.list'));
 
-        return $dataTable->renderTable(['title' => trans('plugins-product::payment.list')]);
+        return $dataTable->renderTable(['title' => trans('plugins-order::payment.list')]);
     }
 
     /**
@@ -54,9 +51,9 @@ class PaymentMethodController extends BaseAdminController
      */
     public function getCreate()
     {
-        page_title()->setTitle(trans('plugins-product::payment.create'));
+        page_title()->setTitle(trans('plugins-order::payment.create'));
 
-        return view('plugins-product::payment.create');
+        return view('plugins-order::payment.create');
     }
 
     /**
@@ -71,7 +68,7 @@ class PaymentMethodController extends BaseAdminController
 
         $paymentMethod = $this->paymentMethodRepository->createOrUpdate($data);
 
-        do_action(BASE_ACTION_AFTER_CREATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $paymentMethod);
+        do_action(BASE_ACTION_AFTER_CREATE_CONTENT, ORDER_MODULE_SCREEN_NAME, $request, $paymentMethod);
 
         if ($request->input('submit') === 'save') {
             return redirect()->route('admin.payment.method.list')->with('success_msg', trans('core-base::notices.create_success_message'));
@@ -94,9 +91,9 @@ class PaymentMethodController extends BaseAdminController
             abort(404);
         }
 
-        page_title()->setTitle(trans('plugins-product::payment.edit') . ' #' . $id);
+        page_title()->setTitle(trans('plugins-order::payment.edit') . ' #' . $id);
 
-        return view('plugins-product::payment.edit', compact('paymentMethod'));
+        return view('plugins-order::payment.edit', compact('paymentMethod'));
     }
 
     /**
@@ -119,7 +116,7 @@ class PaymentMethodController extends BaseAdminController
 
         $this->paymentMethodRepository->createOrUpdate($paymentMethod);
 
-        do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $paymentMethod);
+        do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, ORDER_MODULE_SCREEN_NAME, $request, $paymentMethod);
 
         if ($request->input('submit') === 'save') {
             return redirect()->route('admin.payment.method.list')->with('success_msg', trans('core-base::notices.update_success_message'));
@@ -143,7 +140,7 @@ class PaymentMethodController extends BaseAdminController
             }
             $this->paymentMethodRepository->delete($paymentMethod);
 
-            do_action(BASE_ACTION_AFTER_DELETE_CONTENT, PRODUCT_MODULE_SCREEN_NAME, $request, $paymentMethod);
+            do_action(BASE_ACTION_AFTER_DELETE_CONTENT, ORDER_MODULE_SCREEN_NAME, $request, $paymentMethod);
 
             return [
                 'error' => false,
