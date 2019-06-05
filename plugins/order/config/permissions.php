@@ -29,22 +29,44 @@ return [
     //Payment
     [
         'name'        => 'Payments',
-        'flag'        => 'payments.list',
+        'flag'        => 'order.payments.list',
         'parent_flag' => 'plugins.order',
     ],
     [
         'name'        => 'Create',
-        'flag'        => 'payments.create',
-        'parent_flag' => 'payments.list',
+        'flag'        => 'order.payments.create',
+        'parent_flag' => 'order_payments.list',
     ],
     [
         'name'        => 'Edit',
-        'flag'        => 'payments.edit',
-        'parent_flag' => 'payments.list',
+        'flag'        => 'order.payments.edit',
+        'parent_flag' => 'order_payments.list',
     ],
     [
         'name'        => 'Delete',
-        'flag'        => 'payments.delete',
-        'parent_flag' => 'payments.list',
+        'flag'        => 'order.payments.delete',
+        'parent_flag' => 'order_payments.list',
+    ],
+
+    //Order
+    [
+        'name'        => 'Sources Order',
+        'flag'        => 'order.sources.list',
+        'parent_flag' => 'plugins.order',
+    ],
+    [
+        'name'        => 'Create',
+        'flag'        => 'order.sources.create',
+        'parent_flag' => 'order_sources.list',
+    ],
+    [
+        'name'        => 'Edit',
+        'flag'        => 'order.sources.edit',
+        'parent_flag' => 'order_sources.list',
+    ],
+    [
+        'name'        => 'Delete',
+        'flag'        => 'order.sources.delete',
+        'parent_flag' => 'order_sources.list',
     ],
 ];

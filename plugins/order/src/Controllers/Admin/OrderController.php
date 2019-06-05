@@ -60,7 +60,7 @@ class OrderController extends BaseAdminController
 
         $this->addDetailAssets();
 
-        return view('plugins-order::create', compact('users'));
+        return view('plugins-order::order.create', compact('users'));
     }
 
     /**
@@ -99,7 +99,7 @@ class OrderController extends BaseAdminController
 
         page_title()->setTitle(trans('plugins-order::order.edit') . ' #' . $id);
 
-        return view('plugins-order::edit', compact('order'));
+        return view('plugins-order::order.edit', compact('order'));
     }
 
     /**

@@ -1,17 +1,17 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Tu Nguyen
- * Date: 2019-05-24
- * Time: 08:48
+ * User: AnhPham
+ * Date: 2019-06-06
+ * Time: 04:03
  */
 
 namespace Plugins\Order\DataTables;
 
-use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
+use Plugins\Order\Repositories\Interfaces\OrderSourceRepositories;
 use Core\Base\DataTables\DataTableAbstract;
 
-class PaymentMethodDataTable extends DataTableAbstract
+class SourceOrderDataTable extends DataTableAbstract
 {
     /**
      * Display ajax response.
@@ -24,7 +24,7 @@ class PaymentMethodDataTable extends DataTableAbstract
         $data = $this->datatables
             ->eloquent($this->query())
             ->editColumn('name', function ($item) {
-                return anchor_link(route('admin.order.payment.method.edit', $item->id), $item->name);
+                return anchor_link(route('admin.order.source.method.edit', $item->id), $item->name);
             })
             ->editColumn('created_by', function ($item) {
                 return $item->createdByUser ? $item->createdByUser->getFullName() : null;
@@ -38,7 +38,7 @@ class PaymentMethodDataTable extends DataTableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, CUSTOMER_MODULE_SCREEN_NAME)
             ->addColumn('operations', function ($item) {
-                return table_actions('admin.order.payment.method.edit', 'admin.order.payment.method.delete', $item);
+                return table_actions('admin.order.source.method.edit', 'admin.order.source.method.delete', $item);
             })
             ->escapeColumns([])
             ->make(true);
@@ -52,18 +52,18 @@ class PaymentMethodDataTable extends DataTableAbstract
      */
     public function query()
     {
-        $model = app(PaymentMethodRepositories::class)->getModel();
+        $model = app(OrderSourceRepositories::class)->getModel();
         /**
          * @var \Eloquent $model
          */
         $query = $model->select(
             [
-                'payment_method.id',
-                'payment_method.slug',
-                'payment_method.name',
-                'payment_method.created_by',
-                'payment_method.created_at',
-                'payment_method.status'
+                'order_sources.id',
+                'order_sources.slug',
+                'order_sources.name',
+                'order_sources.created_by',
+                'order_sources.created_at',
+                'order_sources.status'
             ]);
         return $query;
     }
@@ -77,39 +77,39 @@ class PaymentMethodDataTable extends DataTableAbstract
     {
         return [
             'id' => [
-                'name' => 'payment_method.id',
+                'name' => 'order_sources.id',
                 'title' => trans('core-base::tables.id'),
                 'footer' => trans('core-base::tables.id'),
                 'width' => '20px',
                 'class' => 'searchable searchable_id',
             ],
             'name' => [
-                'name' => 'payment_method.name',
+                'name' => 'order_sources.name',
                 'title' => trans('core-base::tables.name'),
                 'footer' => trans('core-base::tables.name'),
                 'class' => 'text-left searchable',
             ],
             'slug' => [
-                'name' => 'payment_method.slug',
+                'name' => 'order_sources.slug',
                 'title' => trans('core-base::tables.slug'),
                 'footer' => trans('core-base::tables.slug'),
                 'class' => 'text-left searchable',
             ],
             'created_by' => [
-                'name' => 'payment_method.created_by',
+                'name' => 'order_sources.created_by',
                 'title' => trans('core-base::tables.created_by'),
                 'footer' => trans('core-base::tables.created_by'),
                 'class' => 'text-left searchable',
             ],
             'created_at' => [
-                'name' => 'payment_method.created_at',
+                'name' => 'order_sources.created_at',
                 'title' => trans('core-base::tables.created_at'),
                 'footer' => trans('core-base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'searchable',
             ],
             'status' => [
-                'name' => 'payment_method.status',
+                'name' => 'order_sources.status',
                 'title' => trans('core-base::tables.status'),
                 'footer' => trans('core-base::tables.status'),
                 'width' => '100px',
@@ -125,7 +125,7 @@ class PaymentMethodDataTable extends DataTableAbstract
     {
         $buttons = [
             'create' => [
-                'link' => route('admin.order.payment.method.create'),
+                'link' => route('admin.order.source.method.create'),
                 'text' => view('core-base::elements.tables.actions.create')->render(),
             ],
         ];

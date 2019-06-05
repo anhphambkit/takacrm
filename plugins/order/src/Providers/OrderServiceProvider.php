@@ -4,6 +4,7 @@ namespace Plugins\Order\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Plugins\Order\Repositories\Interfaces\OrderRepositories;
+use Plugins\Order\Repositories\Interfaces\OrderSourceRepositories;
 use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
 
 class OrderServiceProvider extends ServiceProvider
@@ -43,6 +44,7 @@ class OrderServiceProvider extends ServiceProvider
         return [
             OrderRepositories::class           => \Plugins\Order\Models\Order::class,
             PaymentMethodRepositories::class => \Plugins\Order\Models\PaymentMethod::class,
+            OrderSourceRepositories::class => \Plugins\Order\Models\SourceOrder::class,
         ];
     }
 

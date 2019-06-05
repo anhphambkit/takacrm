@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('content')
-    {!! Form::open(['route' => 'admin.order.payment.method.create']) !!}
+    {!! Form::open(['route' => 'admin.order.source.method.create']) !!}
         @php do_action(BASE_FILTER_BEFORE_RENDER_FORM, ORDER_MODULE_SCREEN_NAME, request(), null) @endphp
         <div class="row">
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" id="from-actions-bottom-right">{{ trans('plugins-order::payment.create') }}</h4>
+                        <h4 class="card-title" id="from-actions-bottom-right">{{ trans('plugins-order::source.create') }}</h4>
                         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -28,8 +28,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-2 @if ($errors->has('description')) has-error @endif">
-                                        <label for="name">{{ trans('plugins-order::payment.form.description') }}</label>
-                                        {!! Form::textarea('description', old('description'), ['class' => 'form-control description-payment', 'id' => 'description-payment']) !!}
+                                        <label for="name">{{ trans('plugins-order::source.form.description') }}</label>
+                                        {!! Form::textarea('description', old('description'), ['class' => 'form-control description-source', 'id' => 'description-source']) !!}
                                         {!! Form::error('description', $errors) !!}
                                     </div>
                                 </div>

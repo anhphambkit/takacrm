@@ -26,7 +26,16 @@ return [
         'parent_id'   => 'menu-order-administrator',
         'name'        => 'plugins-order::sidebar.payment',
         'icon'        => 'fas fa-money-check',
-        'url'         => 'admin.payment.method.list',
-        'permissions' => ['order_payment_method.list']
+        'url'         => 'admin.order.payment.method.list',
+        'permissions' => ['order_payments.list']
+    ],
+    [
+        'id'          => 'menu-order-source',
+        'priority'    => 4,
+        'parent_id'   => 'menu-order-administrator',
+        'name'        => 'plugins-order::sidebar.source_order',
+        'icon'        => 'fab fa-sourcetree',
+        'url'         => 'admin.order.source.method.list',
+        'permissions' => ['order_sources.list']
     ],
 ];

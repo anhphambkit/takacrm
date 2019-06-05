@@ -56,10 +56,6 @@ function formatDataResultSelect2(_this, data) {
 
 function formatDataSelectionSelect2(_this, data) {
     if (data.full_name) {
-        $(_this.wrapperSelect).data('customer-full-name', data.full_name);
-        $(_this.wrapperSelect).data('customer-phone', data.phone);
-        $(_this.wrapperSelect).data('customer-email', data.email);
-        $(_this.wrapperSelect).data('customer-address-full', data.address_full);
         let avatar = data.avatar ? data.avatar : '/vendor/core/images/default-avatar.jpg';
         let markup = `<div class='select2-result-data clearfix' data-customer-full-name="${data.full_name}" data-customer-phone="${data.phone}" data-customer-email="${data.email}">
                     <div class='select2-result-data__avatar select2-image select-selection'>
@@ -102,7 +98,6 @@ $(document).on('change', '#select-customer-list', function (e) {
                     templateSelection: Helper.iconFormat,
                     escapeMarkup: function(es) { return es; }
                 });
-
             })
             .catch(function(data){
                 console.log("error", data);
@@ -111,4 +106,12 @@ $(document).on('change', '#select-customer-list', function (e) {
 
             });
     }
+});
+
+$(`#select-user-performed-list`).select2({
+    placeholder: "Select a user",
+    minimumResultsForSearch: Infinity,
+    templateResult: Helper.iconFormat,
+    templateSelection: Helper.iconFormat,
+    escapeMarkup: function(es) { return es; }
 });

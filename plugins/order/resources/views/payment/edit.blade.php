@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    {!! Form::open(['route' => ['admin.payment.method.edit', $paymentMethod->id]]) !!}
+    {!! Form::open(['route' => ['admin.order.payment.method.edit', $paymentMethod->id]]) !!}
         @php do_action(BASE_FILTER_BEFORE_RENDER_FORM, ORDER_MODULE_SCREEN_NAME, request(), $paymentMethod) @endphp
         <div class="row">
             <div class="col-md-9">

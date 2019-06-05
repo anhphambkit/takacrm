@@ -49,33 +49,67 @@ $router->group(['prefix' => 'order'], function (Router $router) {
     $router->group(['prefix' => 'payment'], function (Router $router) {
 
         $router->get('/', [
-            'as' => 'admin.payment.method.list',
+            'as' => 'admin.order.payment.method.list',
             'uses' => 'PaymentMethodController@getList',
         ]);
 
         $router->get('/create', [
-            'as' => 'admin.payment.method.create',
+            'as' => 'admin.order.payment.method.create',
             'uses' => 'PaymentMethodController@getCreate',
         ]);
 
         $router->post('/create', [
-            'as' => 'admin.payment.method.create',
+            'as' => 'admin.order.payment.method.create',
             'uses' => 'PaymentMethodController@postCreate',
         ]);
 
         $router->get('/edit/{id}', [
-            'as' => 'admin.payment.method.edit',
+            'as' => 'admin.order.payment.method.edit',
             'uses' => 'PaymentMethodController@getEdit',
         ]);
 
         $router->post('/edit/{id}', [
-            'as' => 'admin.payment.method.edit',
+            'as' => 'admin.order.payment.method.edit',
             'uses' => 'PaymentMethodController@postEdit',
         ]);
 
         $router->get('/delete/{id}', [
-            'as' => 'admin.payment.method.delete',
+            'as' => 'admin.order.payment.method.delete',
             'uses' => 'PaymentMethodController@getDelete',
+        ]);
+
+    });
+
+    $router->group(['prefix' => 'source'], function (Router $router) {
+
+        $router->get('/', [
+            'as' => 'admin.order.source.method.list',
+            'uses' => 'SourceOrderController@getList',
+        ]);
+
+        $router->get('/create', [
+            'as' => 'admin.order.source.method.create',
+            'uses' => 'SourceOrderController@getCreate',
+        ]);
+
+        $router->post('/create', [
+            'as' => 'admin.order.source.method.create',
+            'uses' => 'SourceOrderController@postCreate',
+        ]);
+
+        $router->get('/edit/{id}', [
+            'as' => 'admin.order.source.method.edit',
+            'uses' => 'SourceOrderController@getEdit',
+        ]);
+
+        $router->post('/edit/{id}', [
+            'as' => 'admin.order.source.method.edit',
+            'uses' => 'SourceOrderController@postEdit',
+        ]);
+
+        $router->get('/delete/{id}', [
+            'as' => 'admin.order.source.method.delete',
+            'uses' => 'SourceOrderController@getDelete',
         ]);
 
     });

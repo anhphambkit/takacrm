@@ -71,9 +71,9 @@ class PaymentMethodController extends BaseAdminController
         do_action(BASE_ACTION_AFTER_CREATE_CONTENT, ORDER_MODULE_SCREEN_NAME, $request, $paymentMethod);
 
         if ($request->input('submit') === 'save') {
-            return redirect()->route('admin.payment.method.list')->with('success_msg', trans('core-base::notices.create_success_message'));
+            return redirect()->route('admin.order.payment.method.list')->with('success_msg', trans('core-base::notices.create_success_message'));
         } else {
-            return redirect()->route('admin.payment.method.edit', $paymentMethod->id)->with('success_msg', trans('core-base::notices.create_success_message'));
+            return redirect()->route('admin.order.payment.method.edit', $paymentMethod->id)->with('success_msg', trans('core-base::notices.create_success_message'));
         }
     }
 
@@ -119,9 +119,9 @@ class PaymentMethodController extends BaseAdminController
         do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, ORDER_MODULE_SCREEN_NAME, $request, $paymentMethod);
 
         if ($request->input('submit') === 'save') {
-            return redirect()->route('admin.payment.method.list')->with('success_msg', trans('core-base::notices.update_success_message'));
+            return redirect()->route('admin.order.payment.method.list')->with('success_msg', trans('core-base::notices.update_success_message'));
         } else {
-            return redirect()->route('admin.payment.method.edit', $id)->with('success_msg', trans('core-base::notices.update_success_message'));
+            return redirect()->route('admin.order.payment.method.edit', $id)->with('success_msg', trans('core-base::notices.update_success_message'));
         }
     }
 

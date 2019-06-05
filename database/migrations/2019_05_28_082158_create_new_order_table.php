@@ -16,7 +16,6 @@ class CreateNewOrderTable extends Migration
         Schema::dropIfExists('order');
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 120);
             $table->string('order_code', 120)->unique();
             $table->string('customer_name', 255)->nullable();
             $table->string('customer_phone', 20)->nullable();
@@ -26,7 +25,7 @@ class CreateNewOrderTable extends Migration
             $table->integer('user_performed');
             $table->date('order_date');
             $table->integer('payment_method_id')->nullable();
-            $table->integer('product_origin_id')->nullable();
+            $table->integer('order_origin_id')->nullable();
             $table->string('lading_code', 120)->unique();
             $table->integer('campaign_id')->nullable();
             $table->integer('customer_contact_id')->nullable();
@@ -42,6 +41,8 @@ class CreateNewOrderTable extends Migration
             $table->tinyInteger('fees_shipping_percent')->nullable();
             $table->tinyInteger('fees_installation_percent')->nullable();
             $table->boolean('is_discount_after_tax')->default(false);
+            $table->integer('sub_total');
+            $table->integer('total_order');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->tinyInteger('status')->unsigned()->default(1);
