@@ -23,4 +23,12 @@ class CacheOrderRepositories extends CacheAbstractDecorator implements OrderRepo
         $this->repository = $repository;
         $this->entityName = "Cache-Order"; # Please setup reference name of cache.
     }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function createNewInvoiceOrder(array $data) {
+        return $this->flushCacheAndUpdateData(__FUNCTION__, func_get_args());
+    }
 }

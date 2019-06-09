@@ -295,4 +295,13 @@ trait CachePackageRepositoriesTrait
     public function getByWhereNotIn($column, array $value = [], array $args = []) {
         return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }
+
+    /**
+     * @param string $column
+     * @param array $condition
+     * @return mixed
+     */
+    public function getMaxColumn(string $column = 'id', array $condition = []) {
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+    }
 }

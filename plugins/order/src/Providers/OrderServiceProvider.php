@@ -6,6 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use Plugins\Order\Repositories\Interfaces\OrderRepositories;
 use Plugins\Order\Repositories\Interfaces\OrderSourceRepositories;
 use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
+use Plugins\Order\Repositories\Interfaces\ProductsInOrderRepositories;
+use Plugins\Order\Services\Implement\ImplementOrderServices;
+use Plugins\Order\Services\Implement\ImplementProductsInOrderServices;
+use Plugins\Order\Services\OrderServices;
+use Plugins\Order\Services\ProductsInOrderServices;
 
 class OrderServiceProvider extends ServiceProvider
 {
@@ -32,6 +37,8 @@ class OrderServiceProvider extends ServiceProvider
     public function register()
     {
         register_repositories($this);
+        $this->app->singleton(OrderServices::class, ImplementOrderServices::class);
+        $this->app->singleton(ProductsInOrderServices::class, ImplementProductsInOrderServices::class);
     }
 
     /**
@@ -45,6 +52,7 @@ class OrderServiceProvider extends ServiceProvider
             OrderRepositories::class           => \Plugins\Order\Models\Order::class,
             PaymentMethodRepositories::class => \Plugins\Order\Models\PaymentMethod::class,
             OrderSourceRepositories::class => \Plugins\Order\Models\SourceOrder::class,
+            ProductsInOrderRepositories::class => \Plugins\Order\Models\ProductsInOrder::class,
         ];
     }
 

@@ -1,0 +1,15 @@
+.form-actions-area {
+  position: fixed;
+  bottom: 0;
+  width: calc(100% - 4.4rem);
+  z-index: 9;
+  .card {
+    margin: 0 !important;
+    background: #dfdfdf;
+    border: 1px solid #090909;
+  }
+}
+
+.form-general-info {
+  margin-bottom: 60px;
+}

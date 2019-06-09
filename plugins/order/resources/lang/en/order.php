@@ -5,9 +5,13 @@ return [
     'create' => 'New order',
     'edit' => 'Edit order',
     'list' => 'List order',
+    'add_product' => 'Add product',
+    'add_note' => 'Add note',
     'form' => [
         'search_customer_on_system' => 'Search a customer on system',
+        'customer_code' => 'Customer code',
         'customer_name' => 'Customer name',
+        'customer_name_and_customer_code' => 'Customer name (customer code)',
         'customer_phone' => 'Customer phone',
         'customer_email' => 'Customer email',
         'customer_address' => 'Customer address',
@@ -20,8 +24,8 @@ return [
         'order_date' => 'Order Date',
         'payment_method' => 'Payment method',
         'order_origin' => 'Order origin',
+        'order_source' => 'Order Source',
         'campaign' => 'Campaign',
-
         'sub_total' => 'Sub total',
         'fees_ship_percent' => 'Ship fee (%)',
         'fees_vat_percent' => 'VAT (%)',

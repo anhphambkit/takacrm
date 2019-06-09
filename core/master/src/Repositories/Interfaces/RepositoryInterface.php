@@ -221,4 +221,11 @@ interface RepositoryInterface
      */
     public function getByWhereNotIn($column, array $value = [], array $args = []);
 
+    /**
+     * @param string $column
+     * @param array $condition
+     * @return mixed
+     */
+    public function getMaxColumn(string $column = 'id', array $condition = []);
+
 }

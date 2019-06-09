@@ -3,18 +3,21 @@
 namespace Plugins\Customer\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Plugins\Customer\Repositories\Caches\CacheCustomerContactRepositories;
 use Plugins\Customer\Repositories\Caches\CacheCustomerQueryListRepositories;
 use Plugins\Customer\Repositories\Caches\CacheCustomerRelationRepositories;
 use Plugins\Customer\Repositories\Caches\CacheCustomerRepositories;
 use Plugins\Customer\Repositories\Caches\CacheCustomerSourceRepositories;
 use Plugins\Customer\Repositories\Caches\CacheCustomerJobRepositories;
 use Plugins\Customer\Repositories\Caches\CacheGroupCustomerRepositories;
+use Plugins\Customer\Repositories\Eloquent\EloquentCustomerContactRepositories;
 use Plugins\Customer\Repositories\Eloquent\EloquentCustomerQueryListRepositories;
 use Plugins\Customer\Repositories\Eloquent\EloquentCustomerRelationRepositories;
 use Plugins\Customer\Repositories\Eloquent\EloquentCustomerRepositories;
 use Plugins\Customer\Repositories\Eloquent\EloquentCustomerSourceRepositories;
 use Plugins\Customer\Repositories\Eloquent\EloquentCustomerJobRepositories;
 use Plugins\Customer\Repositories\Eloquent\EloquentGroupCustomerRepositories;
+use Plugins\Customer\Repositories\Interfaces\CustomerContactRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerQueryListRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRelationRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRepositories;
@@ -92,6 +95,10 @@ class CustomerServiceProvider extends ServiceProvider
             $this->app->singleton(CustomerQueryListRepositories::class, function () {
                 return new CacheCustomerQueryListRepositories(new EloquentCustomerQueryListRepositories(new \Plugins\Customer\Models\CustomerQueryList()));
             });
+
+            $this->app->singleton(CustomerContactRepositories::class, function () {
+                return new CacheCustomerContactRepositories(new EloquentCustomerContactRepositories(new \Plugins\Customer\Models\CustomerContact()));
+            });
         } else {
             $this->app->singleton(CustomerRepositories::class, function () {
                 return new EloquentCustomerRepositories(new \Plugins\Customer\Models\Customer());
@@ -115,6 +122,10 @@ class CustomerServiceProvider extends ServiceProvider
 
             $this->app->singleton(CustomerQueryListRepositories::class, function () {
                 return new EloquentCustomerQueryListRepositories(new \Plugins\Customer\Models\CustomerQueryList());
+            });
+
+            $this->app->singleton(CustomerContactRepositories::class, function () {
+                return new EloquentCustomerContactRepositories(new \Plugins\Customer\Models\CustomerContact());
             });
         }
 

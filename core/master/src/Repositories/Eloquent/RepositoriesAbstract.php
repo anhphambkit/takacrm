@@ -547,4 +547,19 @@ abstract class RepositoriesAbstract implements RepositoryInterface
         return $data;
     }
 
+    /**
+     * @param string $column
+     * @param array $condition
+     * @return mixed
+     */
+    public function getMaxColumn(string $column = 'id', array $condition = [])
+    {
+        $this->applyConditions($condition);
+        $data = $this->model->max($column);
+
+        $this->resetModel();
+
+        return $data;
+    }
+
 }

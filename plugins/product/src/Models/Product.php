@@ -35,7 +35,7 @@ class Product extends Model
         'wholesale_price',
         'online_price',
         'purchase_price',
-        'discount',
+        'discount_percent',
         'wholesale_discount',
         'purchase_discount',
         'online_discount',
@@ -52,7 +52,9 @@ class Product extends Model
      * @var array
      */
     protected $appends = [
-        'custom_attributes_value'
+        'custom_attributes_value',
+        'category_name',
+        'unit_name',
     ];
 
     /**
@@ -145,5 +147,13 @@ class Product extends Model
                 return null;
                 break;
         }
+    }
+
+    public function getCategoryNameAttribute() {
+        return ($this->productCategory) ? $this->productCategory->name : '';
+    }
+
+    public function getUnitNameAttribute() {
+        return ($this->productUnit) ? $this->productUnit->name : '';
     }
 }

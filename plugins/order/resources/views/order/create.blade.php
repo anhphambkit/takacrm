@@ -25,10 +25,22 @@
                                         {!! Form::select('customer_id', [], old('customer_id'), ['class' => 'custom-select select2-placeholder-single form-control customer-list', "id" => "select-customer-list" ]) !!}
                                         {!! Form::error('customer_id', $errors) !!}
                                     </div>
+                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_contact_id')) has-error @endif">
+                                        <label class="control-label required" for="role">{{ trans('plugins-order::order.form.customer_contact') }}</label>
+                                        {!! Form::select('customer_contact_id', [], old('customer_contact_id'), ['class' => 'custom-select select2-placeholder-single form-control customer-contact-list', "id" => "select-customer-contact-list" ]) !!}
+                                        {!! Form::error('customer_contact_id', $errors) !!}
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_name')) has-error @endif">
                                         <label for="customer_name">{{ trans('plugins-order::order.form.customer_name') }}</label>
                                         {!! Form::text('customer_name', old('customer_name'), ['class' => 'form-control', 'id' => 'customer_name', 'placeholder' => trans('plugins-order::order.form.customer_name'), 'readonly' => "readonly", 'data-counter' => 255]) !!}
                                         {!! Form::error('customer_name', $errors) !!}
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_code')) has-error @endif">
+                                        <label for="customer_code">{{ trans('plugins-order::order.form.customer_code') }}</label>
+                                        {!! Form::text('customer_code', old('customer_code'), ['class' => 'form-control', 'id' => 'customer_code', 'placeholder' => trans('plugins-order::order.form.customer_code'), 'readonly' => "readonly", 'data-counter' => 255]) !!}
+                                        {!! Form::error('customer_code', $errors) !!}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -48,13 +60,6 @@
                                         <label for="customer_address">{{ trans('plugins-order::order.form.customer_address') }}</label>
                                         {!! Form::text('customer_address', old('customer_address'), ['class' => 'form-control', 'id' => 'customer_address', 'readonly' => "readonly", 'placeholder' => trans('plugins-order::order.form.customer_address')]) !!}
                                         {!! Form::error('customer_address', $errors) !!}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_contact')) has-error @endif">
-                                        <label class="control-label required" for="role">{{ trans('plugins-order::order.form.customer_contact') }}</label>
-                                        {!! Form::select('customer_contact', [], old('customer_contact'), ['class' => 'custom-select select2-placeholder-single form-control customer-contact-list', "id" => "select-customer-contact-list" ]) !!}
-                                        {!! Form::error('customer_contact', $errors) !!}
                                     </div>
                                 </div>
                             </div>
@@ -78,10 +83,10 @@
                         <div class="card-body">
                             <div class="form-body">
                                 <div class="row">
-                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('user_performed')) has-error @endif">
+                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('user_performed_id')) has-error @endif">
                                         <label class="control-label required" for="role">{{ trans('plugins-order::order.form.user_performed') }}</label>
-                                        {!! Form::select('user_performed', $users, old('user_performed'), ['class' => 'custom-select select2-placeholder-single form-control user-performed-list', "id" => "select-user-performed-list" ]) !!}
-                                        {!! Form::error('user_performed', $errors) !!}
+                                        {!! Form::select('user_performed_id', $users, old('user_performed_id'), ['class' => 'custom-select select2-placeholder-single form-control user-performed-list', "id" => "select-user-performed-list" ]) !!}
+                                        {!! Form::error('user_performed_id', $errors) !!}
                                     </div>
                                     <div class="form-group col-md-3 mb-2 @if ($errors->has('order_code')) has-error @endif">
                                         <label for="order_code">{{ trans('plugins-order::order.form.order_code') }}</label>
@@ -97,19 +102,26 @@
                                 <div class="row">
                                     <div class="form-group col-md-6 mb-2 @if ($errors->has('payment_method_id')) has-error @endif">
                                         <label for="payment_method_id">{{ trans('plugins-order::order.form.payment_method') }}</label>
-                                        {!! Form::text('payment_method_id', old('payment_method_id'), ['class' => 'form-control', 'id' => 'payment_method_id', 'placeholder' => trans('plugins-order::order.form.payment_method')]) !!}
+                                        {!! Form::select('payment_method_id', $paymentMethods, old('payment_method_id'), ['class' => 'custom-select select2-placeholder-single form-control payment-method-list', "id" => "select-payment-method-list" ]) !!}
                                         {!! Form::error('payment_method_id', $errors) !!}
                                     </div>
-                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('order_origin_id')) has-error @endif">
-                                        <label for="order_origin_id">{{ trans('plugins-order::order.form.order_origin') }}</label>
-                                        {!! Form::text('order_origin_id', old('order_origin_id'), ['class' => 'form-control', 'id' => 'order_origin_id', 'placeholder' => trans('plugins-order::order.form.order_origin')]) !!}
-                                        {!! Form::error('order_origin_id', $errors) !!}
+                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('order_source_id')) has-error @endif">
+                                        <label for="order_source_id">{{ trans('plugins-order::order.form.order_source') }}</label>
+                                        {!! Form::select('order_source_id', $orderSources, old('order_source_id'), ['class' => 'custom-select select2-placeholder-single form-control source-order-list', "id" => "select-source-order-list" ]) !!}
+                                        {!! Form::error('order_source_id', $errors) !!}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6 mb-2 @if ($errors->has('order_date')) has-error @endif">
                                         <label for="order_date">{{ trans('plugins-order::order.form.order_date') }}</label>
-                                        {!! Form::text('order_date', old('order_date'), ['class' => 'form-control', 'id' => 'order_date', 'placeholder' => trans('plugins-order::order.form.order_date')]) !!}
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <span class="far fa-calendar-alt"></span>
+                                                </span>
+                                            </div>
+                                            {!! Form::text('order_date', old('order_date'), ['class' => 'form-control pickadate', 'id' => 'order_date', 'placeholder' => trans('plugins-order::order.form.order_date')]) !!}
+                                        </div>
                                         {!! Form::error('order_date', $errors) !!}
                                     </div>
                                     <div class="form-group col-md-6 mb-2 @if ($errors->has('campaign_id')) has-error @endif">
@@ -196,17 +208,7 @@
                     <div class="card-content collpase show">
                         <div class="card-body">
                             <div class="form-body">
-                                <div class="row">
-                                    <div class="form-group col-md-1 mb-2">
-                                        <label for="description-origin">1</label>
-                                    </div>
-                                    <div class="form-group col-md-11 mb-2">
-                                        {!! Form::textarea('description', old('description'), ['class' => 'form-control description-origin', 'id' => 'description-origin', 'rows' => '2']) !!}
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-sm btn-primary">
-                                    <i class="fa fa-plus"></i> Add note
-                                </button>
+                                @include('plugins-order::partials.order-conditions')
                             </div>
                         </div>
                     </div>
@@ -241,11 +243,11 @@
                                         <label for="fees_ship_percent">{{ trans('plugins-order::order.form.fees_ship_percent') }}</label>
                                     </div>
                                     <div class="form-group col-md-4 mb-2 @if ($errors->has('fees_ship_percent')) has-error @endif">
-                                        {!! Form::text('fees_ship_percent', old('fees_ship_percent'), ['class' => 'form-control', 'id' => 'fees_ship_percent', 'placeholder' => trans('plugins-order::order.form.fees_ship_percent')]) !!}
+                                        {!! Form::text('fees_ship_percent', old('fees_ship_percent'), ['class' => 'form-control order-fee-percent', 'id' => 'fees_ship_percent', 'placeholder' => trans('plugins-order::order.form.fees_ship_percent'), 'data-fee-name' => 'ship']) !!}
                                         {!! Form::error('fees_ship_percent', $errors) !!}
                                     </div>
                                     <div class="form-group col-md-4 mb-2 @if ($errors->has('fees_ship')) has-error @endif">
-                                        {!! Form::text('fees_ship', old('fees_ship'), ['class' => 'form-control', 'id' => 'fees_ship', 'placeholder' => trans('plugins-order::order.form.fees_ship')]) !!}
+                                        {!! Form::text('fees_ship', old('fees_ship'), ['class' => 'form-control order-fee-price', 'id' => 'fees_ship', 'placeholder' => trans('plugins-order::order.form.fees_ship'), 'data-fee-name' => 'ship']) !!}
                                         {!! Form::error('fees_ship', $errors) !!}
                                     </div>
                                 </div>
@@ -254,11 +256,11 @@
                                         <label for="fees_vat_percent">{{ trans('plugins-order::order.form.fees_vat_percent') }}</label>
                                     </div>
                                     <div class="form-group col-md-4 mb-2 @if ($errors->has('fees_vat_percent')) has-error @endif">
-                                        {!! Form::text('fees_vat_percent', old('fees_vat_percent'), ['class' => 'form-control', 'id' => 'fees_vat_percent', 'placeholder' => trans('plugins-order::order.form.fees_vat_percent')]) !!}
+                                        {!! Form::text('fees_vat_percent', old('fees_vat_percent'), ['class' => 'form-control order-fee-percent', 'id' => 'fees_vat_percent', 'placeholder' => trans('plugins-order::order.form.fees_vat_percent'), 'data-fee-name' => 'vat']) !!}
                                         {!! Form::error('fees_vat_percent', $errors) !!}
                                     </div>
                                     <div class="form-group col-md-4 mb-2 @if ($errors->has('fees_vat')) has-error @endif">
-                                        {!! Form::text('fees_vat', old('fees_vat'), ['class' => 'form-control', 'id' => 'fees_vat', 'placeholder' => trans('plugins-order::order.form.fees_vat')]) !!}
+                                        {!! Form::text('fees_vat', old('fees_vat'), ['class' => 'form-control order-fee-price', 'id' => 'fees_vat', 'placeholder' => trans('plugins-order::order.form.fees_vat'), 'data-fee-name' => 'vat']) !!}
                                         {!! Form::error('fees_vat', $errors) !!}
                                     </div>
                                 </div>
@@ -267,11 +269,11 @@
                                         <label for="fees_shipping_percent">{{ trans('plugins-order::order.form.fees_shipping_percent') }}</label>
                                     </div>
                                     <div class="form-group col-md-4 mb-2 @if ($errors->has('fees_shipping_percent')) has-error @endif">
-                                        {!! Form::text('fees_shipping_percent', old('fees_shipping_percent'), ['class' => 'form-control', 'id' => 'fees_shipping_percent', 'placeholder' => trans('plugins-order::order.form.fees_shipping_percent')]) !!}
+                                        {!! Form::text('fees_shipping_percent', old('fees_shipping_percent'), ['class' => 'form-control order-fee-percent', 'id' => 'fees_shipping_percent', 'placeholder' => trans('plugins-order::order.form.fees_shipping_percent'), 'data-fee-name' => 'shipping']) !!}
                                         {!! Form::error('fees_shipping_percent', $errors) !!}
                                     </div>
                                     <div class="form-group col-md-4 mb-2 @if ($errors->has('fees_shipping')) has-error @endif">
-                                        {!! Form::text('fees_shipping', old('fees_shipping'), ['class' => 'form-control', 'id' => 'fees_shipping', 'placeholder' => trans('plugins-order::order.form.fees_shipping')]) !!}
+                                        {!! Form::text('fees_shipping', old('fees_shipping'), ['class' => 'form-control order-fee-price', 'id' => 'fees_shipping', 'placeholder' => trans('plugins-order::order.form.fees_shipping'), 'data-fee-name' => 'shipping']) !!}
                                         {!! Form::error('fees_shipping', $errors) !!}
                                     </div>
                                 </div>
@@ -280,11 +282,11 @@
                                         <label for="fees_installation_percent">{{ trans('plugins-order::order.form.fees_installation_percent') }}</label>
                                     </div>
                                     <div class="form-group col-md-4 mb-2 @if ($errors->has('fees_installation_percent')) has-error @endif">
-                                        {!! Form::text('fees_installation_percent', old('fees_installation_percent'), ['class' => 'form-control', 'id' => 'fees_installation_percent', 'placeholder' => trans('plugins-order::order.form.fees_installation_percent')]) !!}
+                                        {!! Form::text('fees_installation_percent', old('fees_installation_percent'), ['class' => 'form-control order-fee-percent', 'id' => 'fees_installation_percent', 'placeholder' => trans('plugins-order::order.form.fees_installation_percent'), 'data-fee-name' => 'installation']) !!}
                                         {!! Form::error('fees_installation_percent', $errors) !!}
                                     </div>
                                     <div class="form-group col-md-4 mb-2 @if ($errors->has('fees_installation')) has-error @endif">
-                                        {!! Form::text('fees_installation', old('fees_installation'), ['class' => 'form-control', 'id' => 'fees_installation', 'placeholder' => trans('plugins-order::order.form.fees_installation')]) !!}
+                                        {!! Form::text('fees_installation', old('fees_installation'), ['class' => 'form-control order-fee-price', 'id' => 'fees_installation', 'placeholder' => trans('plugins-order::order.form.fees_installation'), 'data-fee-name' => 'installation']) !!}
                                         {!! Form::error('fees_installation', $errors) !!}
                                     </div>
                                 </div>
@@ -317,7 +319,7 @@
     <div class="form-actions-area">
         <div class="row">
             <div class="col-md-12">
-                @include('core-base::elements.form-actions')
+                @include('plugins-order::partials.form-crud-actions')
                 @php do_action(BASE_ACTION_META_BOXES, ORDER_MODULE_SCREEN_NAME, 'top') @endphp
                 @php do_action(BASE_ACTION_META_BOXES, ORDER_MODULE_SCREEN_NAME, 'side') @endphp
             </div>
@@ -330,6 +332,8 @@
         const API = {
             SEARCH_AJAX_CUSTOMER : "{{ route('ajax.admin.search_ajax_customer') }}",
             GET_INFO_WITH_CONTACT_OF_CUSTOMER : "{{ route('ajax.admin.get_info_with_contact_of_customer') }}",
+            GET_INFO_PRICE_OF_PRODUCT : "{{ route('ajax.admin.get_info_price_product') }}",
         };
+        const PRODUCTS = {!! json_encode($products) !!};
     </script>
 @stop

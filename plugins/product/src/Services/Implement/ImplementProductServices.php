@@ -139,4 +139,12 @@ class ImplementProductServices implements ProductServices {
             $data['updated_by'] = Auth::id();
         return $data;
     }
+
+    /**
+     * @param int $productId
+     * @return mixed
+     */
+    public function getInfoPriceProduct(int $productId) {
+        return $this->repository->findById($productId, [], ['id', 'slug', 'sku', 'name', 'retail_price', 'discount_percent', 'vat', 'unit_id', 'short_description']);
+    }
 }

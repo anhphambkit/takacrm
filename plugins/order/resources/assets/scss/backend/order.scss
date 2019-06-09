@@ -1,0 +1,23 @@
+.select-order-product .select2-container--classic,
+.select-order-product .select2-container--default
+{
+  width: calc(100% - 45px) !important;
+}
+
+.table-products-order {
+  th, td {
+    padding: 5px !important;
+  }
+}
+
+.width-2-per {
+  width: 2% !important;
+}
+
+.width-7-per {
+  width: 7% !important;
+}
+
+.action-condition-order {
+  padding: 0!important;
+}

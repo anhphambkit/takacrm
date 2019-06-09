@@ -272,7 +272,6 @@ class ProductController extends BaseAdminController
         AssetManager::addAsset('admin-gallery-css', 'libs/core/base/css/gallery/admin-gallery.css');
         AssetManager::addAsset('product-css', 'backend/plugins/product/assets/css/product.css');
         AssetManager::addAsset('mini-colors-css', 'libs/core/base/css/miniColors/jquery.minicolors.css');
-        AssetManager::addAsset('pick-date-css', 'libs/core/base/css/date-picker/pickadate.css');
         AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
 
         AssetManager::addAsset('select2-js', 'libs/plugins/product/js/select2/select2.full.min.js');
@@ -300,9 +299,6 @@ class ProductController extends BaseAdminController
         AssetManager::addAsset('mini-colors-js', 'libs/core/base/js/miniColors/jquery.minicolors.min.js');
         AssetManager::addAsset('spectrum-js', 'libs/core/base/js/spectrum/spectrum.js');
         AssetManager::addAsset('picker-color-js', 'backend/core/base/assets/scripts/picker-color.min.js');
-        AssetManager::addAsset('picker-js', 'libs/core/base/js/date-picker/picker.js');
-        AssetManager::addAsset('picker-date-js', 'libs/core/base/js/date-picker/picker.date.js');
-        AssetManager::addAsset('picker-time-js', 'libs/core/base/js/date-picker/picker.time.js');
         AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
         AssetManager::addAsset('custom-field-js', 'backend/core/base/assets/scripts/custom-field.js');
 
@@ -313,8 +309,6 @@ class ProductController extends BaseAdminController
         AssetPipeline::requireCss('switchery-css');
         AssetPipeline::requireCss('admin-gallery-css');
         AssetPipeline::requireCss('product-css');
-        AssetPipeline::requireCss('pick-date-css');
-
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('bootstrap-switch-js');
         AssetPipeline::requireJs('bootstrap-checkbox-js');
@@ -323,13 +317,18 @@ class ProductController extends BaseAdminController
         AssetPipeline::requireJs('mini-colors-js');
         AssetPipeline::requireJs('spectrum-js');
         AssetPipeline::requireJs('picker-color-js');
-        AssetPipeline::requireJs('picker-js');
-        AssetPipeline::requireJs('picker-date-js');
-        AssetPipeline::requireJs('picker-time-js');
         AssetPipeline::requireJs('legacy-js');
         AssetPipeline::requireJs('form-select2-js');
         AssetPipeline::requireCss('pretty-checkbox');
         AssetPipeline::requireJs('custom-field-js');
 
+        AssetPipeline::requireCss('daterangepicker-css');
+        AssetPipeline::requireCss('pickadate-css');
+        AssetPipeline::requireCss('cnddaterange-css');
+
+        AssetPipeline::requireJs('pickadate-picker-js');
+        AssetPipeline::requireJs('pickadate-picker-date-js');
+        AssetPipeline::requireJs('daterangepicker-js');
+        AssetPipeline::requireJs('datetime-js');
     }
 }

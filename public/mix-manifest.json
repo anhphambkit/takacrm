@@ -1,4 +1,7 @@
 {
     "/backend/plugins/order/assets/js/order.js": "/backend/plugins/order/assets/js/order.js",
-    "/frontend/plugins/order/assets/js/.js/.gitkeep.js": "/frontend/plugins/order/assets/js/.js/.gitkeep.js"
+    "/frontend/plugins/order/assets/js/.js/.gitkeep.js": "/frontend/plugins/order/assets/js/.js/.gitkeep.js",
+    "/frontend/plugins/order/assets/css/.css/.gitkeep.css": "/frontend/plugins/order/assets/css/.css/.gitkeep.css",
+    "/backend/plugins/order/assets/css/order-crud.css": "/backend/plugins/order/assets/css/order-crud.css",
+    "/backend/plugins/order/assets/css/order.css": "/backend/plugins/order/assets/css/order.css"
 }
