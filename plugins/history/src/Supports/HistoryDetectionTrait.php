@@ -105,12 +105,12 @@ trait HistoryDetectionTrait
         	$fieldsChanged = $this->ignoreAttributes($fieldsChanged);
         	foreach ($fieldsChanged as $attribute => $newValue) {
         		# code...
-        		$origin 	= $this->getOriginalMutator($attribute);
-				$current 	= $this->getNewValueMutator($attribute, $newValue);
-				list($origin, $current) = $this->formatAttributeValue($attribute, $origin, $current);
+                $origin                   = $this->getOriginalMutator($attribute);
+                $current                  = $this->getNewValueMutator($attribute, $newValue);
+                list($_origin, $_current) = $this->formatAttributeWithType($attribute, $origin, $current);
 
                 # validation model change
-                if($this->validation($origin, $current)){
+                if($this->validation($_origin, $_current)){
                     $this->createOrUpdateLogHistory($attribute, $origin, $current);
                 }
         	}

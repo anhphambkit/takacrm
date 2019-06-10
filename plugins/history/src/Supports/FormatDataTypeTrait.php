@@ -16,11 +16,25 @@ trait FormatDataTypeTrait
 		'name' => 'Name'
 	];
 
-	/**
-	 * [$referenceAttributes description]
-	 * @var [type]
-	 */
-	protected $referenceAttributes = [];
+    /**
+     * [$relationShipAttributes description]
+     * @var [type]
+     */
+    protected $relationShipAttributes = [
+        'column_name' => [
+            'mapTable'  => 'table_name_here',
+            'mapColumn' => 'column_name_here',
+            'mapResult' => 'column_result_name_here'
+        ]
+    ];
+
+    /**
+     * [$numericAttributes description]
+     * @var [type]
+     */
+    protected $numericAttributes = [
+        'column_numeric'
+    ];
 
 	/**
 	 * [$typeDateTime description]
@@ -42,7 +56,9 @@ trait FormatDataTypeTrait
      */
     protected function formatDateTime($value)
     {
-    	return $value ? $this->asDateTime($value) : $value;
+        if(!is_null($value)){
+            return $value ? $this->asDateTime($value) : $value;
+        }
     }
 
     /**
@@ -52,7 +68,9 @@ trait FormatDataTypeTrait
      */
     protected function formatNumeric($value)
     {
-    	return $value ? $this->asDateTime($value) : $value;
+        if(!is_null($value)){
+            return $value ? number_format($value, 2, ',', '.') : $value;
+        }
     }
 
     /**
@@ -72,9 +90,50 @@ trait FormatDataTypeTrait
      */
     protected function formatReference($value)
     {
-    	$reference = find_reference_by_id(intval($value), false);
-    	if($reference)
-    		return $reference->value;
+        if(!is_null($value)){
+            $reference = find_reference_by_id(intval($value), false);
+            if($reference)
+                return $reference->value;
+        }
+    }
+
+    /**
+     * [formatRelationShip description]
+     * @param  [type] $value [description]
+     * @return [type]        [description]
+     */
+    protected function formatRelationShip($attribute, $value)
+    {
+        if(!is_null($value)){
+            $configMapping = $this->relationShipAttributes[$attribute];
+            $element = DB::table($configMapping['mapTable'])
+                        ->select($configMapping['mapResult'])
+                        ->where($configMapping['mapColumn'], $value)
+                        ->first();
+            return $element ? $element->{$configMapping['mapResult']} : null;
+        }
+    }
+
+    /**
+     * [formatAttributeWithType description]
+     * @param  [type] $attribute [description]
+     * @param  [type] $origin    [description]
+     * @param  [type] $current   [description]
+     * @return [type]            [description]
+     */
+    protected function formatAttributeWithType($attribute, $origin, $current):array
+    {
+        $columnType = Schema::getColumnType($this->getTable(), $attribute);
+        if(in_array($columnType, $this->typeDateTime)){
+            $origin  = $this->formatDateTime($origin);
+            $current = $this->formatDateTime($current);
+        }
+        elseif(in_array($columnType, $this->typeBoolean)){
+            $current = $this->formatBoolean($current);
+            $origin  = $this->formatBoolean($origin);
+        }
+       
+        return [ $origin, $current ];
     }
 
     /**
@@ -86,20 +145,17 @@ trait FormatDataTypeTrait
      */
     public function formatAttributeValue($attribute, $origin, $current):array
     {
-    	$columnType = Schema::getColumnType($this->getTable(), $attribute);
-    	if(in_array($columnType, $this->typeDateTime)){
-            $origin = $this->formatDateTime($origin);
-            $current = $this->formatDateTime($current);
-    	}
-    	elseif(in_array($columnType, $this->typeBoolean)){
-    		$current = $this->formatBoolean($current);
-    		$origin = $this->formatBoolean($origin);
-    	}
-    	elseif(in_array($attribute, $this->referenceAttributes)){
-    		$current = $this->formatReference($current);
-            $origin = $this->formatReference($origin);
-    	}
+        list($origin, $current) = $this->formatAttributeWithType($attribute, $origin, $current);
 
+        if($this->relationShipAttributes[$attribute] ?? false){
+            $origin  = $this->formatRelationShip($attribute, $origin);
+            $current = $this->formatRelationShip($attribute, $current);
+        }
+        elseif(in_array($attribute, $this->numericAttributes)){
+            $origin  = $this->formatNumeric($origin);
+            $current = $this->formatNumeric($current);
+        }
+        
     	return [ $origin, $current ];
     }
 
@@ -145,6 +201,8 @@ trait FormatDataTypeTrait
      */
     protected function getDisplayTable()
     {
-    	return $this->displayTable ?? $this->getTable();
+        $tableName = $this->getTable();
+        $displayTable = config("plugins-history.history.nameTables.{$tableName}");
+        return $displayTable ?: $tableName;
     }
 }
