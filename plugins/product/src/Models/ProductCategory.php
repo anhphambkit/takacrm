@@ -10,8 +10,9 @@ namespace Plugins\Product\Models;
 
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Plugins\History\Models\ModelHistoryLog;
 
-class ProductCategory extends Model
+class ProductCategory extends ModelHistoryLog
 {
     /**
      * The database table used by the model.
@@ -48,4 +49,26 @@ class ProductCategory extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+
+    # Config for log history
+    /**
+     * [$displayAttributes description]
+     * @var [type]
+     */
+    protected $displayAttributes = [
+        'name' => 'Category Name'
+    ];
+
+    /**
+     * [$relationShipAttributes description]
+     * @var [type]
+     */
+    protected $relationShipAttributes = [
+        'parent_id' => [
+            'mapTable'  => 'product_categories',
+            'mapColumn' => 'id',
+            'mapResult' => 'name'
+        ]
+    ];
 }

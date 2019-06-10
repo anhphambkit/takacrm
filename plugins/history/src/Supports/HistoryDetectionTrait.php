@@ -43,6 +43,7 @@ trait HistoryDetectionTrait
 	 */
 	protected $ignoreLogAttributes = [
 		'updated_at',
+        'updated_by'
 	];
 
 	/**
@@ -164,8 +165,11 @@ trait HistoryDetectionTrait
     public function createOrUpdateLogHistory($attribute, $origin, $current)
     {
         $fieldName = $this->getDisplayAttribute($attribute);
+        list($origin, $current) = $this->formatAttributeValue($attribute, $origin, $current);
         $user = \Auth::user();
         if($user){
+            $origin = $origin ?: '<empty>'; 
+            $current = $current ?: '<empty>'; 
             app(HistoryRepositories::class)->createOrUpdate([
                 'user_id' => $user->id,
                 'content' => "Updated {$fieldName} from {$origin} to {$current}",

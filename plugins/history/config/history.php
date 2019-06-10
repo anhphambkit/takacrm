@@ -2,6 +2,7 @@
 
 return [
 	'nameTables' => [
-		'media_files' => 'Media'
+		'media_files' => 'Media',
+		'product_categories' => 'Product Categories'
 	]
 ];
