@@ -16,7 +16,7 @@ class CreateNewOrderTable extends Migration
         Schema::dropIfExists('order');
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('order_code', 120)->unique();
+            $table->string('order_code', 120);
             $table->string('customer_name', 255)->nullable();
             $table->string('customer_code', 255)->nullable();
             $table->string('customer_phone', 20)->nullable();

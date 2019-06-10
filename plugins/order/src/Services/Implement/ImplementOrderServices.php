@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Plugins\Customer\Repositories\Interfaces\CustomerContactRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRepositories;
 use Plugins\Order\Contracts\OrderConfigs;
+use Plugins\Order\Models\ProductsInOrder;
 use Plugins\Order\Repositories\Interfaces\OrderRepositories;
 use Plugins\Order\Repositories\Interfaces\OrderSourceRepositories;
 use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
@@ -101,25 +102,43 @@ class ImplementOrderServices implements OrderServices {
 
     /**
      * @param array $dataCheckouts
+     * @param int|null $orderId
      * @return mixed
      */
-    public function createNewOrder(array $dataCheckouts){
+    public function createNewOrUpdateOrder(array $dataCheckouts, int $orderId = null){
+        $isModeCreate = true;
+        if ($orderId)
+            $isModeCreate = false;
+
         $productsInOrder = $dataCheckouts['order_products'];
 
-        $dataOrder = $this->prepareDataOrder($dataCheckouts);
+        $dataOrder = $this->prepareDataOrder($dataCheckouts, $isModeCreate);
 
-        return DB::transaction(function () use ($dataOrder, $productsInOrder) {
-            // Create new Order:
-            $order = $this->orderRepository->createNewInvoiceOrder($dataOrder);
+        $order = null;
+        if ($orderId) {
+            $order = $this->orderRepository->findById($orderId);
+            if (empty($order)) {
+                abort(404);
+            }
+        }
+
+        return DB::transaction(function () use ($order, $dataOrder, $productsInOrder) {
+            if ($order) { // Update order
+                $order->fill($dataOrder);
+
+                $this->orderRepository->createOrUpdate($order);
+            }
+            else // Create new Order:
+                $order = $this->orderRepository->createOrUpdate($dataOrder);
 
             // Products:
-            $infoOder = $this->prepareProductsDataInOrder($productsInOrder, $order->id);
+            $infoOrder = $this->prepareProductsDataInOrder($productsInOrder, $order->id);
 
             // Update Sale amount + discount order:
             $dataOrderUpdate = [
-                'sale_order' => $infoOder['sale_order'],
-                'discount_order' => $infoOder['discount_order'] + $order->fees_ship,
-                'vat_order' => $infoOder['vat_order'] + $order->fees_vat,
+                'sale_order' => $infoOrder['sale_order'],
+                'discount_order' => $infoOrder['discount_order'] + $order->fees_ship,
+                'vat_order' => $infoOrder['vat_order'] + $order->fees_vat,
             ];
             $this->orderRepository->update([
                 [
@@ -127,19 +146,28 @@ class ImplementOrderServices implements OrderServices {
                 ]
             ], $dataOrderUpdate);
 
-            // Insert products in order:
-            $this->productsInOrderServices->insertProductsInOrder($infoOder['products']);
+            ProductsInOrder::with('order')->where('order_id', $order->id)->delete();
+
+            $order->products()->createMany($infoOrder['products']);
+
+            $order->save();
+
             return $order;
         }, 3);
     }
 
     /**
      * @param array $data
+     * @param bool $isModeCreate
      * @return array
      */
-    public function prepareDataOrder(array $data) {
-        $maxOrderId = $this->orderRepository->getMaxColumn();
-        $data['created_by'] = Auth::id();
+    public function prepareDataOrder(array $data, $isModeCreate = true) {
+        $maxOrderId = (int)$this->orderRepository->getMaxColumn() + 1;
+
+        if ($isModeCreate)
+            $data['created_by'] = Auth::id();
+        else
+            $data['updated_by'] = Auth::id();
 
         if (!empty($data['customer_id']))
             $data['customer_info'] = $this->customerRepositories->findById($data['customer_id'])->toArray();

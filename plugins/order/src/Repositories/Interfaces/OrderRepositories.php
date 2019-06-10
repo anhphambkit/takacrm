@@ -10,7 +10,7 @@ interface OrderRepositories extends RepositoryInterface
      * @param array $data
      * @return mixed
      */
-    public function createNewInvoiceOrder(array $data);
+    public function createNewOrUpdateOrder(array $data);
 
     /**
      * @param array $request

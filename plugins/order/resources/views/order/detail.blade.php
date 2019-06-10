@@ -16,6 +16,15 @@
             {{--@include('plugins-order::partials.info-detail-order')--}}
         </div>
     </div>
+    <div class="form-actions-area">
+        <div class="row">
+            <div class="col-md-12">
+                @include('plugins-order::partials.form-detail-order-action', [ 'routeEdit' => route('admin.order.edit', [ 'id' => $order->id ]) ])
+                @php do_action(BASE_ACTION_META_BOXES, ORDER_MODULE_SCREEN_NAME, 'top') @endphp
+                @php do_action(BASE_ACTION_META_BOXES, ORDER_MODULE_SCREEN_NAME, 'side') @endphp
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('variable-scripts')

@@ -35,4 +35,12 @@ class ProductsInOrder extends Model
         'total_price',
         'product_info'
     ];
+
+    /**
+     * Get the product that owns the gallery.
+     */
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

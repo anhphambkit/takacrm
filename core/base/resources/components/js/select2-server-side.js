@@ -18,6 +18,7 @@ class Select2ServerSide {
         this.allowClear = true;
         this.placeholder = 'Input any key to search';
         this.minimumInputLength = 1;
+        this.isInit = true;
     }
 
     /**
@@ -82,7 +83,27 @@ class Select2ServerSide {
      * @param data
      * @returns {*}
      */
+    formatInitDataResult(_this, data){
+        return data.full_name || data.id;
+    };
+
+    /**
+     *
+     * @param _this
+     * @param data
+     * @returns {*}
+     */
     formatDataSelection(_this, data){
+        return data.full_name || data.id;
+    };
+
+    /**
+     *
+     * @param _this
+     * @param data
+     * @returns {*}
+     */
+    formatInitDataSelection(_this, data){
         return data.full_name || data.id;
     };
 
@@ -112,12 +133,17 @@ class Select2ServerSide {
             },
             minimumInputLength: _this.minimumInputLength,
             templateResult: function (data) {
+                if (_this.isInit)
+                    return _this.formatInitDataResult(_this, data);
                 return _this.formatDataResult(_this, data);
             },
             templateSelection: function (data) {
+                if (_this.isInit)
+                    return _this.formatInitDataSelection(_this, data);
                 return _this.formatDataSelection(_this, data);
             }
         });
+        this.isInit = false;
     }
 }
 export default Select2ServerSide;

@@ -28,7 +28,7 @@ class CacheOrderRepositories extends CacheAbstractDecorator implements OrderRepo
      * @param array $data
      * @return mixed
      */
-    public function createNewInvoiceOrder(array $data) {
+    public function createNewOrUpdateOrder(array $data) {
         return $this->flushCacheAndUpdateData(__FUNCTION__, func_get_args());
     }
 

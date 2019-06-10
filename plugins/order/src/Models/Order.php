@@ -5,6 +5,7 @@ namespace Plugins\Order\Models;
 use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Plugins\Customer\Models\Customer;
 
 /**
  * Class Order
@@ -215,11 +216,20 @@ class Order extends Model
     /**
      * With Functions
      */
+
     /**
-     * Get the gallery for the product.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function products()
     {
         return $this->hasMany(ProductsInOrder::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id')->with('customerContacts');
     }
 }

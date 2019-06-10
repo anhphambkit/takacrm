@@ -117,7 +117,7 @@ class EloquentOrderRepositories extends RepositoriesAbstract implements OrderRep
      * @return mixed
      * @throws \Exception
      */
-    public function createNewInvoiceOrder(array $data) {
+    public function createNewOrUpdateOrder(array $data) {
         return $this->model->create($data);
     }
 

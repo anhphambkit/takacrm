@@ -126,7 +126,7 @@ class OrderController extends BaseAdminController
     {
         $data = $request->all();
 
-        $order = $this->orderServices->createNewOrder($data);
+        $order = $this->orderServices->createNewOrUpdateOrder($data);
 
         do_action(BASE_ACTION_AFTER_CREATE_CONTENT, ORDER_MODULE_SCREEN_NAME, $request, $order);
 
@@ -149,6 +149,7 @@ class OrderController extends BaseAdminController
         }
 
         $this->addDetailPageAssets();
+        $this->addDetailCRUDAssets();
 
         page_title()->setTitle(trans('plugins-order::order.detail') . ' #' . $id);
 
@@ -165,13 +166,22 @@ class OrderController extends BaseAdminController
     public function getEdit($id)
     {
         $order = $this->orderRepository->findById($id);
+
         if (empty($order)) {
             abort(404);
         }
 
+        $users = User::all()->pluck('full_name', 'id');
+        $paymentMethods = $this->paymentMethodRepositories->pluck('name', 'id');
+        $orderSources = $this->orderSourceRepositories->pluck('name', 'id');
+        $products = $this->productRepositories->all(['productCategory']);
+
+        $this->addDetailAssets();
+        $this->addDetailCRUDAssets();
+
         page_title()->setTitle(trans('plugins-order::order.edit') . ' #' . $id);
 
-        return view('plugins-order::order.edit', compact('order'));
+        return view('plugins-order::order.edit', compact('order', 'users', 'paymentMethods', 'orderSources', 'products'));
     }
 
     /**
@@ -182,13 +192,7 @@ class OrderController extends BaseAdminController
      */
     public function postEdit($id, OrderRequest $request)
     {
-        $order = $this->orderRepository->findById($id);
-        if (empty($order)) {
-            abort(404);
-        }
-        $order->fill($request->input());
-
-        $this->orderRepository->createOrUpdate($order);
+        $order = $this->orderServices->createNewOrUpdateOrder($request->all(), $id);
 
         do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, ORDER_MODULE_SCREEN_NAME, $request, $order);
 

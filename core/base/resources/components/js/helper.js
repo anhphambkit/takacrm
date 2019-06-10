@@ -61,6 +61,12 @@ export default {
         return `<img class="image-item-select" src="${avatar}" />${item.full_name || item[keyValue]}`;
     },
 
+    // Format icon
+    iconInitFormat(item, keyValue = 'text') {
+        let avatar = $(item.element).data('image') ? $(item.element).data('image') : '/vendor/core/images/default-avatar.jpg';
+        return `<img class="image-item-select" src="${avatar}" />${$(item.element).data('full-name') || item[keyValue]}`;
+    },
+
     // Format color:
     colorFormat(item) {
         let html = `<span class="minicolor-preview">
@@ -228,6 +234,48 @@ export default {
      * @param data
      * @returns {*}
      */
+    formatInitDataResultCustomerSelect2(_this, data) {
+        if (!data.id) { return data.text; }
+
+        let avatar = $(data.element).data('image') ? $(data.element).data('image') : '/vendor/core/images/default-avatar.jpg';
+        let markup = `<div class='select2-result-data clearfix'>
+                    <div class='select2-result-data__avatar select2-image'>
+                        <img class="select2-image-custom" src='${avatar}' />
+                    </div>
+                    <div class='select2-result-data__meta'>
+                        <div class='select2-result-data__title select2-title'>${$(data.element).data('full-name')} <span class="select2-option-info">(${$(data.element).data('customer-code')})</span></div>`;
+
+        if ($(data.element).data('email')) {
+            markup += `<div class='select2-result-data__title select2-email'>
+                        <span class="icon-select-info icon-email-select">
+                            <i class="far fa-envelope"></i>
+                        </span>
+                        <span class="content-info-select content-select-email">
+                            ${$(data.element).data('email')}
+                        </span>
+                    </div>`;
+        }
+        if ($(data.element).data('phone')) {
+            markup += `<div class='select2-result-data__title select2-phone'>
+                        <span class="icon-select-info icon-phone-select">
+                            <i class="fas fa-mobile-alt"></i>
+                        </span>
+                        <span class="content-info-select content-select-phone">
+                            ${$(data.element).data('phone')}
+                        </span>
+                    </div>`;
+        }
+
+        markup += `</div></div>`;
+        return markup;
+    },
+
+    /**
+     *
+     * @param _this
+     * @param data
+     * @returns {*}
+     */
     formatDataSelectionCustomerSelect2(_this, data) {
         if (data.full_name) {
             let avatar = data.avatar ? data.avatar : '/vendor/core/images/default-avatar.jpg';
@@ -242,5 +290,26 @@ export default {
             return markup ;
         }
         return data.text;
+    },
+
+    /**
+     *
+     * @param _this
+     * @param data
+     * @returns {*}
+     */
+    formatInitDataSelectionCustomerSelect2(_this, data) {
+        if (!data.id) { return data.text; }
+
+        let avatar = $(data.element).data('image') ? $(data.element).data('image') : '/vendor/core/images/default-avatar.jpg';
+        let markup = `<div class='select2-result-data clearfix' data-customer-full-name="${$(data.element).data('full-name')}" data-customer-phone="${$(data.element).data('phone')}" data-customer-email="${$(data.element).data('email')}">
+                    <div class='select2-result-data__avatar select2-image select-selection'>
+                        <img class="select2-image-custom select2-image-selection" src='${avatar}' />
+                    </div>
+                    <div class='select2-result-data__meta select-selection'>
+                        <div class='select2-result-data__title select2-title'>${$(data.element).data('full-name')} <span class="select2-option-info">(${$(data.element).data('customer-code')})</span></div>
+                    </div>
+                </div>`;
+        return markup ;
     }
 }

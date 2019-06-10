@@ -12,9 +12,10 @@ interface OrderServices
 {
     /**
      * @param array $dataCheckouts
+     * @param int $orderId
      * @return mixed
      */
-    public function createNewOrder(array $dataCheckouts);
+    public function createNewOrUpdateOrder(array $dataCheckouts, int $orderId = null);
 
     /**
      * @param array $conditions

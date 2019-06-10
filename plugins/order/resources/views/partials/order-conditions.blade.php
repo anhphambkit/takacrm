@@ -5,7 +5,7 @@
  * Date: 2019-06-08
  * Time: 21:43
  */
-$orderConditions = !empty($orderConditions) ? $orderConditions : (old('order_conditions') ? old('order_conditions') : [
+$orderConditions = !empty($orderConditions) ? array_values($orderConditions) : (old('order_conditions') ? old('order_conditions') : [
     'Time to ship: ',
     'Address shipping: '
 ]);
@@ -14,20 +14,20 @@ $orderConditions = !empty($orderConditions) ? $orderConditions : (old('order_con
     let indexConditions = {{ sizeof($orderConditions) + 1 }};
 </script>
 <div class="condition-order-area">
-    @foreach($orderConditions as $indexCondition => $orderCondition)
+    @foreach($orderConditions as $indexOrderCondition => $orderCondition)
         @php
-            $indexCondition += 1;
+            $indexOrderCondition++;
         @endphp
-        <div class="row row-condition-order row-condition-order-{{ $indexCondition }}" id="row-condition-order-{{ $indexCondition }}" data-condition-index="{{ $indexCondition }}">
+        <div class="row row-condition-order row-condition-order-{{ $indexOrderCondition }}" id="row-condition-order-{{ $indexOrderCondition }}" data-condition-index="{{ $indexOrderCondition }}">
             <div class="form-group col-md-1 mb-2">
-                <label for="order-condition-{{ $indexCondition }}">{{ $indexCondition }}</label>
+                <label for="order-condition-{{ $indexOrderCondition }}">{{ $indexOrderCondition }}</label>
             </div>
             <div class="form-group col-md-10 mb-2">
-                <textarea rows=2 class="form-control order-condition order-condition-{{ $indexCondition }}" data-condition-index="{{ $indexCondition }}" id="order-condition-{{ $indexCondition }}" placeholder="Conditions" name="order_conditions[{{ $indexCondition }}]">{{ $orderCondition }}</textarea>
+                <textarea rows=2 class="form-control order-condition order-condition-{{ $indexOrderCondition }}" data-condition-index="{{ $indexOrderCondition }}" id="order-condition-{{ $indexOrderCondition }}" placeholder="Conditions" name="order_conditions[{{ $indexOrderCondition }}]">{{ $orderCondition }}</textarea>
             </div>
-            @if($indexCondition > 1)
+            @if($indexOrderCondition > 1)
                 <div class="form-group col-md-1 mb-2 action-condition-order">
-                    <button type="button" class="btn btn-sm btn-danger btn-delete-condition-order btn-delete-condition-order-{{ $indexCondition }}" id="btn-delete-condition-order-{{ $indexCondition }}" data-order-index="{{ $indexCondition }}"><i class="fa fa-trash"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger btn-delete-condition-order btn-delete-condition-order-{{ $indexOrderCondition }}" id="btn-delete-condition-order-{{ $indexOrderCondition }}" data-order-index="{{ $indexOrderCondition }}"><i class="fa fa-trash"></i></button>
                 </div>
             @endif
         </div>

@@ -15,6 +15,14 @@ customerSelectServerSide.formatDataResult = (customerSelectServerSide, data) => 
 customerSelectServerSide.formatDataSelection = (customerSelectServerSide, data) => {
     return Helper.formatDataSelectionCustomerSelect2(customerSelectServerSide, data);
 };
+
+customerSelectServerSide.formatInitDataResult = (customerSelectServerSide, data) => {
+    return Helper.formatInitDataResultCustomerSelect2(customerSelectServerSide, data);
+};
+
+customerSelectServerSide.formatInitDataSelection = (customerSelectServerSide, data) => {
+    return Helper.formatInitDataSelectionCustomerSelect2(customerSelectServerSide, data);
+};
 customerSelectServerSide.init();
 
 // Order general Info:
@@ -53,6 +61,17 @@ $(document).on('change', '#select-customer-list', function (e) {
             });
     }
 });
+
+// Init customer contact select:
+$(`#select-customer-contact-list`).select2({
+    placeholder: "Select a contact",
+    minimumResultsForSearch: Infinity,
+    templateResult: Helper.iconInitFormat,
+    templateSelection: Helper.iconInitFormat,
+    escapeMarkup: function(es) { return es; }
+});
+let customerContactDefault = $('#select-customer-contact-list').data('value');
+$('#select-customer-contact-list').val(customerContactDefault).trigger('change');
 
 $(document).on('click', '.btn-add-order-product', function (e) {
     e.preventDefault();
