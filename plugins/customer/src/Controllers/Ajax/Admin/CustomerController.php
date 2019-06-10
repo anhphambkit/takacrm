@@ -17,7 +17,6 @@ use Plugins\Customer\Repositories\Interfaces\CustomerQueryListRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRepositories;
 use Plugins\Customer\Services\CustomerServices;
 
-
 class CustomerController extends BaseAdminController
 {
     /**
@@ -194,6 +193,16 @@ class CustomerController extends BaseAdminController
     public function searchAjaxCustomer(Request $request)
     {
         $result = $this->customerServices->searchAjaxCustomer($request->all());
+        return response()->json($result);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getInfoWithContactOfCustomer(Request $request)
+    {
+        $result = $this->customerServices->getInfoWithContactOfCustomer((int)$request->get('customer_id'));
         return response()->json($result);
     }
 }

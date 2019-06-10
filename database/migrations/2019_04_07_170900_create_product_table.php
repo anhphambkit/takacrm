@@ -84,7 +84,7 @@ class CreateProductTable extends Migration
             $table->integer('online_price')->comment('online price'); // online price
             $table->integer('purchase_price')->comment('purchase price'); // purchase price
 
-            $table->float('discount')->comment('discount'); // discount
+            $table->float('discount_percent')->comment('discount_percent'); // discount
             $table->float('wholesale_discount')->comment('wholesale discount'); // wholesale discount
             $table->float('purchase_discount')->comment('purchase discount'); // purchase discount
             $table->float('online_discount')->comment('online discount'); // online discount

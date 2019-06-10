@@ -203,7 +203,7 @@ class EloquentCustomerRepositories extends RepositoriesAbstract implements Custo
      * @return mixed
      */
     public function searchAjaxCustomer(array $filters) {
-        $query = $this->model->select('id', 'full_name', 'customer_code', 'phone', 'email', 'avatar');
+        $query = $this->model->select('id', 'full_name', 'customer_code', 'phone', 'email', 'avatar', 'ward_code', 'district_code', 'province_city_code', 'address');
         if ($filters['search_key']) {
             $query->where('full_name', 'ILIKE', "%{$filters['search_key']}%")
                 ->orWhere('customer_code', 'ILIKE', "%{$filters['search_key']}%")
@@ -224,5 +224,13 @@ class EloquentCustomerRepositories extends RepositoriesAbstract implements Custo
             'items' => $query->get(),
             'total' => $total,
         ];
+    }
+
+    /**
+     * @param int $customerId
+     * @return mixed
+     */
+    public function getInfoWithContactOfCustomer(int $customerId) {
+        return $this->findById($customerId, ['customerContacts'], ['id', 'full_name', 'customer_code', 'phone', 'email', 'avatar', 'ward_code', 'district_code', 'province_city_code', 'address']);
     }
 }

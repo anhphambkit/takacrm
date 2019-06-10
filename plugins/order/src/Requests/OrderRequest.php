@@ -15,7 +15,8 @@ class OrderRequest extends CoreRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'user_performed_id' => 'required',
+            'order_products' => 'required',
         ];
     }
 }

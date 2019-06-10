@@ -11,6 +11,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call(DataCustomAttributesReferenceSeeder::class);
+         $this->call(DataReferenceOrderSeeder::class);
     }
 }

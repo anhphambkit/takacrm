@@ -23,6 +23,10 @@ return [
 		'tinymce-js'              => ['theme' => 'app-assets/vendors/js/editors/tinymce/tinymce.js'],
 		'slug-js'              => ['cdn' => 'backend/core/slug/assets/js/slug.js'],
 		'inputtag-js'              => ['cdn' => 'backend/core/base/packages/bootstrap-tagsinput/bootstrap-tagsinput.min.js'],
+        'pickadate-picker-js'      => ['theme' => 'plugins/pickers/js/pickadate/picker.js'],
+		'pickadate-picker-date-js' => ['theme' => 'plugins/pickers/js/pickadate/picker.date.js'],
+		'datetime-js'              => ['theme' => 'plugins/pickers/cdn/dateTime/pick-a-datetime.js'],
+		'daterangepicker-js'              => ['theme' => 'plugins/pickers/js/daterange/daterangepicker.js'],
 
 		/* css */
 		'vendors-css'              => ['theme' => 'app-assets/css/vendors.css'],
@@ -41,6 +45,9 @@ return [
 		'datatable-css'            => ['theme' => 'app-assets/vendors/css/tables/datatable/datatables.min.css'],
 		'datatable-button-css'     => ['theme' => 'app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css'],
 		'inputtag-css'              => ['cdn' => 'backend/core/base/packages/bootstrap-tagsinput/bootstrap-tagsinput.css'],
+        'daterangepicker-css'      => ['theme' => 'plugins/pickers/css/daterange/daterangepicker.css'],
+        'pickadate-css'            => ['theme' => 'plugins/pickers/css/pickadate/pickadate.css'],
+        'cnddaterange-css'         => ['theme' => 'plugins/pickers/cdn/daterange/daterange.css'],
 	],
 
 	'frontend-assets' => [

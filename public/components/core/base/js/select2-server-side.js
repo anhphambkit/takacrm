@@ -22,10 +22,11 @@ class Select2ServerSide {
 
     /**
      *
+     * @param _this
      * @param params
-     * @returns {{q: *, page: *}}
+     * @returns {{limit: number, searchKey: *, page: *}}
      */
-    formatDataRequest(params) {
+    formatDataRequest(_this, params) {
         return {
             searchKey: params.term, // search term
             page: params.page,
@@ -35,11 +36,12 @@ class Select2ServerSide {
 
     /**
      *
+     * @param _this
      * @param data
      * @param params
      * @returns {{pagination: {more: boolean}, results: *}}
      */
-    processResults(data, params){
+    processResults(_this, data, params){
         // parse the results into the format expected by Select2
         // since we are using custom formatting functions we do not need to
         // alter the remote JSON data, except to indicate that infinite
@@ -56,28 +58,31 @@ class Select2ServerSide {
 
     /**
      *
+     * @param _this
      * @param markup
      * @returns {*}
      */
-    escapeMarkup(markup) {
+    escapeMarkup(_this, markup) {
         return markup;
     };
 
     /**
      *
+     * @param _this
      * @param data
      * @returns {*}
      */
-    formatDataResult(data){
+    formatDataResult(_this, data){
         return data.full_name || data.id;
     };
 
     /**
      *
+     * @param _this
      * @param data
      * @returns {*}
      */
-    formatDataSelection(data){
+    formatDataSelection(_this, data){
         return data.full_name || data.id;
     };
 
@@ -93,24 +98,24 @@ class Select2ServerSide {
                 dataType: _this.dataType,
                 delay: _this.deplay,
                 data: function (params) {
-                    return _this.formatDataRequest(params)
+                    return _this.formatDataRequest(_this, params)
                 },
                 processResults: function (data, params) {
-                    return _this.processResults(data, params);
+                    return _this.processResults(_this, data, params);
                 },
                 cache: _this.isCache
             },
             placeholder: _this.placeholder,
             allowClear: _this.allowClear,
             escapeMarkup: function (markup) {
-                return _this.escapeMarkup(markup); // let our custom formatter work
+                return _this.escapeMarkup(_this, markup); // let our custom formatter work
             },
             minimumInputLength: _this.minimumInputLength,
             templateResult: function (data) {
-                return _this.formatDataResult(data);
+                return _this.formatDataResult(_this, data);
             },
             templateSelection: function (data) {
-                return _this.formatDataSelection(data);
+                return _this.formatDataSelection(_this, data);
             }
         });
     }

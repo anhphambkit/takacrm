@@ -6,5 +6,4 @@ return [
     'unit'    => 'Product Units',
     'origin'      => 'Product Origins',
     'category'      => 'Product Categories',
-    'payment'       => 'Payment Methods'
 ];

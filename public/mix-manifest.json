@@ -1,7 +1,8 @@
 {
-    "/backend/core/media/assets/js/media.js": "/backend/core/media/assets/js/media.js",
-    "/backend/core/media/assets/js/integrate.js": "/backend/core/media/assets/js/integrate.js",
-    "/backend/core/media/assets/js/focus.js": "/backend/core/media/assets/js/focus.js",
-    "/backend/core/media/assets/css/media.css": "/backend/core/media/assets/css/media.css",
-    "/backend/core/media/assets/js/jquery.addMedia.js": "/backend/core/media/assets/js/jquery.addMedia.js"
+    "/backend/plugins/order/assets/js/order-table.js": "/backend/plugins/order/assets/js/order-table.js",
+    "/backend/plugins/order/assets/js/order.js": "/backend/plugins/order/assets/js/order.js",
+    "/frontend/plugins/order/assets/js/.js/.gitkeep.js": "/frontend/plugins/order/assets/js/.js/.gitkeep.js",
+    "/frontend/plugins/order/assets/css/.css/.gitkeep.css": "/frontend/plugins/order/assets/css/.css/.gitkeep.css",
+    "/backend/plugins/order/assets/css/order-crud.css": "/backend/plugins/order/assets/css/order-crud.css",
+    "/backend/plugins/order/assets/css/order.css": "/backend/plugins/order/assets/css/order.css"
 }

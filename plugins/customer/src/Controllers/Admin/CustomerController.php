@@ -371,7 +371,6 @@ class CustomerController extends BaseAdminController
         AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
         AssetManager::addAsset('picker-js', 'libs/core/base/js/date-picker/picker.js');
         AssetManager::addAsset('picker-date-js', 'libs/core/base/js/date-picker/picker.date.js');
-        AssetManager::addAsset('picker-time-js', 'libs/core/base/js/date-picker/picker.time.js');
         AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
         AssetManager::addAsset('customer-js', 'backend/plugins/customer/assets/js/customer.js');
 
@@ -382,9 +381,17 @@ class CustomerController extends BaseAdminController
         AssetPipeline::requireJs('form-select2-js');
         AssetPipeline::requireJs('picker-js');
         AssetPipeline::requireJs('picker-date-js');
-        AssetPipeline::requireJs('picker-time-js');
         AssetPipeline::requireJs('legacy-js');
         AssetPipeline::requireJs('customer-js');
+
+        AssetPipeline::requireCss('daterangepicker-css');
+        AssetPipeline::requireCss('pickadate-css');
+        AssetPipeline::requireCss('cnddaterange-css');
+
+        AssetPipeline::requireJs('pickadate-picker-js');
+        AssetPipeline::requireJs('pickadate-picker-date-js');
+        AssetPipeline::requireJs('daterangepicker-js');
+        AssetPipeline::requireJs('datetime-js');
     }
 
     /**
@@ -395,9 +402,6 @@ class CustomerController extends BaseAdminController
         AssetManager::addAsset('pick-date-css', 'libs/core/base/css/date-picker/pickadate.css');
         AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
         AssetManager::addAsset('customer-css', 'backend/plugins/customer/assets/css/customer.css');
-        AssetManager::addAsset('picker-js', 'libs/core/base/js/date-picker/picker.js');
-        AssetManager::addAsset('picker-date-js', 'libs/core/base/js/date-picker/picker.date.js');
-        AssetManager::addAsset('picker-time-js', 'libs/core/base/js/date-picker/picker.time.js');
         AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
         AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
         AssetManager::addAsset('customer-table-js', 'backend/plugins/customer/assets/js/customer-table.js');
@@ -406,13 +410,19 @@ class CustomerController extends BaseAdminController
         AssetPipeline::requireCss('pick-date-css');
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('customer-css');
-        AssetPipeline::requireJs('picker-js');
-        AssetPipeline::requireJs('picker-date-js');
-        AssetPipeline::requireJs('picker-time-js');
         AssetPipeline::requireJs('legacy-js');
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('customer-table-js');
         AssetPipeline::requireJs('customer-list-js');
+
+        AssetPipeline::requireCss('daterangepicker-css');
+        AssetPipeline::requireCss('pickadate-css');
+        AssetPipeline::requireCss('cnddaterange-css');
+
+        AssetPipeline::requireJs('pickadate-picker-js');
+        AssetPipeline::requireJs('pickadate-picker-date-js');
+        AssetPipeline::requireJs('daterangepicker-js');
+        AssetPipeline::requireJs('datetime-js');
     }
 
     /**

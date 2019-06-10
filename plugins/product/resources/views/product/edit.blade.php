@@ -81,7 +81,7 @@
                                     <div class="row">
                                         <div class="form-group col-md-12 mb-2 @if ($errors->has('short_description')) has-error @endif">
                                             <label for="name">{{ trans('plugins-product::product.form.short_description') }}</label>
-                                            {!! render_editor('short_description', !empty(old('short_description')) ? old('short_description') : $product->short_description, true) !!}
+                                            {!! Form::textarea('short_description', !empty(old('short_description')) ? old('short_description') : $product->short_description, ['class' => 'form-control short_description', 'id' => 'short_description']) !!}
                                             {!! Form::error('short_description', $errors) !!}
                                         </div>
                                     </div>
@@ -139,10 +139,10 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="form-group col-md-6 mb-2 @if ($errors->has('discount')) has-error @endif">
-                                            <label class="control-label required" for="role">{{ trans('plugins-product::product.form.discount') }}</label>
-                                            {!! Form::number('discount', !empty(old('discount')) ? old('discount') : $product->discount, ['class' => 'form-control', 'id' => 'discount', 'type' => 'number', 'min' => 0, 'placeholder' => trans('plugins-product::product.form.discount')]) !!}
-                                            {!! Form::error('discount', $errors) !!}
+                                        <div class="form-group col-md-6 mb-2 @if ($errors->has('discount_percent')) has-error @endif">
+                                            <label class="control-label required" for="role">{{ trans('plugins-product::product.form.discount_percent') }}</label>
+                                            {!! Form::number('discount_percent', !empty(old('discount_percent')) ? old('discount_percent') : $product->discount_percent, ['class' => 'form-control', 'id' => 'discount_percent', 'type' => 'number', 'min' => 0, 'placeholder' => trans('plugins-product::product.form.discount_percent')]) !!}
+                                            {!! Form::error('discount_percent', $errors) !!}
                                         </div>
                                         <div class="form-group col-md-6 mb-2 @if ($errors->has('wholesale_discount')) has-error @endif">
                                             <label for="name">{{ trans('plugins-product::product.form.wholesale_discount') }}</label>

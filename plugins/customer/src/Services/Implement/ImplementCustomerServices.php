@@ -46,4 +46,12 @@ class ImplementCustomerServices implements CustomerServices
         $filters = $this->getFilterAjaxSearch($filters);
         return $customers = $this->customerRepository->searchAjaxCustomer($filters);
     }
+
+    /**
+     * @param int $customerId
+     * @return mixed
+     */
+    public function getInfoWithContactOfCustomer(int $customerId) {
+        return $this->customerRepository->getInfoWithContactOfCustomer($customerId);
+    }
 }

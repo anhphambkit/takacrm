@@ -114,26 +114,4 @@ return [
         'flag'        => 'product_origins.delete',
         'parent_flag' => 'product_origins.list',
     ],
-
-    //Payment
-    [
-        'name'        => 'Product Payments',
-        'flag'        => 'product_payments.list',
-        'parent_flag' => 'plugins.product',
-    ],
-    [
-        'name'        => 'Create',
-        'flag'        => 'product_payments.create',
-        'parent_flag' => 'product_payments.list',
-    ],
-    [
-        'name'        => 'Edit',
-        'flag'        => 'product_payments.edit',
-        'parent_flag' => 'product_payments.list',
-    ],
-    [
-        'name'        => 'Delete',
-        'flag'        => 'product_payments.delete',
-        'parent_flag' => 'product_payments.list',
-    ],
 ];

@@ -19,4 +19,9 @@ $router->group(['prefix' => 'admin'], function (Router $router) {
         'uses' => 'Admin\ProductController@getProductsByCategory',
     ]);
 
+    $router->get('/get-info-price-product', [
+        'as' => 'ajax.admin.get_info_price_product',
+        'uses' => 'Admin\ProductController@getInfoPriceProduct',
+    ]);
+
 });
