@@ -13,7 +13,7 @@
             @include('plugins-order::partials.info-detail-order')
         </div>
         <div class="col-md-3 right-info-order">
-            @include('plugins-order::partials.info-detail-order')
+            {{--@include('plugins-order::partials.info-detail-order')--}}
         </div>
     </div>
 @stop

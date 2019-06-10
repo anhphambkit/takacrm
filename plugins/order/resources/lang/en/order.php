@@ -10,6 +10,12 @@ return [
     'all' => 'All',
     'detail' => 'Detail',
     'order' => 'Order',
+    'vat' => 'VAT',
+    'condition_order' => 'Conditions order',
+    'shipping_fee' => 'Shipping fee',
+    'installation_fee' => 'Installation fee',
+    'after_tax' => 'After tax',
+    'before_tax' => 'Before tax',
     'general_info_order' => 'General Info Order',
     'form' => [
         'search_customer_on_system' => 'Search a customer on system',
@@ -50,5 +56,7 @@ return [
         'discount_percent' => 'Discount (%)',
         'total_price' => 'Total price',
         'actions' => 'Actions',
+        'total' => 'Total',
+        'sub_total' => 'Sub total',
     ]
 ];

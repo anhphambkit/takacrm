@@ -211,4 +211,15 @@ class Order extends Model
     public function getCreatedByInstanceAttribute() {
         return $this->createdByUser;
     }
+
+    /**
+     * With Functions
+     */
+    /**
+     * Get the gallery for the product.
+     */
+    public function products()
+    {
+        return $this->hasMany(ProductsInOrder::class);
+    }
 }

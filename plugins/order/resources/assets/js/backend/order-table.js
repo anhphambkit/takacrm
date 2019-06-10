@@ -35,8 +35,11 @@ manageOrder.columns = [
     },
     {
         title: "Order Code",
-        data: 'order_code',
+        data: null,
         name: 'order_code',
+        render(data) {
+            return `<a href="${API.DETAIL_ORDER}/${data.id}" class="link-order-detail">${data.order_code}</a>`;
+        }
     },
     {
         title: "Customer Code",

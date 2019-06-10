@@ -143,8 +143,7 @@ class OrderController extends BaseAdminController
      */
     public function getDetail($id)
     {
-        $order = Order::find($id);
-//        dd($order->user_performed_info);
+        $order = $this->orderRepository->findById($id, ['products']);
         if (empty($order)) {
             abort(404);
         }

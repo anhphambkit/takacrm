@@ -27,7 +27,7 @@
         const API = {
             {{--LIST_CUSTOMER_URL : "{{ route('admin.order.list') }}",--}}
             GET_LIST_ORDER : "{{ route('ajax.admin.get_list_order') }}",
-{{--            GET_INTRODUCE_PERSON : "{{ route('ajax.admin.get_introduce_persons_by_type_reference') }}",--}}
+            DETAIL_ORDER : "{{ route('admin.order.detail', [ 'id' => '' ]) }}",
         }
     </script>
 @stop

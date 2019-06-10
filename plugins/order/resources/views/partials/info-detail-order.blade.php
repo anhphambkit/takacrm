@@ -21,6 +21,8 @@
         <div class="card-body">
             <h2 class="header-order text-center text-bold-600">{{ trans('plugins-order::order.order') }} - {{ $order->order_code }}</h2>
             @include('plugins-order::tables.info-general-order')
+            @include('plugins-order::tables.product-order-detail-table')
+            @include('plugins-order::tables.conditions-order-detail')
         </div>
     </div>
 </div>
