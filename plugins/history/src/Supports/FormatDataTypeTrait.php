@@ -7,7 +7,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 trait FormatDataTypeTrait
-{
+{   
+    /**
+     * [$displayEmpty description]
+     * @var string
+     */
+    protected $displayEmpty = '<empty>';
+
 	/**
 	 * [$displayAttributes description]
 	 * @var [type]
@@ -155,7 +161,10 @@ trait FormatDataTypeTrait
             $origin  = $this->formatNumeric($origin);
             $current = $this->formatNumeric($current);
         }
-        
+
+        $origin  = is_null($origin) ? $this->displayEmpty : $origin;
+        $current = is_null($current) ? $this->displayEmpty : $current; 
+
     	return [ $origin, $current ];
     }
 
