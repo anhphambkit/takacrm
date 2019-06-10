@@ -1,4 +1,5 @@
 {
+    "/backend/plugins/order/assets/js/order-table.js": "/backend/plugins/order/assets/js/order-table.js",
     "/backend/plugins/order/assets/js/order.js": "/backend/plugins/order/assets/js/order.js",
     "/frontend/plugins/order/assets/js/.js/.gitkeep.js": "/frontend/plugins/order/assets/js/.js/.gitkeep.js",
     "/frontend/plugins/order/assets/css/.css/.gitkeep.css": "/frontend/plugins/order/assets/css/.css/.gitkeep.css",

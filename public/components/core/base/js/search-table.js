@@ -15,6 +15,12 @@ class SearchTable extends Table{
     }
 
     /**
+     * Hooks
+     */
+    beforeSearch(){}
+    afterParseDataSearch(){}
+
+    /**
      * Reset data for search table
      */
     resetDataSearch() {
@@ -113,6 +119,8 @@ class SearchTable extends Table{
                 self.dataSearch[name] = $('#' + idElement).val();
             }
         });
+
+        this.afterParseDataSearch();
     }
 
     /**
@@ -130,6 +138,7 @@ class SearchTable extends Table{
     searchAction(){
         this.destroyEmptyTable();
         this.prepareDataSearch();
+        this.beforeSearch();
         let btnLoading = this.wrapperSearchFilter + ' ' + this.searchBtn;
         this.init(false, this.wrapperSearchFilter, btnLoading);
     }

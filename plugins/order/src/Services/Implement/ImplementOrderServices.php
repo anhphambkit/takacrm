@@ -9,6 +9,7 @@
 namespace Plugins\Order\Services\Implement;
 
 use Carbon\Carbon;
+use Core\Setting\Repositories\Interfaces\ReferenceRepositories;
 use Core\User\Repositories\Eloquent\UserRepository;
 use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Support\Facades\Auth;
@@ -66,6 +67,11 @@ class ImplementOrderServices implements OrderServices {
     private $productRepositories;
 
     /**
+     * @var ReferenceRepositories
+     */
+    private $referenceRepositories;
+
+    /**
      * ImplementOrderServices constructor.
      * @param OrderRepositories $orderRepositories
      * @param ProductsInOrderServices $productsInOrderServices
@@ -75,11 +81,12 @@ class ImplementOrderServices implements OrderServices {
      * @param CustomerContactRepositories $customerContactRepositories
      * @param UserInterface $userRepository
      * @param ProductRepositories $productRepositories
+     * @param ReferenceRepositories $referenceRepositories
      */
     public function __construct(OrderRepositories $orderRepositories, ProductsInOrderServices $productsInOrderServices,
                                 CustomerRepositories $customerRepositories, PaymentMethodRepositories $paymentMethodRepositories,
                                 OrderSourceRepositories $orderSourceRepositories, CustomerContactRepositories $customerContactRepositories,
-                                UserInterface $userRepository, ProductRepositories $productRepositories)
+                                UserInterface $userRepository, ProductRepositories $productRepositories, ReferenceRepositories $referenceRepositories)
     {
         $this->orderRepository = $orderRepositories;
         $this->productsInOrderServices = $productsInOrderServices;
@@ -89,6 +96,7 @@ class ImplementOrderServices implements OrderServices {
         $this->userRepository = $userRepository;
         $this->customerContactRepositories = $customerContactRepositories;
         $this->productRepositories = $productRepositories;
+        $this->referenceRepositories = $referenceRepositories;
     }
 
     /**
@@ -103,10 +111,24 @@ class ImplementOrderServices implements OrderServices {
         return DB::transaction(function () use ($dataOrder, $productsInOrder) {
             // Create new Order:
             $order = $this->orderRepository->createNewInvoiceOrder($dataOrder);
+
             // Products:
-            $productsInOder = $this->prepareProductsDataInOrder($productsInOrder, $order->id);
+            $infoOder = $this->prepareProductsDataInOrder($productsInOrder, $order->id);
+
+            // Update Sale amount + discount order:
+            $dataOrderUpdate = [
+                'sale_order' => $infoOder['sale_order'],
+                'discount_order' => $infoOder['discount_order'] + $order->fees_ship,
+                'vat_order' => $infoOder['vat_order'] + $order->fees_vat,
+            ];
+            $this->orderRepository->update([
+                [
+                    'id', '=', $order->id
+                ]
+            ], $dataOrderUpdate);
+
             // Insert products in order:
-            $this->productsInOrderServices->insertProductsInOrder($productsInOder);
+            $this->productsInOrderServices->insertProductsInOrder($infoOder['products']);
             return $order;
         }, 3);
     }
@@ -142,6 +164,15 @@ class ImplementOrderServices implements OrderServices {
         $data['order_code'] = (!empty($data['order_code'])) ? $data['order_code'] : OrderConfigs::ORDER_CODE_DEFAULT . "-{$maxOrderId}";
         $data['order_date'] = (!empty($data['order_date'])) ? $data['order_date'] : Carbon::now();
 
+        $notPaidStatus = $this->referenceRepositories->bySlug(str_slug(OrderConfigs::STATUS_PAYMENT_ORDER_NOT_PAID));
+        $notPaidStatusId = ($notPaidStatus) ? $notPaidStatus->id : NULL;
+
+        $newOrderStatus = $this->referenceRepositories->bySlug(str_slug(OrderConfigs::STATUS_ORDER_NEW));
+        $newOrderStatusId = ($newOrderStatus) ? $newOrderStatus->id : NULL;
+
+        $data['order_status'] = $newOrderStatusId;
+        $data['payment_status'] = $notPaidStatusId;
+
         unset($data['order_products'], $data['_token'], $data['submit']);
         return $data;
     }
@@ -161,6 +192,9 @@ class ImplementOrderServices implements OrderServices {
                 return [$item['id'] => $item];
             })->toArray();
 
+            $salesOrder = 0;
+            $vatOrder = 0;
+            $discountOrder = 0;
             $productsInOrder = [];
             foreach ($products as $index => $product) {
                 $productsInOrder[$index]['order_id'] = $orderId;
@@ -179,8 +213,16 @@ class ImplementOrderServices implements OrderServices {
                 $productsInOrder[$index]['product_info'] = json_encode($infoProducts[$product['id']]);
                 $productsInOrder[$index]['updated_at'] = $now;
                 $productsInOrder[$index]['created_at'] = $now;
+                $salesOrder += $productsInOrder[$index]['retail_price'];
+                $vatOrder += ($productsInOrder[$index]['retail_price']*$productsInOrder[$index]['vat'])/100;
+                $discountOrder += ($productsInOrder[$index]['discount']) ? $productsInOrder[$index]['discount'] : 0;
             }
-            return $productsInOrder;
+            return [
+                'products' => $productsInOrder,
+                'sale_order' => round($salesOrder),
+                'discount_order' => round($discountOrder),
+                'vat_order' => round($vatOrder),
+            ];
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
@@ -193,5 +235,14 @@ class ImplementOrderServices implements OrderServices {
      */
     public function updateOrder(array $conditions, array $data) {
         return $this->orderRepository->update($conditions, $data);
+    }
+
+    /**
+     * @param array $request
+     * @return mixed
+     */
+    public function searchListOrder(array $request)
+    {
+        return $this->orderRepository->searchListOrder($request);
     }
 }

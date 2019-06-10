@@ -22,4 +22,10 @@ interface OrderServices
      * @return mixed
      */
     public function updateOrder(array $conditions, array $data);
+
+    /**
+     * @param array $request
+     * @return mixed
+     */
+    public function searchListOrder(array $request);
 }

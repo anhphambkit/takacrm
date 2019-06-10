@@ -52,12 +52,25 @@ class Order extends Model
         'fees_shipping_percent',
         'fees_installation_percent',
         'is_discount_after_tax',
+        'sale_order',
+        'discount_order',
+        'vat_order',
         'sub_total',
         'total_order',
         'created_by',
         'updated_by',
         'order_status',
+        'payment_status',
         'status'
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'created_by_instance',
     ];
 
     /**
@@ -190,5 +203,12 @@ class Order extends Model
     public function getOrderConditionsAttribute($value)
     {
         return (!empty($value)) ? json_decode($value) : [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedByInstanceAttribute() {
+        return $this->createdByUser;
     }
 }

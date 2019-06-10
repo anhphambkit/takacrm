@@ -2,9 +2,11 @@
 
 namespace Plugins\Order\Controllers\Admin;
 
+use Core\Setting\Services\ReferenceServices;
 use Core\User\Models\User;
 use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
+use Plugins\Order\Contracts\OrderConfigs;
 use Plugins\Order\Repositories\Interfaces\OrderSourceRepositories;
 use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
 use Plugins\Order\Requests\OrderRequest;
@@ -49,6 +51,11 @@ class OrderController extends BaseAdminController
     protected $orderServices;
 
     /**
+     * @var ReferenceServices
+     */
+    protected $referenceServices;
+
+    /**
      * OrderController constructor.
      * @param OrderRepositories $orderRepository
      * @param UserInterface $userRepository
@@ -56,10 +63,11 @@ class OrderController extends BaseAdminController
      * @param OrderSourceRepositories $orderSourceRepositories
      * @param ProductRepositories $productRepositories
      * @param OrderServices $orderServices
+     * @param ReferenceServices $referenceServices
      */
     public function __construct(OrderRepositories $orderRepository, UserInterface $userRepository,
                                 PaymentMethodRepositories $paymentMethodRepositories, OrderSourceRepositories $orderSourceRepositories,
-                                ProductRepositories $productRepositories, OrderServices $orderServices
+                                ProductRepositories $productRepositories, OrderServices $orderServices, ReferenceServices $referenceServices
     )
     {
         $this->orderRepository = $orderRepository;
@@ -68,6 +76,7 @@ class OrderController extends BaseAdminController
         $this->orderSourceRepositories = $orderSourceRepositories;
         $this->productRepositories = $productRepositories;
         $this->orderServices = $orderServices;
+        $this->referenceServices = $referenceServices;
     }
 
     /**
@@ -78,9 +87,11 @@ class OrderController extends BaseAdminController
      */
     public function getList(OrderDataTable $dataTable)
     {
+        $orderStatuses = $this->referenceServices->getReferenceFromAttributeType(OrderConfigs::STATUS_ORDER_TYPE);
+        $paymentOrderStatuses = $this->referenceServices->getReferenceFromAttributeType(OrderConfigs::STATUS_PAYMENT_ORDER_TYPE);
         page_title()->setTitle(trans('plugins-order::order.list'));
-
-        return $dataTable->renderTable(['title' => trans('plugins-order::order.list')]);
+        $this->addListssets();
+        return view('plugins-order::order.list', compact('orderStatuses', 'paymentOrderStatuses'));
     }
 
     /**
@@ -205,6 +216,17 @@ class OrderController extends BaseAdminController
     private function addDetailCRUDAssets() {
         AssetManager::addAsset('order-crud-css', 'backend/plugins/order/assets/css/order-crud.css');
         AssetPipeline::requireCss('order-crud-css');
+    }
+
+    /**
+     * Add frontend plugins for layout
+     * @author AnhPham
+     */
+    private function addListssets() {
+        AssetManager::addAsset('order-css', 'backend/plugins/order/assets/css/order.css');
+        AssetManager::addAsset('order-table-js', 'backend/plugins/order/assets/js/order-table.js');
+        AssetPipeline::requireCss('order-css');
+        AssetPipeline::requireJs('order-table-js');
     }
 
     /**

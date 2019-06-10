@@ -50,7 +50,7 @@ class CreateNewOrderTable extends Migration
             $table->integer('total_order');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
-            $table->integer('order_status')->nullable();
+            $table->integer('order_status');
             $table->boolean('status')->default(true);
             $table->softDeletes();
             $table->timestamps();

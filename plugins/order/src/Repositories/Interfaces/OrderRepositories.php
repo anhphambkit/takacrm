@@ -11,4 +11,10 @@ interface OrderRepositories extends RepositoryInterface
      * @return mixed
      */
     public function createNewInvoiceOrder(array $data);
+
+    /**
+     * @param array $request
+     * @return mixed
+     */
+    public function searchListOrder(array $request);
 }

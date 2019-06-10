@@ -7,6 +7,7 @@ return [
     'list' => 'List order',
     'add_product' => 'Add product',
     'add_note' => 'Add note',
+    'all' => 'All',
     'form' => [
         'search_customer_on_system' => 'Search a customer on system',
         'customer_code' => 'Customer code',

@@ -17,7 +17,6 @@ use Plugins\Customer\Repositories\Interfaces\CustomerQueryListRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRepositories;
 use Plugins\Customer\Services\CustomerServices;
 
-
 class CustomerController extends BaseAdminController
 {
     /**
