@@ -26,7 +26,12 @@
         <tr class="row-product-order row-product-order-{{ $index }}" id="row-product-order-detail-{{ $index }}" data-product-index="{{ $index }}">
             <td scope="row">{{ $index + 1 }}</td>
             <td class="product-basic-info product-basic-info-{{ $index }}" id="product-basic-info-{{ $index }}">
-                {{ $orderProduct->name }}
+                <a href="#" class="link-detail-product">{{ $orderProduct->name }}</a>
+                @if(!empty($orderProduct->short_description))
+                    <div class="short-description-product">
+                        {{ $orderProduct->short_description }}
+                    </div>
+                @endif
             </td>
             <td>
                 {{ $orderProduct->sku }}
