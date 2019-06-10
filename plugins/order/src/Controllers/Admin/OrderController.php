@@ -7,6 +7,7 @@ use Core\User\Models\User;
 use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
 use Plugins\Order\Contracts\OrderConfigs;
+use Plugins\Order\Models\Order;
 use Plugins\Order\Repositories\Interfaces\OrderSourceRepositories;
 use Plugins\Order\Repositories\Interfaces\PaymentMethodRepositories;
 use Plugins\Order\Requests\OrderRequest;
@@ -90,7 +91,7 @@ class OrderController extends BaseAdminController
         $orderStatuses = $this->referenceServices->getReferenceFromAttributeType(OrderConfigs::STATUS_ORDER_TYPE);
         $paymentOrderStatuses = $this->referenceServices->getReferenceFromAttributeType(OrderConfigs::STATUS_PAYMENT_ORDER_TYPE);
         page_title()->setTitle(trans('plugins-order::order.list'));
-        $this->addListssets();
+        $this->addListAssets();
         return view('plugins-order::order.list', compact('orderStatuses', 'paymentOrderStatuses'));
     }
 
@@ -134,6 +135,25 @@ class OrderController extends BaseAdminController
         } else {
             return redirect()->route('admin.order.edit', $order->id)->with('success_msg', trans('core-base::notices.create_success_message'));
         }
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getDetail($id)
+    {
+        $order = Order::find($id);
+//        dd($order->user_performed_info);
+        if (empty($order)) {
+            abort(404);
+        }
+
+        $this->addDetailPageAssets();
+
+        page_title()->setTitle(trans('plugins-order::order.detail') . ' #' . $id);
+
+        return view('plugins-order::order.detail', compact('order'));
     }
 
     /**
@@ -222,11 +242,20 @@ class OrderController extends BaseAdminController
      * Add frontend plugins for layout
      * @author AnhPham
      */
-    private function addListssets() {
+    private function addListAssets() {
         AssetManager::addAsset('order-css', 'backend/plugins/order/assets/css/order.css');
         AssetManager::addAsset('order-table-js', 'backend/plugins/order/assets/js/order-table.js');
         AssetPipeline::requireCss('order-css');
         AssetPipeline::requireJs('order-table-js');
+    }
+
+    /**
+     * Add frontend plugins for layout
+     * @author AnhPham
+     */
+    private function addDetailPageAssets() {
+        AssetManager::addAsset('order-css', 'backend/plugins/order/assets/css/order.css');
+        AssetPipeline::requireCss('order-css');
     }
 
     /**

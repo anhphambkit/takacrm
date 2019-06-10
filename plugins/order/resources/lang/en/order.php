@@ -8,6 +8,9 @@ return [
     'add_product' => 'Add product',
     'add_note' => 'Add note',
     'all' => 'All',
+    'detail' => 'Detail',
+    'order' => 'Order',
+    'general_info_order' => 'General Info Order',
     'form' => [
         'search_customer_on_system' => 'Search a customer on system',
         'customer_code' => 'Customer code',
@@ -34,6 +37,7 @@ return [
         'fees_installation_percent' => 'Installation fee (%)',
         'is_discount_after_tax' => 'Discount after tax?',
         'total_order' => 'Total',
+        'group_user' => 'Group user',
     ],
     'table' => [
         'product' => 'Product',

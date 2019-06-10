@@ -142,24 +142,24 @@ class ImplementOrderServices implements OrderServices {
         $data['created_by'] = Auth::id();
 
         if (!empty($data['customer_id']))
-            $data['customer_info'] = json_encode($this->customerRepositories->findById($data['customer_id'])->toArray());
+            $data['customer_info'] = $this->customerRepositories->findById($data['customer_id'])->toArray();
         else {
             $data['customer_name'] = (!empty($data['customer_info'])) ? $data['customer_info'] : OrderConfigs::GUEST;
         }
 
-        $data['user_performed_info'] = json_encode($this->userRepository->findById($data['user_performed_id'])->toArray());
+        $data['user_performed_info'] = $this->userRepository->findById($data['user_performed_id'], ['getRole'])->toArray();
 
         if (!empty($data['payment_method_id']))
-            $data['payment_method_info'] = json_encode($this->paymentMethodRepositories->findById($data['payment_method_id'])->toArray());
+            $data['payment_method_info'] = $this->paymentMethodRepositories->findById($data['payment_method_id'])->toArray();
 
         if (!empty($data['order_source_id']))
-            $data['order_source_info'] = json_encode($this->orderSourceRepositories->findById($data['order_source_id'])->toArray());
+            $data['order_source_info'] = $this->orderSourceRepositories->findById($data['order_source_id'])->toArray();
 
         if (!empty($data['customer_contact_id']))
-            $data['customer_contact_info'] = json_encode($this->customerContactRepositories->findById($data['customer_contact_id'])->toArray());
+            $data['customer_contact_info'] = $this->customerContactRepositories->findById($data['customer_contact_id'])->toArray();
 
         if (!empty($data['order_conditions']))
-            $data['order_conditions'] = json_encode($data['order_conditions']);
+            $data['order_conditions'] = $data['order_conditions'];
 
         $data['order_code'] = (!empty($data['order_code'])) ? $data['order_code'] : OrderConfigs::ORDER_CODE_DEFAULT . "-{$maxOrderId}";
         $data['order_date'] = (!empty($data['order_date'])) ? $data['order_date'] : Carbon::now();

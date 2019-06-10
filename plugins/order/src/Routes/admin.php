@@ -31,6 +31,11 @@ $router->group(['prefix' => 'order'], function (Router $router) {
         'uses' => 'OrderController@postCreate',
     ]);
 
+    $router->get('/detail/{id}', [
+        'as' => 'admin.order.detail',
+        'uses' => 'OrderController@getDetail',
+    ]);
+
     $router->get('/edit/{id}', [
         'as' => 'admin.order.edit',
         'uses' => 'OrderController@getEdit',

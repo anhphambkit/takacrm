@@ -157,7 +157,7 @@ class Order extends Model
      */
     public function getCustomerInfoAttribute($value)
     {
-        return (!empty($value)) ? json_decode($value) : [];
+        return (!empty($value)) ? json_decode($value, true) : [];
     }
 
     /**
@@ -166,7 +166,7 @@ class Order extends Model
      */
     public function getUserPerformedInfoAttribute($value)
     {
-        return (!empty($value)) ? json_decode($value) : [];
+        return (!empty($value)) ? json_decode($value, true) : [];
     }
 
     /**
@@ -175,7 +175,7 @@ class Order extends Model
      */
     public function getPaymentMethodInfoAttribute($value)
     {
-        return (!empty($value)) ? json_decode($value) : [];
+        return (!empty($value)) ? json_decode($value, true) : [];
     }
 
     /**
@@ -184,7 +184,7 @@ class Order extends Model
      */
     public function getOrderSourceInfoAttribute($value)
     {
-        return (!empty($value)) ? json_decode($value) : [];
+        return (!empty($value)) ? json_decode($value, true) : [];
     }
 
     /**
@@ -193,7 +193,7 @@ class Order extends Model
      */
     public function getCustomerContactInfoAttribute($value)
     {
-        return (!empty($value)) ? json_decode($value) : [];
+        return (!empty($value)) ? json_decode($value, true) : [];
     }
 
     /**
@@ -202,7 +202,7 @@ class Order extends Model
      */
     public function getOrderConditionsAttribute($value)
     {
-        return (!empty($value)) ? json_decode($value) : [];
+        return (!empty($value)) ? json_decode($value, true) : [];
     }
 
     /**
