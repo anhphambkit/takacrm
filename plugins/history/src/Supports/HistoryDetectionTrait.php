@@ -14,12 +14,6 @@ trait HistoryDetectionTrait
     use FormatDataTypeTrait;
 
 	/**
-	 * [$formatTime description]
-	 * @var string
-	 */
-	protected $formatTime = 'm/d/Y';
-
-	/**
 	 * [$attributeDelete description]
 	 * @var array
 	 */
