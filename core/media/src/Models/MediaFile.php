@@ -7,10 +7,12 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Core\Media\ValueObjects\MediaPath;
+use Plugins\History\Supports\HistoryDetectionTrait;
 
 class MediaFile extends Eloquent
 {
     use SoftDeletes;
+    use HistoryDetectionTrait;
 
     /**
      * The database table used by the model.

@@ -1,12 +1,7 @@
 {
-    "/backend/plugins/product/assets/scripts/form-select2.js": "/backend/plugins/product/assets/scripts/form-select2.js",
-    "/backend/plugins/product/assets/css/product.css": "/backend/plugins/product/assets/css/product.css",
-    "/backend/plugins/product/assets/scripts/switch.min.js": "/backend/plugins/product/assets/scripts/switch.min.js",
-    "/backend/plugins/product/assets/scripts/switch.js": "/backend/plugins/product/assets/scripts/switch.js",
-
-    "/backend/plugins/product/assets/scripts/product.js": "/backend/plugins/product/assets/scripts/product.js",
-    
-    "/backend/plugins/product/assets/scripts/picker-color.min.js": "/backend/plugins/product/assets/scripts/picker-color.min.js",
-    "/backend/plugins/product/assets/scripts/picker-color.js": "/backend/plugins/product/assets/scripts/picker-color.js",
-    "/backend/plugins/product/assets/scripts/form-select2.min.js": "/backend/plugins/product/assets/scripts/form-select2.min.js"
+    "/backend/core/media/assets/js/media.js": "/backend/core/media/assets/js/media.js",
+    "/backend/core/media/assets/js/integrate.js": "/backend/core/media/assets/js/integrate.js",
+    "/backend/core/media/assets/js/focus.js": "/backend/core/media/assets/js/focus.js",
+    "/backend/core/media/assets/css/media.css": "/backend/core/media/assets/css/media.css",
+    "/backend/core/media/assets/js/jquery.addMedia.js": "/backend/core/media/assets/js/jquery.addMedia.js"
 }

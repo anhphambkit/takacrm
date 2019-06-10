@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.1.3",
         "davejamesmiller/laravel-breadcrumbs": "5.x",
+        "doctrine/dbal": "^2.9",
         "elasticquent/elasticquent": "dev-master",
         "fideloper/proxy": "^4.0",
         "floatingpoint/stylist": "^1.0",
@@ -55,7 +56,8 @@
             "Plugins\\Addresscode\\": "plugins/addresscode/src",
             "Plugins\\Address\\": "plugins/address/src",
             "Plugins\\Order\\": "plugins/order/src",
-            "Plugins\\CustomAttributes\\": "plugins/custom-attributes/src"
+            "Plugins\\CustomAttributes\\": "plugins/custom-attributes/src",
+            "Plugins\\History\\": "plugins/history/src"
         },
         "files": [
             "helpers.php"
