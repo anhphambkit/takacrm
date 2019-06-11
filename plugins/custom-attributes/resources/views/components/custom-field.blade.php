@@ -9,7 +9,7 @@ $classFieldWrapper = (!empty($classFieldWrapper)) ? $classFieldWrapper : 'form-g
 $methodAttributeRelation = "{$customAttributeEntity->type_value}ValueAttributes";
 $typeValue = ucfirst($customAttributeEntity->type_value);
 $entityId = !empty($entityId) ? $entityId : 0;
-$customAttributeEntityValues = $customAttributeEntity->$methodAttributeRelation()->select('*')->where('entity_id', (int)$entityId)->get();
+$customAttributeEntityValues = $customAttributeEntity->{$methodAttributeRelation}->where('entity_id', (int)$entityId);
 ?>
 <div class="{{ $classFieldWrapper }} @if ($errors->has($customAttributeEntity->slug)) has-error @endif">
     <label class="control-label {{ ($customAttributeEntity->is_required) ? 'required' : '' }}" for="custom-attribute-{{$customAttributeEntity->slug}}">{{ $customAttributeEntity->name }}</label>

@@ -55,6 +55,8 @@ class Product extends Model
         'custom_attributes_value',
         'category_name',
         'unit_name',
+        'manufacturer_name',
+        'origin_name',
     ];
 
     /**
@@ -155,5 +157,13 @@ class Product extends Model
 
     public function getUnitNameAttribute() {
         return ($this->productUnit) ? $this->productUnit->name : '';
+    }
+
+    public function getManufacturerNameAttribute() {
+        return ($this->productManufacturer) ? $this->productManufacturer->name : '';
+    }
+
+    public function getOriginNameAttribute() {
+        return ($this->productOrigin) ? $this->productOrigin->name : '';
     }
 }

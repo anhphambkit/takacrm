@@ -50,6 +50,9 @@ return [
     'show_hide_editor'        => 'Show/Hide Editor',
     'basic_info_title'        => 'Basic information',
     'code_placeholder'        => 'Code',
+    'log_info'                => 'Log Information',
+    'created_by'              => 'Created by',
+    'created_at'              => 'Created at',
     'action'        => 'Action',
     'code'        => 'Code',
 ];

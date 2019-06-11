@@ -92,7 +92,7 @@ class CustomAttributes extends Model
      */
     public function optionValueAttributes()
     {
-        return $this->hasMany(CustomAttributeValueOption::class, 'custom_attribute_id');
+        return $this->hasMany(CustomAttributeValueOption::class, 'custom_attribute_id')->with('customAttribute');
     }
 
     /**

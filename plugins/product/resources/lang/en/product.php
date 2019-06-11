@@ -12,6 +12,7 @@ return [
     'description_info' => 'Description Information',
     'price_info' => 'Price Information',
     'custom_attributes' => 'Custom Attributes',
+    'advanced_info' => 'Advanced Information',
 
     'form' => [
         'upc' => 'UPC',

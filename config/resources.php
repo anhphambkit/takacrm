@@ -27,6 +27,7 @@ return [
 		'pickadate-picker-date-js' => ['theme' => 'plugins/pickers/js/pickadate/picker.date.js'],
 		'datetime-js'              => ['theme' => 'plugins/pickers/cdn/dateTime/pick-a-datetime.js'],
 		'daterangepicker-js'              => ['theme' => 'plugins/pickers/js/daterange/daterangepicker.js'],
+        'slick-js'              => ['cdn' => 'backend/core/base/packages/slick/slick/slick.min.js'],
 
 		/* css */
 		'vendors-css'              => ['theme' => 'app-assets/css/vendors.css'],
@@ -48,6 +49,8 @@ return [
         'daterangepicker-css'      => ['theme' => 'plugins/pickers/css/daterange/daterangepicker.css'],
         'pickadate-css'            => ['theme' => 'plugins/pickers/css/pickadate/pickadate.css'],
         'cnddaterange-css'         => ['theme' => 'plugins/pickers/cdn/daterange/daterange.css'],
+        'slick-css'              => ['cdn' => 'backend/core/base/packages/slick/slick/slick.css'],
+        'slick-theme-css'              => ['cdn' => 'backend/core/base/packages/slick/slick/slick-theme.css'],
 	],
 
 	'frontend-assets' => [
