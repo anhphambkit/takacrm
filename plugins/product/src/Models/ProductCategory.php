@@ -50,8 +50,7 @@ class ProductCategory extends ModelHistoryLog
         return $this->belongsTo(User::class, 'created_by');
     }
 
-
-    # Config for log history
+    ################### LOGGER ###########################
     /**
      * [$displayAttributes description]
      * @var [type]
@@ -70,5 +69,14 @@ class ProductCategory extends ModelHistoryLog
             'mapColumn' => 'id',
             'mapResult' => 'name'
         ]
+    ];
+
+    /**
+     * [$relationShipAttributes description]
+     * @var [type]
+     */
+    protected $logTargetAttributes = [
+        'target' => HISTORY_MODULE_PRODUCT_CATEGORY,
+        'primary' => 'id'
     ];
 }

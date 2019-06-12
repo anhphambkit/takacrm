@@ -12,14 +12,13 @@ trait HistoryDetectionTrait
 {	
     use ValidationHistoryTrait;
     use FormatDataTypeTrait;
-
+    
 	/**
 	 * [$attributeDelete description]
 	 * @var array
 	 */
 	protected $deleteAttributes = [
 		'primaryIndex' => 'id',
-		'name'         => 'name'
 	];
 
 	/**
@@ -28,7 +27,6 @@ trait HistoryDetectionTrait
 	 */
 	protected $createAttributes = [
 		'primaryIndex' => 'id',
-		'name'         => 'name'
 	];
 
 	/**
@@ -48,11 +46,11 @@ trait HistoryDetectionTrait
 	 */
 	protected static function bootHistoryDetectionTrait()
 	{
-		foreach (static::getModelEvents() as $event) {
-			static::$event(function ($model) use ($event) {
-				$model->createLogHistory($event);
-	        });
-		}
+        foreach (static::getModelEvents() as $event) {
+            static::$event(function ($model) use ($event) {
+                $model->createLogHistory($event);
+            });
+        }
 	}
 
 	/**
@@ -79,11 +77,12 @@ trait HistoryDetectionTrait
         if($user){
             $tableName = $this->getDisplayTable();
             $primaryIndex = $this->getAttribute($this->createAttributes['primaryIndex']);
-            app(HistoryRepositories::class)->createOrUpdate([
+            $formatted = array_merge([
                 'user_id' => $user->id,
-                'content' => "Created new record of table {$tableName} with id is {$primaryIndex}",
+                'content' => "Created new record of table {$tableName} with name is {$primaryIndex}",
                 'type'    => find_reference_element(HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_CREATE)->id
-            ]);
+            ], $this->getTargetHistory());
+            app(HistoryRepositories::class)->createOrUpdate($formatted);
         }
     }
 
@@ -124,11 +123,12 @@ trait HistoryDetectionTrait
         if($user){
             $tableName = $this->getDisplayTable();
             $primaryIndex = $this->getAttribute($this->deleteAttributes['primaryIndex']);
-            app(HistoryRepositories::class)->createOrUpdate([
+            $formatted = array_merge([
                 'user_id' => $user->id,
                 'content' => "Deleted record of table {$tableName} with id is {$primaryIndex}",
                 'type'    => find_reference_element(HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_DELETE)->id
-            ]);
+            ], $this->getTargetHistory());
+            app(HistoryRepositories::class)->createOrUpdate($formatted);
         }
     }
 
@@ -162,11 +162,12 @@ trait HistoryDetectionTrait
         list($origin, $current) = $this->formatAttributeValue($attribute, $origin, $current);
         $user = \Auth::user();
         if($user){
-            app(HistoryRepositories::class)->createOrUpdate([
+            $formatted = array_merge([
                 'user_id' => $user->id,
                 'content' => "Updated {$fieldName} from {$origin} to {$current}",
                 'type'    => find_reference_element(HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_UPDATE)->id
-            ]);
+            ], $this->getTargetHistory());
+            app(HistoryRepositories::class)->createOrUpdate($formatted);
         }
     }
 

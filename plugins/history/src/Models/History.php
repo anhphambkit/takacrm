@@ -28,5 +28,7 @@ class History extends Eloquent
 		'user_type',
 		'type',
 		'content',
+        'target_type',
+        'target_id',
     ];
 }

@@ -214,4 +214,17 @@ trait FormatDataTypeTrait
         $displayTable = config("plugins-history.history.nameTables.{$tableName}");
         return $displayTable ?: $tableName;
     }
+
+    /**
+     * [getTargetHistory description]
+     * @return [type] [description]
+     */
+    protected function getTargetHistory():array
+    {
+        $logTargetAttributes = property_exists($this, 'logTargetAttributes') ? $this->logTargetAttributes : [];
+        return [
+            'target_type' => $logTargetAttributes['target'] ?? null,
+            'target_id' => $this->getAttribute($logTargetAttributes['primary'] ?? 'id')
+        ];
+    }
 }

@@ -6,12 +6,13 @@ use Core\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
 use Plugins\CustomAttributes\Models\CustomAttributes;
+use Plugins\History\Models\ModelHistoryLog;
 
 /**
  * Class Product
  * @package Plugins\Product\Models
  */
-class Product extends Model
+class Product extends ModelHistoryLog
 {
     /**
      * The database table used by the model.
@@ -151,19 +152,93 @@ class Product extends Model
         }
     }
 
+    /**
+     * [getCategoryNameAttribute description]
+     * @return [type] [description]
+     */
     public function getCategoryNameAttribute() {
         return ($this->productCategory) ? $this->productCategory->name : '';
     }
 
+    /**
+     * [getUnitNameAttribute description]
+     * @return [type] [description]
+     */
     public function getUnitNameAttribute() {
         return ($this->productUnit) ? $this->productUnit->name : '';
     }
 
+    /**
+     * [getManufacturerNameAttribute description]
+     * @return [type] [description]
+     */
     public function getManufacturerNameAttribute() {
         return ($this->productManufacturer) ? $this->productManufacturer->name : '';
     }
 
+    /**
+     * [getOriginNameAttribute description]
+     * @return [type] [description]
+     */
     public function getOriginNameAttribute() {
         return ($this->productOrigin) ? $this->productOrigin->name : '';
     }
+
+
+    ################### LOGGER ###########################
+
+    /**
+     * [$attributeDelete description]
+     * @var array
+     */
+    protected $deleteAttributes = [
+        'primaryIndex' => 'name',
+    ];
+
+    /**
+     * [$createAttributes description]
+     * @var array
+     */
+    protected $createAttributes = [
+        'primaryIndex' => 'name',
+    ];
+
+    /**
+     * [$ignoreLogAttributes description]
+     * @var [type]
+     */
+    protected $ignoreLogAttributes = [
+        'updated_at',
+        'updated_by',
+        'deleted_at'
+    ];
+
+    /**
+     * [$displayAttributes description]
+     * @var [type]
+     */
+    protected $displayAttributes = [
+        'name' => 'Category Name'
+    ];
+
+    /**
+     * [$relationShipAttributes description]
+     * @var [type]
+     */
+    protected $relationShipAttributes = [
+        'parent_id' => [
+            'mapTable'  => 'product_categories',
+            'mapColumn' => 'id',
+            'mapResult' => 'name'
+        ]
+    ];
+
+    /**
+     * [$relationShipAttributes description]
+     * @var [type]
+     */
+    protected $logTargetAttributes = [
+        'target' => HISTORY_MODULE_PRODUCT,
+        'primary' => 'id'
+    ];
 }
