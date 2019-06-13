@@ -31,4 +31,14 @@ class History extends Eloquent
         'target_type',
         'target_id',
     ];
+
+
+    /**
+     * [user description]
+     * @return [type] [description]
+     */
+    public function user()
+    {
+        return $this->morphTo();
+    }
 }

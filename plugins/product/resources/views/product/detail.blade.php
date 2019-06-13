@@ -28,7 +28,20 @@
             {{--UPDATE_CUSTOMER : "{{ route('ajax.admin.update_data_relation_of_product') }}",--}}
         }
     </script>
+
 @stop
 
 @section('master-footer')
+<script type="text/javascript">
+    $(document).ready(function(){
+        //TODO HERE
+        var historyHeight = $('#log-history-product').height();
+        if(historyHeight > 600){
+            $('#log-history-product').css({
+                "max-height":'600px',
+                "overflow": 'scroll'
+            });
+        }
+    })
+</script>
 @stop

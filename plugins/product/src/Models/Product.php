@@ -218,7 +218,27 @@ class Product extends ModelHistoryLog
      * @var [type]
      */
     protected $displayAttributes = [
-        'name' => 'Category Name'
+        'name'               => 'Name',
+        'slug'               => 'Slug',
+        'sku'                => 'Sku',
+        'image_feature'      => 'Image',
+        'short_description'  => 'Short Description',
+        'long_desc'          => 'Long Description',
+        'manufacturer_id'    => 'Manufacturer',
+        'unit_id'            => 'Unit',
+        'origin_id'          => 'Origin',
+        'category_id'        => 'Product Category',
+        'retail_price'       => 'Retail Price',
+        'wholesale_price'    => 'Wholesale Price',
+        'online_price'       => 'Online Price',
+        'purchase_price'     => 'Purchase Price',
+        'discount_percent'   => 'Discount Percent',
+        'wholesale_discount' => 'Wholesale Discount',
+        'purchase_discount'  => 'Purchase Discount',
+        'online_discount'    => 'Online Discount',
+        'vat'                => 'Vat',
+        'is_feature'         => 'Product Feature',
+        'status'             => 'Status',
     ];
 
     /**
@@ -230,7 +250,31 @@ class Product extends ModelHistoryLog
             'mapTable'  => 'product_categories',
             'mapColumn' => 'id',
             'mapResult' => 'name'
+        ],
+        'manufacturer_id' => [
+            'mapTable'  => 'product_manufacturers',
+            'mapColumn' => 'id',
+            'mapResult' => 'name'
+        ],
+        'unit_id' => [
+            'mapTable'  => 'product_units',
+            'mapColumn' => 'id',
+            'mapResult' => 'name'
+        ],
+        'origin_id' => [
+            'mapTable'  => 'product_origins',
+            'mapColumn' => 'id',
+            'mapResult' => 'name'
         ]
+    ];
+
+    /**
+     * [$logBooleanAttributes description]
+     * @var [type]
+     */
+    protected $logBooleanAttributes = [
+        'status' => ['Activated', 'Disabled'],
+        'is_feature' => ['Feature', 'None Feature']
     ];
 
     /**

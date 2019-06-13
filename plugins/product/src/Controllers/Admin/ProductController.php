@@ -19,7 +19,7 @@ use Core\Base\Controllers\Admin\BaseAdminController;
 use AssetManager;
 use AssetPipeline;
 use Plugins\Product\Services\ProductServices;
-
+use Plugins\History\Repositories\Interfaces\HistoryRepositories;
 class ProductController extends BaseAdminController
 {
     /**
@@ -58,6 +58,12 @@ class ProductController extends BaseAdminController
     protected $productServices;
 
     /**
+     * [$historyRepository description]
+     * @var [type]
+     */
+    private $historyRepository;
+
+    /**
      * ProductController constructor.
      * @param ProductRepositories $productRepository
      * @param ProductCategoryRepositories $productCategoryRepositories
@@ -67,19 +73,25 @@ class ProductController extends BaseAdminController
      * @param CustomAttributeServices $customAttributeServices
      * @param ProductServices $productServices
      */
-    public function __construct(ProductRepositories $productRepository, ProductCategoryRepositories $productCategoryRepositories,
-                                ManufacturerRepositories $manufacturerRepositories, ProductUnitRepositories $productUnitRepositories,
-                                ProductOriginRepositories $productOriginRepositories, CustomAttributeServices $customAttributeServices,
-                                ProductServices $productServices
+    public function __construct(
+        ProductRepositories $productRepository,
+        ProductCategoryRepositories $productCategoryRepositories,
+        ManufacturerRepositories $manufacturerRepositories,
+        ProductUnitRepositories $productUnitRepositories,
+        ProductOriginRepositories $productOriginRepositories,
+        CustomAttributeServices $customAttributeServices,
+        ProductServices $productServices,
+        HistoryRepositories $history
     )
     {
-        $this->productRepository = $productRepository;
+        $this->productRepository           = $productRepository;
         $this->productCategoryRepositories = $productCategoryRepositories;
-        $this->manufacturerRepositories = $manufacturerRepositories;
-        $this->productUnitRepositories = $productUnitRepositories;
-        $this->productOriginRepositories = $productOriginRepositories;
-        $this->customAttributeServices = $customAttributeServices;
-        $this->productServices = $productServices;
+        $this->manufacturerRepositories    = $manufacturerRepositories;
+        $this->productUnitRepositories     = $productUnitRepositories;
+        $this->productOriginRepositories   = $productOriginRepositories;
+        $this->customAttributeServices     = $customAttributeServices;
+        $this->productServices             = $productServices;
+        $this->historyRepository           = $history;
     }
 
     /**
@@ -90,7 +102,6 @@ class ProductController extends BaseAdminController
      */
     public function getList(ProductDataTable $dataTable)
     {
-
         page_title()->setTitle(trans('plugins-product::product.list'));
 
         return $dataTable->renderTable(['title' => trans('plugins-product::product.list')]);
@@ -245,7 +256,8 @@ class ProductController extends BaseAdminController
      * @return mixed
      * @author Tu Nguyen
      */
-    public function getDetail($id){
+    public function getDetail($id)
+    {
         page_title()->setTitle(trans('plugins-product::product.detail') . ' #' . $id);
         $product = $this->productRepository->findById($id);
 
@@ -263,7 +275,12 @@ class ProductController extends BaseAdminController
         ], ['attributeOptions']);
 
         $this->addDetailAssets();
-        return view('plugins-product::product.detail', compact('product', 'galleries', 'allProductCustomAttributes'));
+
+        $histories = $this->historyRepository->allBy([
+            'target_id'   => $id,
+            'target_type' => HISTORY_MODULE_PRODUCT
+        ]);
+        return view('plugins-product::product.detail', compact('product', 'galleries', 'allProductCustomAttributes', 'histories'));
     }
 
     /**

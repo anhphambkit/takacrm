@@ -84,9 +84,20 @@ trait FormatDataTypeTrait
      * @param  [type] $value [description]
      * @return [type]        [description]
      */
-    protected function formatBoolean($value)
+    protected function formatBoolean($attribute, $value)
     {
-    	return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        if(!is_null($value)){
+            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+            $logBooleanAttributes = property_exists($this, 'logBooleanAttributes') ? $this->logBooleanAttributes : [];
+            $configAttribute = $logBooleanAttributes[$attribute] ?? false;
+            if($configAttribute){
+                if($value) 
+                    $value = $configAttribute[0] ?? $value;
+                else
+                    $value = $configAttribute[1] ?? $value;
+            }
+            return $value;
+        }
     }
 
     /**
@@ -135,8 +146,8 @@ trait FormatDataTypeTrait
             $current = $this->formatDateTime($current);
         }
         elseif(in_array($columnType, $this->typeBoolean)){
-            $current = $this->formatBoolean($current);
-            $origin  = $this->formatBoolean($origin);
+            $current = $this->formatBoolean($attribute, $current);
+            $origin  = $this->formatBoolean($attribute, $origin);
         }
        
         return [ $origin, $current ];
