@@ -30,6 +30,12 @@ class History extends Eloquent
 		'content',
         'target_type',
         'target_id',
+        'value_origin',
+        'value_current',
+        'field_name',
+        'path_session',
+        'table_name',
+        'attribute_name'
     ];
 
 

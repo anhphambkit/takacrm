@@ -1,8 +1,8 @@
 {
-    "/backend/plugins/order/assets/js/order-table.js": "/backend/plugins/order/assets/js/order-table.js",
-    "/backend/plugins/order/assets/js/order.js": "/backend/plugins/order/assets/js/order.js",
-    "/frontend/plugins/order/assets/js/.js/.gitkeep.js": "/frontend/plugins/order/assets/js/.js/.gitkeep.js",
-    "/frontend/plugins/order/assets/css/.css/.gitkeep.css": "/frontend/plugins/order/assets/css/.css/.gitkeep.css",
-    "/backend/plugins/order/assets/css/order-crud.css": "/backend/plugins/order/assets/css/order-crud.css",
-    "/backend/plugins/order/assets/css/order.css": "/backend/plugins/order/assets/css/order.css"
+    "/backend/plugins/customer/assets/js/customer-table.js": "/backend/plugins/customer/assets/js/customer-table.js",
+    "/backend/plugins/customer/assets/js/customer-list.js": "/backend/plugins/customer/assets/js/customer-list.js",
+    "/backend/plugins/customer/assets/css/customer.css": "/backend/plugins/customer/assets/css/customer.css",
+    "/backend/plugins/customer/assets/css/detail-customer.css": "/backend/plugins/customer/assets/css/detail-customer.css",
+    "/backend/plugins/customer/assets/js/customer.js": "/backend/plugins/customer/assets/js/customer.js",
+    "/backend/plugins/customer/assets/js/detail-customer.js": "/backend/plugins/customer/assets/js/detail-customer.js"
 }

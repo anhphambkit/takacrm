@@ -12,6 +12,7 @@ trait HistoryDetectionTrait
 {	
     use ValidationHistoryTrait;
     use FormatDataTypeTrait;
+    use FormatJsonTrait;
     
 	/**
 	 * [$attributeDelete description]
@@ -73,17 +74,21 @@ trait HistoryDetectionTrait
      */
     public function createdObserver()
     {
-        $user = \Auth::user();
-        if($user){
-            $tableName = $this->getDisplayTable();
-            $primaryIndex = $this->getAttribute($this->createAttributes['primaryIndex']);
-            $formatted = array_merge([
-                'user_id' => $user->id,
-                'content' => "Created new record of table {$tableName} with name is {$primaryIndex}",
-                'type'    => find_reference_element(HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_CREATE)->id
-            ], $this->getTargetHistory());
-            app(HistoryRepositories::class)->createOrUpdate($formatted);
-        }
+        $tableName    = $this->getDisplayTable();
+        $primaryValue = $this->getAttribute($this->createAttributes['primaryIndex']);
+        $fieldName    = $this->getDisplayAttribute($this->createAttributes['primaryIndex']);
+        $content      = "Created new record of table {$tableName} with {$fieldName} is {$primaryValue}";
+
+        $formatted = [
+            'content'        => $content,
+            'value_current'  => $primaryValue,
+            'field_name'     => $fieldName,
+            'path_session'   => uniqid(),
+            'table_name'     => $tableName,
+            'attribute_name' => $this->createAttributes['primaryIndex']
+        ];
+
+        $this->saveLogAttribute($formatted, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_CREATE);
     }
 
     /**
@@ -97,6 +102,7 @@ trait HistoryDetectionTrait
         $fieldsChanged = $this->isDirty() ? $this->getDirty() : false;
         if($fieldsChanged){
         	$fieldsChanged = $this->ignoreAttributes($fieldsChanged);
+            $sessionPath = uniqid();
         	foreach ($fieldsChanged as $attribute => $newValue) {
         		# code...
                 $origin                   = $this->getOriginalMutator($attribute);
@@ -105,7 +111,7 @@ trait HistoryDetectionTrait
 
                 # validation model change
                 if($this->validation($_origin, $_current)){
-                    $this->createOrUpdateLogHistory($attribute, $origin, $current);
+                    $this->createOrUpdateLogHistory($attribute, $origin, $current, $sessionPath);
                 }
         	}
         }
@@ -119,17 +125,20 @@ trait HistoryDetectionTrait
      */
     public function deletedObserver()
     {
-        $user = \Auth::user();
-        if($user){
-            $tableName = $this->getDisplayTable();
-            $primaryIndex = $this->getAttribute($this->deleteAttributes['primaryIndex']);
-            $formatted = array_merge([
-                'user_id' => $user->id,
-                'content' => "Deleted record of table {$tableName} with id is {$primaryIndex}",
-                'type'    => find_reference_element(HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_DELETE)->id
-            ], $this->getTargetHistory());
-            app(HistoryRepositories::class)->createOrUpdate($formatted);
-        }
+        $tableName    = $this->getDisplayTable();
+        $primaryValue = $this->getAttribute($this->deleteAttributes['primaryIndex']);
+        $fieldName    = $this->getDisplayAttribute($this->deleteAttributes['primaryIndex']);
+        $content      = "Deleted record of table {$tableName} with {$fieldName} is {$primaryValue}";
+
+        $formatted = [
+            'content'        => $content,
+            'value_current'  => $primaryValue,
+            'field_name'     => $fieldName,
+            'path_session'   => uniqid(),
+            'table_name'     => $tableName,
+            'attribute_name' => $this->deleteAttributes['primaryIndex']
+        ];
+        $this->saveLogAttribute($formatted, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_DELETE);
     }
 
     /**
@@ -156,17 +165,36 @@ trait HistoryDetectionTrait
      * @param  [type] $current   [description]
      * @return [type]            [description]
      */
-    public function createOrUpdateLogHistory($attribute, $origin, $current)
+    public function createOrUpdateLogHistory($attribute, $origin, $current, $sessionPath)
     {
-        $fieldName = $this->getDisplayAttribute($attribute);
+        // if(in_array($attribute, $this->jsonAttributes)){
+        //     return $this->formatJsonAttribute($attribute, $origin, $current);
+        // }
+        $fieldName              = $this->getDisplayAttribute($attribute);
         list($origin, $current) = $this->formatAttributeValue($attribute, $origin, $current);
-        $user = \Auth::user();
-        if($user){
+        $formatted = [
+            'content'       => "Updated {$fieldName} from {$origin} to {$current}",
+            'value_origin'  => $origin,
+            'value_current' => $current,
+            'field_name'    => $fieldName,
+            'path_session'  => $sessionPath,
+            'table_name'    => $this->getDisplayTable(),
+            'attribute_name' => $attribute
+        ];
+        $this->saveLogAttribute($formatted, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_UPDATE);
+    }
+
+    /**
+     * [saveLogJsonAttribute description]
+     * @return [type] [description]
+     */
+    protected function saveLogAttribute(array $data = [], $type)
+    {
+        if($user = \Auth::user()){
             $formatted = array_merge([
                 'user_id' => $user->id,
-                'content' => "Updated {$fieldName} from {$origin} to {$current}",
-                'type'    => find_reference_element(HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_UPDATE)->id
-            ], $this->getTargetHistory());
+                'type'    => find_reference_element($type)->id
+            ], $this->getTargetHistory(), $data);
             app(HistoryRepositories::class)->createOrUpdate($formatted);
         }
     }

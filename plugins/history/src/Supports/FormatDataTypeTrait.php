@@ -140,7 +140,7 @@ trait FormatDataTypeTrait
      */
     protected function formatAttributeWithType($attribute, $origin, $current):array
     {
-        $columnType = Schema::getColumnType($this->getTable(), $attribute);
+        $columnType = $this->getTypeAttribute($attribute);
         if(in_array($columnType, $this->typeDateTime)){
             $origin  = $this->formatDateTime($origin);
             $current = $this->formatDateTime($current);
@@ -151,6 +151,16 @@ trait FormatDataTypeTrait
         }
        
         return [ $origin, $current ];
+    }
+
+    /** 
+     * [getTypeAttribute description]
+     * @param  [type] $attribute [description]
+     * @return [type]            [description]
+     */
+    protected function getTypeAttribute($attribute):string
+    {
+        return Schema::getColumnType($this->getTable(), $attribute);
     }
 
     /**

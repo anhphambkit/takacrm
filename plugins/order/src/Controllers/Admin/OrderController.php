@@ -172,7 +172,7 @@ class OrderController extends BaseAdminController
             'target_type' => HISTORY_MODULE_ORDER
         ]);
         
-        return view('plugins-order::order.detail', compact('order'));
+        return view('plugins-order::order.detail', compact('order','histories'));
     }
 
     /**
