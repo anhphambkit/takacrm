@@ -9,6 +9,7 @@ use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Plugins\Customer\Contracts\CustomerConfig;
 use Plugins\Customer\Repositories\Interfaces\CustomerJobRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerQueryListRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRelationRepositories;
@@ -171,11 +172,16 @@ class CustomerController extends BaseAdminController
     public function postCreate(CustomerRequest $request)
     {
         $data = $request->input();
-
+        $maxCustomerId = (int)$this->customerRepository->getMaxColumn() + 1;
         $data['created_by'] = Auth::id();
+        $data['customer_code'] = !empty($data['customer_code']) ? $data['customer_code'] : CustomerConfig::CUSTOMER . "-{$maxCustomerId}";
 
         $customer = DB::transaction(function () use ($data, $request) {
-            $customer = $this->customerRepository->createOrUpdate($data);
+            $customer = $this->customerRepository->createOrUpdate($data, [
+                [
+                    'email', '=', $data['customer_email']
+                ]
+            ]);
 
             $customerGroups = $request->input('customer_group_id', []);
             $customer->customerGroups()->attach($customerGroups);
