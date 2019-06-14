@@ -1,0 +1,39 @@
+.thumbnail-product {
+  width: 60px;
+  height: 60px;
+}
+
+.product-name.text-bold-700 {
+  font-size: 30px;
+  color: black;
+}
+
+.info-product {
+  font-size: 17px;
+  font-weight: 600;
+
+  .online-price {
+    color: #FF0000;
+  }
+  .price-title {
+    color: black;
+  }
+}
+
+.table-product {
+  th {
+    background: #e3ebf3;
+    border: 1px solid #ccc;
+  }
+  td {
+    border: 1px solid #ccc;
+  }
+  .row-product-total {
+    color: black;
+    font-weight: 600;
+  }
+}
+
+.btn-submit-order {
+  font-size: 28px;
+}

@@ -24,8 +24,8 @@ class CreateNewOrderTable extends Migration
             $table->string('customer_email', 50)->nullable();
             $table->integer('customer_id')->nullable();
             $table->text('customer_info')->nullable();
-            $table->integer('user_performed_id');
-            $table->text('user_performed_info');
+            $table->integer('user_performed_id')->nullable();
+            $table->text('user_performed_info')->nullable();
             $table->date('order_date');
             $table->integer('payment_method_id')->nullable();
             $table->text('payment_method_info')->nullable();

@@ -172,10 +172,11 @@ class ImplementOrderServices implements OrderServices {
         if (!empty($data['customer_id']))
             $data['customer_info'] = $this->customerRepositories->findById($data['customer_id'])->toArray();
         else {
-            $data['customer_name'] = (!empty($data['customer_info'])) ? $data['customer_info'] : OrderConfigs::GUEST;
+            $data['customer_name'] = (!empty($data['customer_name'])) ? $data['customer_name'] : OrderConfigs::GUEST;
         }
 
-        $data['user_performed_info'] = $this->userRepository->findById($data['user_performed_id'], ['getRole'])->toArray();
+        if (!empty($data['user_performed_id']))
+            $data['user_performed_info'] = $this->userRepository->findById($data['user_performed_id'], ['getRole'])->toArray();
 
         if (!empty($data['payment_method_id']))
             $data['payment_method_info'] = $this->paymentMethodRepositories->findById($data['payment_method_id'])->toArray();
@@ -185,9 +186,6 @@ class ImplementOrderServices implements OrderServices {
 
         if (!empty($data['customer_contact_id']))
             $data['customer_contact_info'] = $this->customerContactRepositories->findById($data['customer_contact_id'])->toArray();
-
-        if (!empty($data['order_conditions']))
-            $data['order_conditions'] = $data['order_conditions'];
 
         $data['order_code'] = (!empty($data['order_code'])) ? $data['order_code'] : OrderConfigs::ORDER_CODE_DEFAULT . "-{$maxOrderId}";
         $data['order_date'] = (!empty($data['order_date'])) ? $data['order_date'] : Carbon::now();
@@ -230,12 +228,12 @@ class ImplementOrderServices implements OrderServices {
                 $productsInOrder[$index]['sku'] = $infoProducts[$product['id']]['sku'];
                 $productsInOrder[$index]['name'] = $infoProducts[$product['id']]['name'];
                 $productsInOrder[$index]['slug'] = $infoProducts[$product['id']]['slug'];
-                $productsInOrder[$index]['short_description'] = $infoProducts[$product['id']]['short_description'];
-                $productsInOrder[$index]['unit_name'] = $product['unit_name'];
+                $productsInOrder[$index]['short_description'] = !empty($product['short_description']) ? $product['short_description'] : $infoProducts[$product['id']]['short_description'];
+                $productsInOrder[$index]['unit_name'] = !empty($product['unit_name']) ? $product['unit_name'] : $infoProducts[$product['id']]['unit_name'];
                 $productsInOrder[$index]['quantity'] = (int)$product['quantity'];
                 $productsInOrder[$index]['retail_price'] = (int)$product['retail_price'];
-                $productsInOrder[$index]['vat'] = (float)$product['vat'];
-                $productsInOrder[$index]['discount'] = (int)$product['discount'];
+                $productsInOrder[$index]['vat'] = !empty($product['vat']) ? (float)$product['vat'] : 0;
+                $productsInOrder[$index]['discount'] = !empty($product['discount']) ? (int)$product['discount'] : 0;
                 $productsInOrder[$index]['discount_percent'] = (float)$product['discount_percent'];
                 $productsInOrder[$index]['total_price'] = (int)$product['total_price'];
                 $productsInOrder[$index]['product_info'] = json_encode($infoProducts[$product['id']]);

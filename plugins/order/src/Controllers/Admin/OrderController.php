@@ -72,6 +72,7 @@ class OrderController extends BaseAdminController
      * @param ProductRepositories $productRepositories
      * @param OrderServices $orderServices
      * @param ReferenceServices $referenceServices
+     * @param HistoryRepositories $historyRepository
      */
     public function __construct(
         OrderRepositories $orderRepository,

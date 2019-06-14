@@ -11,3 +11,11 @@
 |
 */
 use Illuminate\Routing\Router;
+
+$router->group(['prefix' => 'product'], function (Router $router) {
+
+    $router->get('/{url}', [
+        'as' => 'public.product.landing_page',
+        'uses' => 'ProductController@getLandingPageProduct',
+    ]);
+});

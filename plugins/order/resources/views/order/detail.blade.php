@@ -41,4 +41,17 @@
 @stop
 
 @section('master-footer')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            //TODO HERE
+            var historyHeight = $('#log-history-order').height();
+            if(historyHeight > 600){
+                $('#log-history-order').css({
+                    "max-height":'600px',
+                    "overflow": 'scroll'
+                });
+            }
+        })
+    </script>
 @stop
+

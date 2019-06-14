@@ -11,3 +11,10 @@
 |
 */
 use Illuminate\Routing\Router;
+
+$router->group(['prefix' => 'public'], function (Router $router) {
+    $router->post('/create-new-order', [
+        'as' => 'public.order.new',
+        'uses' => 'OrderController@postCreateNewOrderFromLandingPage',
+    ]);
+});
