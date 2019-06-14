@@ -28,6 +28,12 @@
                         </span>
                     </span>
                 </div>
+                <div class="link-product-landing-page">
+                    <span class="link-name text-bold-700">{{ trans('plugins-product::product.url_landing_page') }}:</span>
+                    <a href="{{ route('public.product.landing_page', [ 'url' => $product->url_link ]) }}" target="_blank" class="landing-page-product">
+                        {{ route('public.product.landing_page', [ 'url' => $product->url_link ]) }}
+                    </a>
+                </div>
             </div>
             <div class="col-md-8">
             </div>

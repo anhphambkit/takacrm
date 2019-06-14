@@ -72,6 +72,7 @@ class OrderController extends BaseAdminController
      * @param ProductRepositories $productRepositories
      * @param OrderServices $orderServices
      * @param ReferenceServices $referenceServices
+     * @param HistoryRepositories $historyRepository
      */
     public function __construct(
         OrderRepositories $orderRepository,
@@ -172,7 +173,7 @@ class OrderController extends BaseAdminController
             'target_type' => HISTORY_MODULE_ORDER
         ]);
         
-        return view('plugins-order::order.detail', compact('order'));
+        return view('plugins-order::order.detail', compact('order', 'histories'));
     }
 
     /**

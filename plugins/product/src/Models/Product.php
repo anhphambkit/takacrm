@@ -58,6 +58,7 @@ class Product extends ModelHistoryLog
         'unit_name',
         'manufacturer_name',
         'origin_name',
+        'url_link',
     ];
 
     /**
@@ -182,6 +183,13 @@ class Product extends ModelHistoryLog
      */
     public function getOriginNameAttribute() {
         return ($this->productOrigin) ? $this->productOrigin->name : '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlLinkAttribute() {
+        return "{$this->slug}.{$this->id}";
     }
 
 

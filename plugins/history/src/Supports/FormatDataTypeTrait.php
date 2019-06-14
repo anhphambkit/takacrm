@@ -180,6 +180,15 @@ trait FormatDataTypeTrait
     }
 
     /**
+     * @param $value
+     * @return array
+     */
+    public function formatAttributeArrayValue($value) {
+        return is_array($value) ? json_encode($value) : $value;
+    }
+
+
+    /**
      * [getOriginalMutator description]
      * @param  [type] $attr [description]
      * @return [type]       [description]

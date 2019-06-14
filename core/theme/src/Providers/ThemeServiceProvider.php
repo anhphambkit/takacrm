@@ -59,7 +59,7 @@ class ThemeServiceProvider extends ServiceProvider
             return $this->app['stylist']->activate($themeName, true);
         }
 
-        $themeName = setting('theme_frontend', 'TAKABOOK');
+        $themeName = setting('theme_frontend', 'MODERN');
         return $this->app['stylist']->activate($themeName, true);
     }
 
@@ -103,6 +103,8 @@ class ThemeServiceProvider extends ServiceProvider
     protected function inAdministration()
     {
         $segment = 1;
-        return $this->app['request']->segment($segment) === config('core-base.cms.router-prefix.admin');
+        $isAdmin = $this->app['request']->segment($segment) === config('core-base.cms.router-prefix.admin');
+        config()->set('core-base.cms.router-prefix.is_admin', $isAdmin);
+        return $isAdmin;
     }
 }

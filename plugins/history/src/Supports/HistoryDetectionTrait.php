@@ -164,7 +164,7 @@ trait HistoryDetectionTrait
         if($user){
             $formatted = array_merge([
                 'user_id' => $user->id,
-                'content' => "Updated {$fieldName} from {$origin} to {$current}",
+                'content' => "Updated {$fieldName} from {$this->formatAttributeArrayValue($origin)} to {$this->formatAttributeArrayValue($current)}",
                 'type'    => find_reference_element(HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_UPDATE)->id
             ], $this->getTargetHistory());
             app(HistoryRepositories::class)->createOrUpdate($formatted);
