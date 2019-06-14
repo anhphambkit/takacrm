@@ -18,6 +18,7 @@ use AssetManager;
 use AssetPipeline;
 use Plugins\Order\Services\OrderServices;
 use Plugins\Product\Repositories\Interfaces\ProductRepositories;
+use Plugins\History\Repositories\Interfaces\HistoryRepositories;
 
 class OrderController extends BaseAdminController
 {
@@ -57,6 +58,12 @@ class OrderController extends BaseAdminController
     protected $referenceServices;
 
     /**
+     * [$historyRepository description]
+     * @var [type]
+     */
+    private $historyRepository;
+
+    /**
      * OrderController constructor.
      * @param OrderRepositories $orderRepository
      * @param UserInterface $userRepository
@@ -66,18 +73,25 @@ class OrderController extends BaseAdminController
      * @param OrderServices $orderServices
      * @param ReferenceServices $referenceServices
      */
-    public function __construct(OrderRepositories $orderRepository, UserInterface $userRepository,
-                                PaymentMethodRepositories $paymentMethodRepositories, OrderSourceRepositories $orderSourceRepositories,
-                                ProductRepositories $productRepositories, OrderServices $orderServices, ReferenceServices $referenceServices
+    public function __construct(
+        OrderRepositories $orderRepository,
+        UserInterface $userRepository,
+        PaymentMethodRepositories $paymentMethodRepositories,
+        OrderSourceRepositories $orderSourceRepositories,
+        ProductRepositories $productRepositories,
+        OrderServices $orderServices,
+        ReferenceServices $referenceServices,
+        HistoryRepositories $historyRepository
     )
     {
-        $this->orderRepository = $orderRepository;
-        $this->userRepository = $userRepository;
+        $this->orderRepository           = $orderRepository;
+        $this->userRepository            = $userRepository;
         $this->paymentMethodRepositories = $paymentMethodRepositories;
-        $this->orderSourceRepositories = $orderSourceRepositories;
-        $this->productRepositories = $productRepositories;
-        $this->orderServices = $orderServices;
-        $this->referenceServices = $referenceServices;
+        $this->orderSourceRepositories   = $orderSourceRepositories;
+        $this->productRepositories       = $productRepositories;
+        $this->orderServices             = $orderServices;
+        $this->referenceServices         = $referenceServices;
+        $this->historyRepository         = $historyRepository;
     }
 
     /**
@@ -153,6 +167,11 @@ class OrderController extends BaseAdminController
 
         page_title()->setTitle(trans('plugins-order::order.detail') . ' #' . $id);
 
+        $histories = $this->historyRepository->allBy([
+            'target_id'   => $id,
+            'target_type' => HISTORY_MODULE_ORDER
+        ]);
+        
         return view('plugins-order::order.detail', compact('order'));
     }
 
