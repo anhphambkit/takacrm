@@ -34,8 +34,8 @@ trait FormatJsonTrait
     {
 		$_origin           = $this->formatJsonArray($origin ?: []);
 		$_current          = $this->formatJsonArray($current ?: []);
-		$attributesAdded   = array_diff($_origin, $_current);
-		$attributesRemoved = array_diff($_current, $_origin);
+		$attributesRemoved   = array_diff($_origin, $_current);
+		$attributesAdded = array_diff($_current, $_origin);
 
 		foreach ($attributesAdded as $attr) {
 			# log for added attribute json
