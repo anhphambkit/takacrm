@@ -10,7 +10,7 @@ $typeValue = ucfirst($customAttributeEntity->type_value);
 $entityId = !empty($entityId) ? $entityId : 0;
 $customAttributeEntityValues = $customAttributeEntity->{$methodAttributeRelation}->where('entity_id', (int)$entityId);
 ?>
-<div class="info-item">
+<div class="info-item mb-2">
     <span class="info-title">
         {{ $customAttributeEntity->name }}:
     </span>

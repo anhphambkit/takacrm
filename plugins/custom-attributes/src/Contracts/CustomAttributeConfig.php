@@ -26,7 +26,7 @@ interface CustomAttributeConfig
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_SINGLE_SELECT          = 'Single Select';
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_MULTIPLE_SELECT        = 'Multiple Select';
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_URL_INPUT              = 'Url Input';
-    const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_DATE_TIME_INPUT        = 'Date Input';
+    const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_DATE_TIME_INPUT        = 'Datetime Input';
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_COLOR_PICKER           = 'Color Picker';
 
     const REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_STRING                  = 'string';

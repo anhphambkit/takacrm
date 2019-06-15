@@ -14,6 +14,8 @@ use Core\User\Repositories\Eloquent\UserRepository;
 use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
+use Plugins\CustomAttributes\Services\CustomAttributeServices;
 use Plugins\Customer\Repositories\Interfaces\CustomerContactRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRepositories;
 use Plugins\Order\Contracts\OrderConfigs;
@@ -73,6 +75,11 @@ class ImplementOrderServices implements OrderServices {
     private $referenceRepositories;
 
     /**
+     * @var CustomAttributeServices
+     */
+    private $customAttributeServices;
+
+    /**
      * ImplementOrderServices constructor.
      * @param OrderRepositories $orderRepositories
      * @param ProductsInOrderServices $productsInOrderServices
@@ -83,11 +90,13 @@ class ImplementOrderServices implements OrderServices {
      * @param UserInterface $userRepository
      * @param ProductRepositories $productRepositories
      * @param ReferenceRepositories $referenceRepositories
+     * @param CustomAttributeServices $customAttributeServices
      */
     public function __construct(OrderRepositories $orderRepositories, ProductsInOrderServices $productsInOrderServices,
                                 CustomerRepositories $customerRepositories, PaymentMethodRepositories $paymentMethodRepositories,
                                 OrderSourceRepositories $orderSourceRepositories, CustomerContactRepositories $customerContactRepositories,
-                                UserInterface $userRepository, ProductRepositories $productRepositories, ReferenceRepositories $referenceRepositories)
+                                UserInterface $userRepository, ProductRepositories $productRepositories,
+                                ReferenceRepositories $referenceRepositories, CustomAttributeServices $customAttributeServices)
     {
         $this->orderRepository = $orderRepositories;
         $this->productsInOrderServices = $productsInOrderServices;
@@ -98,6 +107,7 @@ class ImplementOrderServices implements OrderServices {
         $this->customerContactRepositories = $customerContactRepositories;
         $this->productRepositories = $productRepositories;
         $this->referenceRepositories = $referenceRepositories;
+        $this->customAttributeServices = $customAttributeServices;
     }
 
     /**
@@ -114,6 +124,12 @@ class ImplementOrderServices implements OrderServices {
 
         $dataOrder = $this->prepareDataOrder($dataCheckouts, $isModeCreate);
 
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_ORDER)
+            ]
+        ], ['attributeOptions']);
+
         $order = null;
         if ($orderId) {
             $order = $this->orderRepository->findById($orderId);
@@ -122,7 +138,7 @@ class ImplementOrderServices implements OrderServices {
             }
         }
 
-        return DB::transaction(function () use ($order, $dataOrder, $productsInOrder) {
+        return DB::transaction(function () use ($order, $dataOrder, $productsInOrder, $allCustomAttributes) {
             if ($order) { // Update order
                 $order->fill($dataOrder);
 
@@ -149,6 +165,8 @@ class ImplementOrderServices implements OrderServices {
             ProductsInOrder::with('order')->where('order_id', $order->id)->delete();
 
             $order->products()->createMany($infoOrder['products']);
+
+            $this->customAttributeServices->createOrUpdateDataEntityCustomAttributes($order, $allCustomAttributes, $dataOrder);
 
             $order->save();
 

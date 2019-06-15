@@ -175,7 +175,9 @@ class CustomerController extends BaseAdminController
         ], ['attributeOptions']);
 
         page_title()->setTitle(trans('plugins-customer::customer.create'));
+        $this->addCustomAttributesAsset();
         $this->addCreateEditAssets();
+
         return view('plugins-customer::create', compact('provincesCities', 'genders', 'typeReferenceData', 'customerJobs',
             'customerGroups', 'customerSources', 'customerRelationships', 'introducePersonIds', 'users', 'allCustomAttributes'));
     }
@@ -309,6 +311,7 @@ class CustomerController extends BaseAdminController
         ], ['attributeOptions']);
 
         page_title()->setTitle(trans('plugins-customer::customer.edit') . ' #' . $id);
+        $this->addCustomAttributesAsset();
         $this->addCreateEditAssets();
         return view('plugins-customer::edit', compact('customer', 'customerContacts', 'provincesCities',
                                                                     'genders', 'typeReferenceData', 'introducePersonIds',
@@ -414,35 +417,70 @@ class CustomerController extends BaseAdminController
      */
     private function addCreateEditAssets()
     {
-        AssetManager::addAsset('pick-date-css', 'libs/core/base/css/date-picker/pickadate.css');
         AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
         AssetManager::addAsset('customer-css', 'backend/plugins/customer/assets/css/customer.css');
 
         AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
         AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
-        AssetManager::addAsset('picker-js', 'libs/core/base/js/date-picker/picker.js');
-        AssetManager::addAsset('picker-date-js', 'libs/core/base/js/date-picker/picker.date.js');
-        AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
         AssetManager::addAsset('customer-js', 'backend/plugins/customer/assets/js/customer.js');
 
-        AssetPipeline::requireCss('pick-date-css');
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('customer-css');
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('form-select2-js');
-        AssetPipeline::requireJs('picker-js');
-        AssetPipeline::requireJs('picker-date-js');
-        AssetPipeline::requireJs('legacy-js');
         AssetPipeline::requireJs('customer-js');
+    }
 
+    /**
+     * Add frontend plugins for layout
+     * @author AnhPham
+     */
+    private function addCustomAttributesAsset()
+    {
+        AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
+        AssetManager::addAsset('bootstrap-switch-css', 'libs/plugins/product/css/toggle/bootstrap-switch.min.css');
+        AssetManager::addAsset('switchery-css', 'libs/plugins/product/css/toggle/switchery.min.css');
+        AssetManager::addAsset('admin-gallery-css', 'libs/core/base/css/gallery/admin-gallery.css');
+        AssetManager::addAsset('mini-colors-css', 'libs/core/base/css/miniColors/jquery.minicolors.css');
+        AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
+
+        AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
+        AssetManager::addAsset('bootstrap-switch-js', 'libs/plugins/product/js/toggle/bootstrap-switch.min.js');
+        AssetManager::addAsset('bootstrap-checkbox-js', 'libs/plugins/product/js/toggle/bootstrap-checkbox.min.js');
+        AssetManager::addAsset('switchery-js', 'libs/plugins/product/js/toggle/switchery.min.js');
+        AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
+        AssetManager::addAsset('switch-js', 'backend/plugins/product/assets/scripts/switch.min.js');
+        AssetManager::addAsset('mini-colors-js', 'libs/core/base/js/miniColors/jquery.minicolors.min.js');
+        AssetManager::addAsset('spectrum-js', 'libs/core/base/js/spectrum/spectrum.js');
+        AssetManager::addAsset('picker-color-js', 'backend/core/base/assets/scripts/picker-color.min.js');
+        AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
+        AssetManager::addAsset('custom-field-js', 'backend/core/base/assets/scripts/custom-field.js');
+
+        AssetPipeline::requireCss('mini-colors-css');
+        AssetPipeline::requireCss('select2-css');
+        AssetPipeline::requireCss('bootstrap-switch-css');
+        AssetPipeline::requireCss('switchery-css');
+        AssetPipeline::requireCss('admin-gallery-css');
+        AssetPipeline::requireCss('pretty-checkbox');
         AssetPipeline::requireCss('daterangepicker-css');
         AssetPipeline::requireCss('pickadate-css');
         AssetPipeline::requireCss('cnddaterange-css');
 
+        AssetPipeline::requireJs('select2-js');
+        AssetPipeline::requireJs('bootstrap-switch-js');
+        AssetPipeline::requireJs('bootstrap-checkbox-js');
+        AssetPipeline::requireJs('switchery-js');
+        AssetPipeline::requireJs('switch-js');
+        AssetPipeline::requireJs('mini-colors-js');
+        AssetPipeline::requireJs('spectrum-js');
+        AssetPipeline::requireJs('picker-color-js');
+        AssetPipeline::requireJs('legacy-js');
+        AssetPipeline::requireJs('form-select2-js');
         AssetPipeline::requireJs('pickadate-picker-js');
         AssetPipeline::requireJs('pickadate-picker-date-js');
         AssetPipeline::requireJs('daterangepicker-js');
         AssetPipeline::requireJs('datetime-js');
+        AssetPipeline::requireJs('custom-field-js');
     }
 
     /**

@@ -6,6 +6,7 @@
  * Time: 11:18
  */
 $entityId = !empty($entityId) ? $entityId : null;
+$classFieldWrapper = !empty($classFieldWrapper) ? $classFieldWrapper : 'form-group col-md-12 mb-2';
 ?>
 {{--Custom Attribute--}}
 <div class="card">
@@ -22,14 +23,15 @@ $entityId = !empty($entityId) ? $entityId : null;
     <div class="card-content collapse show">
         <div class="card-body">
             <div class="form-body">
-                @foreach($allCustomAttributes as $allCustomAttribute)
-                    <div class="row">
-                        @component('plugins-custom-attributes::components.custom-field')
-                            @slot('customAttributeEntity', $allCustomAttribute)
-                            @slot('entityId', $entityId)
-                        @endcomponent
-                    </div>
-                @endforeach
+                <div class="row">
+                    @foreach($allCustomAttributes as $allCustomAttribute)
+                            @component('plugins-custom-attributes::components.custom-field')
+                                @slot('customAttributeEntity', $allCustomAttribute)
+                                @slot('entityId', $entityId)
+                                @slot('classFieldWrapper', $classFieldWrapper)
+                            @endcomponent
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
