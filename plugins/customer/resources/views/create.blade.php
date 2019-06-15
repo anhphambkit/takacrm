@@ -301,6 +301,9 @@
                             </div>
                         </div>
                     </div>
+                    {{--Custom Attribute--}}
+                    @include('plugins-custom-attributes::partials.card-custom-attributes')
+                    {{--End Custom Attribute--}}
                 </div>
                 @php do_action(BASE_ACTION_META_BOXES, CUSTOMER_MODULE_SCREEN_NAME, 'advanced') @endphp
             </div>

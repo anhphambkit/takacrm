@@ -9,6 +9,8 @@ use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
+use Plugins\CustomAttributes\Services\CustomAttributeServices;
 use Plugins\Customer\Contracts\CustomerConfig;
 use Plugins\Customer\Repositories\Interfaces\CustomerJobRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerQueryListRepositories;
@@ -72,6 +74,11 @@ class CustomerController extends BaseAdminController
     protected $customerQueryListRepositories;
 
     /**
+     * @var CustomAttributeServices
+     */
+    protected $customAttributeServices;
+
+    /**
      * CustomerController constructor.
      * @param CustomerRepositories $customerRepository
      * @param AddressGeneralInfoService $addressGeneralInfoService
@@ -82,11 +89,13 @@ class CustomerController extends BaseAdminController
      * @param UserInterface $userRepository
      * @param CustomerQueryListRepositories $customerQueryListRepositories
      * @param CustomerJobRepositories $customerJobRepositories
+     * @param CustomAttributeServices $customAttributeServices
      */
     public function __construct(CustomerRepositories $customerRepository, AddressGeneralInfoService $addressGeneralInfoService,
                                 ReferenceServices $referenceServices, GroupCustomerRepositories $groupCustomerRepositories,
                                 CustomerSourceRepositories $customerSourceRepositories, CustomerRelationRepositories $customerRelationRepositories,
-                                UserInterface $userRepository, CustomerQueryListRepositories $customerQueryListRepositories, CustomerJobRepositories $customerJobRepositories)
+                                UserInterface $userRepository, CustomerQueryListRepositories $customerQueryListRepositories,
+                                CustomerJobRepositories $customerJobRepositories, CustomAttributeServices $customAttributeServices)
     {
         $this->customerRepository = $customerRepository;
         $this->addressGeneralInfoService = $addressGeneralInfoService;
@@ -97,6 +106,7 @@ class CustomerController extends BaseAdminController
         $this->customerQueryListRepositories = $customerQueryListRepositories;
         $this->customerJobRepositories = $customerJobRepositories;
         $this->userRepository = $userRepository;
+        $this->customAttributeServices = $customAttributeServices;
     }
 
     /**
@@ -128,7 +138,6 @@ class CustomerController extends BaseAdminController
         $users = $this->userRepository->getAllUsers();
         page_title()->setTitle(trans('plugins-customer::customer.list'));
         $this->addAssets();
-//        return $dataTable->renderTable(['title' => trans('plugins-customer::customer.list')]);
         return view('plugins-customer::list', compact('customerRelations', 'genders', 'provincesCities', 'typeReferenceData', 'customerGroups', 'customerSources', 'introducePersonIds', 'users', 'customerQueryList'));
     }
 
@@ -159,10 +168,16 @@ class CustomerController extends BaseAdminController
         $customerRelationships = $this->customerRelationRepositories->all();
         $users = $this->userRepository->getAllUsers();
 
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['attributeOptions']);
+
         page_title()->setTitle(trans('plugins-customer::customer.create'));
         $this->addCreateEditAssets();
         return view('plugins-customer::create', compact('provincesCities', 'genders', 'typeReferenceData', 'customerJobs',
-            'customerGroups', 'customerSources', 'customerRelationships', 'introducePersonIds', 'users'));
+            'customerGroups', 'customerSources', 'customerRelationships', 'introducePersonIds', 'users', 'allCustomAttributes'));
     }
 
     /**
@@ -176,10 +191,16 @@ class CustomerController extends BaseAdminController
         $data['created_by'] = Auth::id();
         $data['customer_code'] = !empty($data['customer_code']) ? $data['customer_code'] : CustomerConfig::CUSTOMER . "-{$maxCustomerId}";
 
-        $customer = DB::transaction(function () use ($data, $request) {
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['stringValueAttributes', 'numberValueAttributes', 'textValueAttributes', 'dateValueAttributes', 'optionValueAttributes']);
+
+        $customer = DB::transaction(function () use ($data, $request, $allCustomAttributes) {
             $customer = $this->customerRepository->createOrUpdate($data, [
                 [
-                    'email', '=', $data['customer_email']
+                    'email', '=', $data['email']
                 ]
             ]);
 
@@ -197,7 +218,10 @@ class CustomerController extends BaseAdminController
                 $customer->customerContacts()->create(array_merge($customerContact, ['created_by' => Auth::id()]));
             }
 
-            return $customer->save();
+            $this->customAttributeServices->createOrUpdateDataEntityCustomAttributes($customer, $allCustomAttributes, $data);
+
+            $customer->save();
+            return $customer;
         }, 3);
 
         do_action(BASE_ACTION_AFTER_CREATE_CONTENT, CUSTOMER_MODULE_SCREEN_NAME, $request, $customer);
@@ -220,8 +244,14 @@ class CustomerController extends BaseAdminController
         $customerRelationshipIds = $this->customerRelationRepositories->all();
         $customerIntroduces = $this->customerRepository->getListCustomerIntroducedByTypeAndId(ReferenceConfig::REFERENCE_CUSTOMER_DATA, $id);
         page_title()->setTitle(trans('plugins-customer::customer.detail') . ' #' . $id);
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['attributeOptions']);
+
         $this->addDetailAssets();
-        return view('plugins-customer::detail', compact('customer', 'customerRelationshipIds', 'customerContacts', 'customerIntroduces'));
+        return view('plugins-customer::detail', compact('customer', 'customerRelationshipIds', 'customerContacts', 'customerIntroduces', 'allCustomAttributes'));
     }
 
     /**
@@ -272,13 +302,19 @@ class CustomerController extends BaseAdminController
 
         $customerContacts = $customer->customerContacts->toArray();
 
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['attributeOptions']);
+
         page_title()->setTitle(trans('plugins-customer::customer.edit') . ' #' . $id);
         $this->addCreateEditAssets();
         return view('plugins-customer::edit', compact('customer', 'customerContacts', 'provincesCities',
                                                                     'genders', 'typeReferenceData', 'introducePersonIds',
                                                                     'customerRelationshipIds', 'customerGroups', 'customerSources',
                                                                     'users', 'selectedCustomerJobs', 'selectedCustomerGroups',
-                                                                    'selectedCustomerSources', 'customerJobs')
+                                                                    'selectedCustomerSources', 'customerJobs', 'allCustomAttributes')
         );
     }
 
@@ -299,7 +335,13 @@ class CustomerController extends BaseAdminController
 
         $data['updated_by'] = Auth::id();
 
-        $customer = DB::transaction(function () use ($data, $customer, $request) {
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['stringValueAttributes', 'numberValueAttributes', 'textValueAttributes', 'dateValueAttributes', 'optionValueAttributes']);
+
+        $customer = DB::transaction(function () use ($data, $customer, $request, $allCustomAttributes) {
             $customer->fill($data);
 
             $this->customerRepository->createOrUpdate($customer);
@@ -322,6 +364,9 @@ class CustomerController extends BaseAdminController
                 $customer->customerContacts()->create(array_merge($customerContact, ['created_by' => Auth::id(), 'updated_by' => Auth::id()]));
             }
 
+            $this->customAttributeServices->createOrUpdateDataEntityCustomAttributes($customer, $allCustomAttributes, $data);
+
+            $customer->save();
             return $customer;
         }, 3);
 
@@ -413,6 +458,14 @@ class CustomerController extends BaseAdminController
         AssetManager::addAsset('customer-table-js', 'backend/plugins/customer/assets/js/customer-table.js');
         AssetManager::addAsset('customer-list-js', 'backend/plugins/customer/assets/js/customer-list.js');
 
+        AssetPipeline::requireCss('daterangepicker-css');
+        AssetPipeline::requireCss('pickadate-css');
+        AssetPipeline::requireCss('cnddaterange-css');
+        AssetPipeline::requireJs('pickadate-picker-js');
+        AssetPipeline::requireJs('pickadate-picker-date-js');
+        AssetPipeline::requireJs('daterangepicker-js');
+        AssetPipeline::requireJs('datetime-js');
+
         AssetPipeline::requireCss('pick-date-css');
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('customer-css');
@@ -420,15 +473,6 @@ class CustomerController extends BaseAdminController
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('customer-table-js');
         AssetPipeline::requireJs('customer-list-js');
-
-        AssetPipeline::requireCss('daterangepicker-css');
-        AssetPipeline::requireCss('pickadate-css');
-        AssetPipeline::requireCss('cnddaterange-css');
-
-        AssetPipeline::requireJs('pickadate-picker-js');
-        AssetPipeline::requireJs('pickadate-picker-date-js');
-        AssetPipeline::requireJs('daterangepicker-js');
-        AssetPipeline::requireJs('datetime-js');
     }
 
     /**

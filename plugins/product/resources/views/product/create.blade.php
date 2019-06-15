@@ -181,31 +181,7 @@
                     {{--End Price--}}
 
                     {{--Custom Attribute--}}
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title" id="from-actions-bottom-right">{{ trans('plugins-product::product.custom_attributes') }}</h4>
-                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                            <div class="heading-elements">
-                                <ul class="list-inline mb-0">
-                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card-content collpase show">
-                            <div class="card-body">
-                                <div class="form-body">
-                                    @foreach($allProductCustomAttributes as $allProductCustomAttribute)
-                                        <div class="row">
-                                            @component('plugins-custom-attributes::components.custom-field')
-                                                @slot('customAttributeEntity', $allProductCustomAttribute)
-                                            @endcomponent
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @include('plugins-custom-attributes::partials.card-custom-attributes')
                     {{--End Custom Attribute--}}
                 </div>
                 @php do_action(BASE_ACTION_META_BOXES, PRODUCT_MODULE_SCREEN_NAME, 'advanced') @endphp

@@ -5,6 +5,7 @@
  * Date: 2019-06-11
  * Time: 20:59
  */
+$entityId = !empty($entityId) ? $entityId : null;
 ?>
 <div class="card detail-info-product">
     <div class="card-header">
@@ -19,10 +20,10 @@
     </div>
     <div class="card-content collpase show">
         <div class="card-body">
-            @foreach($allProductCustomAttributes as $allProductCustomAttribute)
+            @foreach($allCustomAttributes as $allCustomAttribute)
                 @component('plugins-custom-attributes::components.info-custom-attribute')
-                    @slot('customAttributeEntity', $allProductCustomAttribute)
-                    @slot('entityId', $product->id)
+                    @slot('customAttributeEntity', $allCustomAttribute)
+                    @slot('entityId', $entityId)
                 @endcomponent
             @endforeach
         </div>

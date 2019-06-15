@@ -10,7 +10,7 @@
             @include('plugins-product::partials.gallery-slider-card')
             @include('plugins-product::partials.general-product-info')
             @include('plugins-product::partials.price-product-info')
-            @include('plugins-product::partials.custom-attribute-product-info')
+            @include('plugins-custom-attributes::partials.custom-attribute-detail-info', [ 'entityId' => $product->id ])
         </div>
         <div class="col-md-6 middle-info-product">
             @include('plugins-product::partials.product-info-tabs')

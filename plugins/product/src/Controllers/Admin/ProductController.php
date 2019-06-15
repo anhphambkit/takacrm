@@ -72,6 +72,7 @@ class ProductController extends BaseAdminController
      * @param ProductOriginRepositories $productOriginRepositories
      * @param CustomAttributeServices $customAttributeServices
      * @param ProductServices $productServices
+     * @param HistoryRepositories $history
      */
     public function __construct(
         ProductRepositories $productRepository,
@@ -126,7 +127,7 @@ class ProductController extends BaseAdminController
         $origins = $this->productOriginRepositories->pluck('name', 'id');
         $origins = [ 0 => "Please select a product origin" ] + $origins;
 
-        $allProductCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
             [
                 'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
             ]
@@ -136,7 +137,7 @@ class ProductController extends BaseAdminController
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.create', compact('categories', 'manufacturer', 'units', 'origins', 'allProductCustomAttributes'));
+        return view('plugins-product::product.create', compact('categories', 'manufacturer', 'units', 'origins', 'allCustomAttributes'));
     }
 
     /**
@@ -190,7 +191,7 @@ class ProductController extends BaseAdminController
             $galleries = $product->galleries->pluck('media')->all();
         }
 
-        $allProductCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
             [
                 'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
             ]
@@ -200,7 +201,7 @@ class ProductController extends BaseAdminController
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries', 'units', 'origins', 'allProductCustomAttributes'));
+        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries', 'units', 'origins', 'allCustomAttributes'));
     }
 
     /**
