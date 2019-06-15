@@ -58,6 +58,33 @@
                                                         <th scope="row">CreatedAt</th>
                                                         <th scope="row">{{ $log->created_at }}</th>
                                                     </tr>
+
+                                                    @if($productsHistory[$log->path_session] ?? false)
+                                                        <tr>
+                                                            <th scope="row" colspan="5" class="text-center" >Origin Products</th>
+                                                        </tr>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#ID / Name</th>
+                                                                <th>Quantity</th>
+                                                                <th>Retail Price</th>
+                                                                <th>Vat</th>
+                                                                <th>Total Price</th>
+                                                            </tr>
+                                                        </thead>
+                                                        @foreach($productsHistory[$log->path_session] as $productLog)
+                                                            @php
+                                                                $productLogInfo = json_decode($productLog->json_product);
+                                                            @endphp
+                                                            <tr>
+                                                                <td>{{ $productLogInfo->product_id }} / {{ $productLogInfo->name }}</td>
+                                                                <td>{{ $productLogInfo->quantity }}</td>
+                                                                <td>{{ $productLogInfo->retail_price }}</td>
+                                                                <td>{{ $productLogInfo->vat }}</td>
+                                                                <td>{{ $productLogInfo->total_price }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
                                                 @endif
                                             @endforeach
                                         @endif

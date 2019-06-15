@@ -146,12 +146,14 @@ class ImplementOrderServices implements OrderServices {
                 ]
             ], $dataOrderUpdate);
 
-            ProductsInOrder::with('order')->where('order_id', $order->id)->delete();
+            $productsOrder = ProductsInOrder::with('order')->where('order_id', $order->id)->get();
+            //IMPORTANT To tracking log history
+            foreach ($productsOrder as $item) {
+                $item->delete();
+            }
 
             $order->products()->createMany($infoOrder['products']);
-
             $order->save();
-
             return $order;
         }, 3);
     }

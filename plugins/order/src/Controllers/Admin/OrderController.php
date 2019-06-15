@@ -19,6 +19,7 @@ use AssetPipeline;
 use Plugins\Order\Services\OrderServices;
 use Plugins\Product\Repositories\Interfaces\ProductRepositories;
 use Plugins\History\Repositories\Interfaces\HistoryRepositories;
+use Plugins\History\Models\ProductOrderHistory;
 
 class OrderController extends BaseAdminController
 {
@@ -170,8 +171,9 @@ class OrderController extends BaseAdminController
             'target_type' => HISTORY_MODULE_ORDER
         ]);
 
-        $histories = $histories->groupBy('path_session');
-        return view('plugins-order::order.detail', compact('order','histories'));
+        $productsHistory = ProductOrderHistory::where('order_id', $id)->get()->groupBy('path_session');
+        $histories       = $histories->groupBy('path_session');
+        return view('plugins-order::order.detail', compact('order','histories', 'productsHistory'));
     }
 
     /**

@@ -101,8 +101,9 @@ trait HistoryDetectionTrait
     {
         $fieldsChanged = $this->isDirty() ? $this->getDirty() : false;
         if($fieldsChanged){
-        	$fieldsChanged = $this->ignoreAttributes($fieldsChanged);
-            $sessionPath = uniqid();
+            $fieldsChanged = $this->ignoreAttributes($fieldsChanged);
+            $sessionPath   = uniqid();
+            $this->beforeUpdate($sessionPath, $fieldsChanged);
         	foreach ($fieldsChanged as $attribute => $newValue) {
         		# code...
                 $origin                   = $this->getOriginalMutator($attribute);
@@ -215,5 +216,14 @@ trait HistoryDetectionTrait
     		'created',
     		'deleted'
     	];
+    }
+
+    /**
+     * [beforeUpdate description]
+     * @param  [type] $sessionPath [description]
+     * @return [type]              [description]
+     */
+    protected function beforeUpdate($sessionPath, array $fieldsChanged){
+        //HOOK
     }
 }
