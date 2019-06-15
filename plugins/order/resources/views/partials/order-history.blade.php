@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="card-content collapse show">
-                <div class="card-body">
+                <div class="card-body" id="log-history-order">
                     @if(!empty($histories))
                         @foreach($histories as $key => $groupHistory)
                             <div class="table-responsive">

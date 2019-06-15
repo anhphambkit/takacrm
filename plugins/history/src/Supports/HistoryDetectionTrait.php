@@ -167,7 +167,7 @@ trait HistoryDetectionTrait
      */
     public function createOrUpdateLogHistory($attribute, $origin, $current, $sessionPath)
     {
-        if(in_array($attribute, $this->jsonAttributes)){
+        if(in_array($attribute, $this->jsonAttributes ?? [])){
             return $this->formatJsonAttribute($attribute, $origin, $current, $sessionPath);
         }
         $fieldName              = $this->getDisplayAttribute($attribute);
@@ -176,12 +176,12 @@ trait HistoryDetectionTrait
         $current                = $this->formatAttributeArrayValue($current);
 
         $formatted = [
-            'content'       => "Updated {$fieldName} from {$origin} to {$current}",
-            'value_origin'  => $origin,
-            'value_current' => $current,
-            'field_name'    => $fieldName,
-            'path_session'  => $sessionPath,
-            'table_name'    => $this->getDisplayTable(),
+            'content'        => "Updated {$fieldName} from {$origin} to {$current}",
+            'value_origin'   => $origin,
+            'value_current'  => $current,
+            'field_name'     => $fieldName,
+            'path_session'   => $sessionPath,
+            'table_name'     => $this->getDisplayTable(),
             'attribute_name' => $attribute
         ];
         $this->saveLogAttribute($formatted, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_UPDATE);
