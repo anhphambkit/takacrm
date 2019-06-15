@@ -35,14 +35,11 @@ class AddNewColumnOrderTable extends Migration
 
         $notPaidStatus = app()->make(ReferenceRepositories::class)->bySlug(str_slug(OrderConfigs::STATUS_PAYMENT_ORDER_NOT_PAID));
         $notPaidStatusId = ($notPaidStatus) ? $notPaidStatus->id : NULL;
-        if ($notPaidStatus) {
-            if (!Schema::hasColumn('orders', 'payment_status')) {
-                Schema::table('orders', function (Blueprint $table) use ($notPaidStatusId) {
-                    $table->integer('payment_status')->default($notPaidStatusId);
-                });
-            }
+        if (!Schema::hasColumn('orders', 'payment_status')) {
+            Schema::table('orders', function (Blueprint $table) use ($notPaidStatusId) {
+                $table->integer('payment_status')->default($notPaidStatusId);
+            });
         }
-
     }
 
     /**
