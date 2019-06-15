@@ -259,7 +259,10 @@ class Order extends ModelHistoryLog
     protected $ignoreLogAttributes = [
         'updated_at',
         'updated_by',
-        'deleted_at'
+        'deleted_at',
+        'user_performed_info',
+        'payment_method_info',
+        'order_source_info'
     ];
 
     /**
@@ -334,48 +337,7 @@ class Order extends ModelHistoryLog
      * @var [type]
      */
     protected $jsonAttributes = [
-        'order_conditions' => [
-            'attribute_title'         => 'Product',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'customer_info' => [
-            'attribute_title'         => 'Customer',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'customer_contact_info' => [
-            'attribute_title'         => 'Customer contact',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'user_performed_info' => [
-            'attribute_title'         => 'User Performed',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'payment_method_info' => [
-            'attribute_title'         => 'Payment Method',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'order_source_info' => [
-            'attribute_title'         => 'Order source',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
+        'order_conditions'
     ];
 
     /**

@@ -21,6 +21,15 @@ class History extends Eloquent
      */
     protected $table = 'history';
 
+    /**
+     * [$appends description]
+     * @var [type]
+     */
+    protected $appends =[
+        'user_image',
+        'username'
+    ];
+
     protected $fillable = [
     	'name',
 		'status',
@@ -46,5 +55,23 @@ class History extends Eloquent
     public function user()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * [getUserImageAttribute description]
+     * @return [type] [description]
+     */
+    public function getUserImageAttribute()
+    {
+        return $this->user->profile_image ?? '/storage/system/images/default-avatar.png';
+    }
+
+    /**
+     * [getUserImageAttribute description]
+     * @return [type] [description]
+     */
+    public function getUsernameAttribute()
+    {
+        return $this->user->getFullName() ?? '';
     }
 }

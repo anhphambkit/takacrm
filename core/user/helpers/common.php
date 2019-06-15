@@ -3,6 +3,7 @@
 use Core\User\Models\UserMeta;
 use Illuminate\Http\Request;
 use Core\User\Models\Role;
+use Core\User\Repositories\Interfaces\UserInterface;
 
 if (!function_exists('render_login_form')) {
     /**
@@ -23,6 +24,20 @@ if (!function_exists('get_user_meta')) {
      */
     function get_user_meta($key, $default = null) {
         return UserMeta::getMeta($key, $default);
+    }
+}
+
+
+if (!function_exists('get_user_by_id')) {
+    /**
+     * @param $key
+     * @param null $default
+     * @return mixed
+     * @author TrinhLe
+     */
+    function get_user_by_id($id) 
+    {
+        return app(UserInterface::class)->findById((int)$id);
     }
 }
 

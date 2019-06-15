@@ -30,25 +30,23 @@ trait FormatJsonTrait
      * @param  [type] $value [description]
      * @return [type]        [description]
      */
-    protected function formatJsonAttribute($attribute, $origin, $current)
+    protected function formatJsonAttribute($attribute, $origin, $current, $sessionPath)
     {
-		$_origin           = $this->swapArray($origin ?: [], $this->jsonAttributes[$attribute]['attributes_primary']);
-		$_current          = $this->swapArray($current ?: [], $this->jsonAttributes[$attribute]['attributes_primary']);
-		$attributesAdded   = array_diff_key($_origin, $_current);
-		$attributesRemoved = array_diff_key($_current, $_origin);
+		$_origin           = $this->formatJsonArray($origin ?: []);
+		$_current          = $this->formatJsonArray($current ?: []);
+		$attributesAdded   = array_diff($_origin, $_current);
+		$attributesRemoved = array_diff($_current, $_origin);
 
 		foreach ($attributesAdded as $attr) {
 			# log for added attribute json
-			list($value, $title, $displayName) = $this->getInformationAttributeJson($attribute);
-			$content                           = "Added new {$title} with {$displayName} is {$value} ";
-        	$this->saveLogAttribute($content, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_UPDATE);
+			$formatted = $this->getInformationAttributeJson($attribute, $attr, $sessionPath);
+        	$this->saveLogAttribute($formatted, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_CREATE);
 		}
 
 		foreach ($attributesRemoved as $attr) {
 			# log for removed attribute json
-			list($value, $title, $displayName) = $this->getInformationAttributeJson($attribute);
-			$content                           = "Removed {$title} with {$displayName} is {$value} ";
-        	$this->saveLogAttribute($content, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_UPDATE);
+			$formatted = $this->getInformationAttributeJson($attribute, $attr, $sessionPath, false);
+            $this->saveLogAttribute($formatted, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_DELETE);
 		}
     }
 
@@ -57,11 +55,23 @@ trait FormatJsonTrait
      * @param  [type] $attribute [description]
      * @return [type]            [description]
      */
-    protected function getInformationAttributeJson($attribute){
-    	$value       = $this->getAttribute($this->jsonAttributes[$attribute]['attribute_display']);
-		$title       = $this->jsonAttributes[$attribute]['attribute_title'] ?? '';
-		$displayName = $this->jsonAttributes[$attribute]['attribute_display_title'] ?? '';
-		return [ $value, $title, $displayName ];
+    protected function getInformationAttributeJson($attribute, $value, $sessionPath, $isCreated = true)
+    {
+        $fieldName = $this->getDisplayAttribute($attribute);
+        $tableName = $this->getDisplayTable();
+        if($isCreated)
+            $content = "Added new {$fieldName} with value is {$value} ";
+        else
+            $content = "Deleted record {$fieldName} with value is {$value} ";
+
+        return $formatted = [
+            'content'        => $content,
+            'value_current'  => $value,
+            'field_name'     => $fieldName,
+            'path_session'   => $sessionPath,
+            'table_name'     => $tableName,
+            'attribute_name' => $attribute
+        ];
     }
 
     /**
@@ -69,12 +79,12 @@ trait FormatJsonTrait
      * @param  array  $array [description]
      * @return [type]        [description]
      */
-    protected function swapArray(array $array = [], $primaryIndex):array
+    protected function formatJsonArray(array $items = []):array
     {
     	$result = array();
-    	foreach ($array as $key => $item) {
-    		$result[$item[$primaryIndex] ?? $key] = $item;
-    	}
-    	return $result;
+    	foreach($items as $item){
+            $result[] = $item;
+        }
+        return $result;
     }
 }
