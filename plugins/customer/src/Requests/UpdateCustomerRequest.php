@@ -3,6 +3,8 @@
 namespace Plugins\Customer\Requests;
 
 use Core\Master\Requests\CoreRequest;
+use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
+use Plugins\CustomAttributes\Services\CustomAttributeServices;
 
 class UpdateCustomerRequest extends CoreRequest
 {
@@ -14,12 +16,19 @@ class UpdateCustomerRequest extends CoreRequest
      */
     public function rules()
     {
-
-        return  [
+        $customAttributeRequest = app()->make(CustomAttributeServices::class)->parseRequestForCustomAttributeByConditions(
+            [
+                [
+                    'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+                ]
+            ]
+        );
+        return array_merge([
             'email'      => 'required|max:60|min:6|email',
             'full_name'   => 'required|max:120',
             'customer_contact.*.full_name'   => 'required|max:120',
-        ];
+            'customer_contact.*.email'   => 'required|max:120',
+        ], $customAttributeRequest);
     }
 
     public function messages()

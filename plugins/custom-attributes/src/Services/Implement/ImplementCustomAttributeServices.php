@@ -236,10 +236,16 @@ class ImplementCustomAttributeServices implements CustomAttributeServices
      */
     public function createOrUpdateDataEntityCustomAttributes(&$entity, $allEntityCustomAttributes, array $dataEntity) {
         // Delete Old Value Custom Field:
+        $allIdEntityCustomAttributes = $allEntityCustomAttributes->pluck('id')->toArray();
         foreach (CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUES as $typeValue) {
             $typeValue = ucfirst($typeValue);
-            app("\Plugins\CustomAttributes\Models\CustomAttributeValue{$typeValue}")::with('customAttribute')->where('entity_id', $entity->id)->delete();
+            app("\Plugins\CustomAttributes\Models\CustomAttributeValue{$typeValue}")::with('customAttribute')
+                ->where('entity_id', $entity->id)
+                ->whereIn('custom_attribute_id', $allIdEntityCustomAttributes)
+                ->delete();
         }
+
+
         foreach ($allEntityCustomAttributes as $allEntityCustomAttribute) {
             $methodAttributeRelation = "{$allEntityCustomAttribute->type_value}ValueAttributes";
             switch ($allEntityCustomAttribute->type_value) {

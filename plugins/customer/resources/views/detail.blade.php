@@ -19,6 +19,7 @@
             @include('plugins-customer::partials.customer-progress')
             @include('plugins-customer::partials.customer-contacts')
             @include('plugins-customer::partials.info-detail-customer')
+            @include('plugins-custom-attributes::partials.custom-attribute-detail-info', [ 'entityId' => $customer->id ])
         </div>
         <div class="col-md-6 middle-info-customer">
             @include('plugins-customer::partials.customer-info-tabs')

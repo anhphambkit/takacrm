@@ -6,6 +6,8 @@ use Core\Setting\Services\ReferenceServices;
 use Core\User\Models\User;
 use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
+use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
+use Plugins\CustomAttributes\Services\CustomAttributeServices;
 use Plugins\Order\Contracts\OrderConfigs;
 use Plugins\Order\Models\Order;
 use Plugins\Order\Repositories\Interfaces\OrderSourceRepositories;
@@ -65,6 +67,11 @@ class OrderController extends BaseAdminController
     private $historyRepository;
 
     /**
+     * @var CustomAttributeServices
+     */
+    private $customAttributeServices;
+
+    /**
      * OrderController constructor.
      * @param OrderRepositories $orderRepository
      * @param UserInterface $userRepository
@@ -74,6 +81,7 @@ class OrderController extends BaseAdminController
      * @param OrderServices $orderServices
      * @param ReferenceServices $referenceServices
      * @param HistoryRepositories $historyRepository
+     * @param CustomAttributeServices $customAttributeServices
      */
     public function __construct(
         OrderRepositories $orderRepository,
@@ -83,7 +91,8 @@ class OrderController extends BaseAdminController
         ProductRepositories $productRepositories,
         OrderServices $orderServices,
         ReferenceServices $referenceServices,
-        HistoryRepositories $historyRepository
+        HistoryRepositories $historyRepository,
+        CustomAttributeServices $customAttributeServices
     )
     {
         $this->orderRepository           = $orderRepository;
@@ -94,6 +103,7 @@ class OrderController extends BaseAdminController
         $this->orderServices             = $orderServices;
         $this->referenceServices         = $referenceServices;
         $this->historyRepository         = $historyRepository;
+        $this->customAttributeServices   = $customAttributeServices;
     }
 
     /**
@@ -120,15 +130,21 @@ class OrderController extends BaseAdminController
     {
         $users          = User::all()->pluck('full_name', 'id');
         $paymentMethods = $this->paymentMethodRepositories->pluck('name', 'id');
-        $orderSources   = $this->orderSourceRepositories->pluck('name', 'id');
-        $products       = $this->productRepositories->all(['productCategory']);
+        $orderSources = $this->orderSourceRepositories->pluck('name', 'id');
+        $products = $this->productRepositories->all(['productCategory']);
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_ORDER)
+            ]
+        ], ['attributeOptions']);
 
         page_title()->setTitle(trans('plugins-order::order.create'));
 
+        $this->addCustomAttributesAsset();
         $this->addDetailAssets();
         $this->addDetailCRUDAssets();
 
-        return view('plugins-order::order.create', compact('users', 'paymentMethods', 'orderSources', 'products'));
+        return view('plugins-order::order.create', compact('users', 'paymentMethods', 'orderSources', 'products', 'allCustomAttributes'));
     }
 
     /**
@@ -161,6 +177,12 @@ class OrderController extends BaseAdminController
     {
         $order = $this->orderRepository->findOrFail($id, ['products']);
 
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_ORDER)
+            ]
+        ], ['attributeOptions']);
+
         $this->addDetailPageAssets();
         $this->addDetailCRUDAssets();
 
@@ -173,7 +195,7 @@ class OrderController extends BaseAdminController
 
         $productsHistory = ProductOrderHistory::where('order_id', $id)->get()->groupBy('path_session');
         $histories       = $histories->groupBy('path_session');
-        return view('plugins-order::order.detail', compact('order','histories', 'productsHistory'));
+        return view('plugins-order::order.detail', compact('order','histories', 'productsHistory', 'allCustomAttributes'));
     }
 
     /**
@@ -188,15 +210,21 @@ class OrderController extends BaseAdminController
         $order          = $this->orderRepository->findOrFail($id);
         $users          = User::all()->pluck('full_name', 'id');
         $paymentMethods = $this->paymentMethodRepositories->pluck('name', 'id');
-        $orderSources   = $this->orderSourceRepositories->pluck('name', 'id');
-        $products       = $this->productRepositories->all(['productCategory']);
+        $orderSources = $this->orderSourceRepositories->pluck('name', 'id');
+        $products = $this->productRepositories->all(['productCategory']);
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_ORDER)
+            ]
+        ], ['attributeOptions']);
 
+        $this->addCustomAttributesAsset();
         $this->addDetailAssets();
         $this->addDetailCRUDAssets();
 
         page_title()->setTitle(trans('plugins-order::order.edit') . ' #' . $id);
 
-        return view('plugins-order::order.edit', compact('order', 'users', 'paymentMethods', 'orderSources', 'products'));
+        return view('plugins-order::order.edit', compact('order', 'users', 'paymentMethods', 'orderSources', 'products', 'allCustomAttributes'));
     }
 
     /**
@@ -278,28 +306,64 @@ class OrderController extends BaseAdminController
      */
     private function addDetailAssets()
     {
-        AssetManager::addAsset('select2-css', 'libs/plugins/Order/css/select2/select2.min.css');
         AssetManager::addAsset('order-css', 'backend/plugins/order/assets/css/order.css');
 
-        AssetManager::addAsset('select2-js', 'libs/plugins/product/js/select2/select2.full.min.js');
         AssetManager::addAsset('order-js', 'backend/plugins/order/assets/js/order.js');
 
-        AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('order-css');
 
-        AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('order-js');
+    }
 
+    /**
+     * Add frontend plugins for layout
+     * @author AnhPham
+     */
+    private function addCustomAttributesAsset()
+    {
+        AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
+        AssetManager::addAsset('bootstrap-switch-css', 'libs/plugins/product/css/toggle/bootstrap-switch.min.css');
+        AssetManager::addAsset('switchery-css', 'libs/plugins/product/css/toggle/switchery.min.css');
+        AssetManager::addAsset('admin-gallery-css', 'libs/core/base/css/gallery/admin-gallery.css');
+        AssetManager::addAsset('mini-colors-css', 'libs/core/base/css/miniColors/jquery.minicolors.css');
         AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
-        AssetPipeline::requireCss('pretty-checkbox');
 
+        AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
+        AssetManager::addAsset('bootstrap-switch-js', 'libs/plugins/product/js/toggle/bootstrap-switch.min.js');
+        AssetManager::addAsset('bootstrap-checkbox-js', 'libs/plugins/product/js/toggle/bootstrap-checkbox.min.js');
+        AssetManager::addAsset('switchery-js', 'libs/plugins/product/js/toggle/switchery.min.js');
+        AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
+        AssetManager::addAsset('switch-js', 'backend/plugins/product/assets/scripts/switch.min.js');
+        AssetManager::addAsset('mini-colors-js', 'libs/core/base/js/miniColors/jquery.minicolors.min.js');
+        AssetManager::addAsset('spectrum-js', 'libs/core/base/js/spectrum/spectrum.js');
+        AssetManager::addAsset('picker-color-js', 'backend/core/base/assets/scripts/picker-color.min.js');
+        AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
+        AssetManager::addAsset('custom-field-js', 'backend/core/base/assets/scripts/custom-field.js');
+
+        AssetPipeline::requireCss('mini-colors-css');
+        AssetPipeline::requireCss('select2-css');
+        AssetPipeline::requireCss('bootstrap-switch-css');
+        AssetPipeline::requireCss('switchery-css');
+        AssetPipeline::requireCss('admin-gallery-css');
+        AssetPipeline::requireCss('pretty-checkbox');
         AssetPipeline::requireCss('daterangepicker-css');
         AssetPipeline::requireCss('pickadate-css');
         AssetPipeline::requireCss('cnddaterange-css');
 
+        AssetPipeline::requireJs('select2-js');
+        AssetPipeline::requireJs('bootstrap-switch-js');
+        AssetPipeline::requireJs('bootstrap-checkbox-js');
+        AssetPipeline::requireJs('switchery-js');
+        AssetPipeline::requireJs('switch-js');
+        AssetPipeline::requireJs('mini-colors-js');
+        AssetPipeline::requireJs('spectrum-js');
+        AssetPipeline::requireJs('picker-color-js');
+        AssetPipeline::requireJs('legacy-js');
+        AssetPipeline::requireJs('form-select2-js');
         AssetPipeline::requireJs('pickadate-picker-js');
         AssetPipeline::requireJs('pickadate-picker-date-js');
         AssetPipeline::requireJs('daterangepicker-js');
         AssetPipeline::requireJs('datetime-js');
+        AssetPipeline::requireJs('custom-field-js');
     }
 }

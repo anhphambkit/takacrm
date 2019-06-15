@@ -1,8 +1,12 @@
 {
-    "/backend/plugins/customer/assets/js/customer-table.js": "/backend/plugins/customer/assets/js/customer-table.js",
-    "/backend/plugins/customer/assets/js/customer-list.js": "/backend/plugins/customer/assets/js/customer-list.js",
-    "/backend/plugins/customer/assets/css/customer.css": "/backend/plugins/customer/assets/css/customer.css",
-    "/backend/plugins/customer/assets/css/detail-customer.css": "/backend/plugins/customer/assets/css/detail-customer.css",
-    "/backend/plugins/customer/assets/js/customer.js": "/backend/plugins/customer/assets/js/customer.js",
-    "/backend/plugins/customer/assets/js/detail-customer.js": "/backend/plugins/customer/assets/js/detail-customer.js"
+    "/frontend/plugins/product/assets/js/product-landing-page.js": "/frontend/plugins/product/assets/js/product-landing-page.js",
+    "/frontend/plugins/product/assets/css/landing-page.css": "/frontend/plugins/product/assets/css/landing-page.css",
+    "/backend/plugins/product/assets/css/product.css": "/backend/plugins/product/assets/css/product.css",
+    "/backend/plugins/product/assets/scripts/switch.min.js": "/backend/plugins/product/assets/scripts/switch.min.js",
+    "/backend/plugins/product/assets/scripts/switch.js": "/backend/plugins/product/assets/scripts/switch.js",
+    "/backend/plugins/product/assets/scripts/picker-color.min.js": "/backend/plugins/product/assets/scripts/picker-color.min.js",
+    "/backend/plugins/product/assets/scripts/picker-color.js": "/backend/plugins/product/assets/scripts/picker-color.js",
+    "/backend/plugins/product/assets/scripts/form-select2.min.js": "/backend/plugins/product/assets/scripts/form-select2.min.js",
+    "/backend/plugins/product/assets/scripts/form-select2.js": "/backend/plugins/product/assets/scripts/form-select2.js",
+    "/backend/plugins/product/assets/js/product.js": "/backend/plugins/product/assets/js/product.js"
 }

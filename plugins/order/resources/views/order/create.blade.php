@@ -138,6 +138,13 @@
         </div>
         <div class="row">
             <div class="col-md-12">
+                {{--Custom Attribute--}}
+                @include('plugins-custom-attributes::partials.card-custom-attributes', [ 'classFieldWrapper' => 'form-group col-md-4 mb-2' ])
+                {{--End Custom Attribute--}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title" id="from-actions-bottom-right">{{ trans('plugins-order::order.form.order_info') }}</h4>
