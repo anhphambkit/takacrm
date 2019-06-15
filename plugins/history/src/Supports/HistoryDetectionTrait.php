@@ -101,8 +101,9 @@ trait HistoryDetectionTrait
     {
         $fieldsChanged = $this->isDirty() ? $this->getDirty() : false;
         if($fieldsChanged){
-        	$fieldsChanged = $this->ignoreAttributes($fieldsChanged);
-            $sessionPath = uniqid();
+            $fieldsChanged = $this->ignoreAttributes($fieldsChanged);
+            $sessionPath   = uniqid();
+            $this->beforeUpdate($sessionPath, $fieldsChanged);
         	foreach ($fieldsChanged as $attribute => $newValue) {
         		# code...
                 $origin                   = $this->getOriginalMutator($attribute);
@@ -167,18 +168,21 @@ trait HistoryDetectionTrait
      */
     public function createOrUpdateLogHistory($attribute, $origin, $current, $sessionPath)
     {
-        // if(in_array($attribute, $this->jsonAttributes)){
-        //     return $this->formatJsonAttribute($attribute, $origin, $current);
-        // }
+        if(in_array($attribute, $this->jsonAttributes ?? [])){
+            return $this->formatJsonAttribute($attribute, $origin, $current, $sessionPath);
+        }
         $fieldName              = $this->getDisplayAttribute($attribute);
         list($origin, $current) = $this->formatAttributeValue($attribute, $origin, $current);
+        $origin                 = $this->formatAttributeArrayValue($origin);
+        $current                = $this->formatAttributeArrayValue($current);
+
         $formatted = [
-            'content'       => "Updated {$fieldName} from {$origin} to {$current}",
-            'value_origin'  => $origin,
-            'value_current' => $current,
-            'field_name'    => $fieldName,
-            'path_session'  => $sessionPath,
-            'table_name'    => $this->getDisplayTable(),
+            'content'        => "Updated {$fieldName} from {$origin} to {$current}",
+            'value_origin'   => $origin,
+            'value_current'  => $current,
+            'field_name'     => $fieldName,
+            'path_session'   => $sessionPath,
+            'table_name'     => $this->getDisplayTable(),
             'attribute_name' => $attribute
         ];
         $this->saveLogAttribute($formatted, HistoryReferenceConfig::REFERENCE_HISTORY_ACTION_UPDATE);
@@ -212,5 +216,14 @@ trait HistoryDetectionTrait
     		'created',
     		'deleted'
     	];
+    }
+
+    /**
+     * [beforeUpdate description]
+     * @param  [type] $sessionPath [description]
+     * @return [type]              [description]
+     */
+    protected function beforeUpdate($sessionPath, array $fieldsChanged){
+        //HOOK
     }
 }

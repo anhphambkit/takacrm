@@ -257,9 +257,12 @@ class Order extends ModelHistoryLog
      * @var [type]
      */
     protected $ignoreLogAttributes = [
-        'updated_at',
+        // 'updated_at',
         'updated_by',
-        'deleted_at'
+        'deleted_at',
+        'user_performed_info',
+        'payment_method_info',
+        'order_source_info'
     ];
 
     /**
@@ -267,6 +270,7 @@ class Order extends ModelHistoryLog
      * @var [type]
      */
     protected $displayAttributes = [
+        'updated_at'                => 'Updated At',
         'order_code'                => 'Order Code',
         'customer_name'             => 'Customer Name',
         'customer_code'             => 'Customer Code',
@@ -334,48 +338,7 @@ class Order extends ModelHistoryLog
      * @var [type]
      */
     protected $jsonAttributes = [
-        'order_conditions' => [
-            'attribute_title'         => 'Product',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'customer_info' => [
-            'attribute_title'         => 'Customer',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'customer_contact_info' => [
-            'attribute_title'         => 'Customer contact',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'user_performed_info' => [
-            'attribute_title'         => 'User Performed',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'payment_method_info' => [
-            'attribute_title'         => 'Payment Method',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
-        'order_source_info' => [
-            'attribute_title'         => 'Order source',
-            'attributes_primary'      => 'id',
-            'attribute_display'       => 'name',
-            'attribute_display_title' => 'Name',
-            'attributes_log'          => ['price', 'name', 'qty']
-        ],
+        'order_conditions'
     ];
 
     /**
@@ -384,6 +347,7 @@ class Order extends ModelHistoryLog
      */
     protected $logBooleanAttributes = [
         'status' => ['Activated', 'Disabled'],
+        'is_discount_after_tax' => ['Checked', 'Unchecked']
     ];
 
     /**
@@ -394,4 +358,15 @@ class Order extends ModelHistoryLog
         'target' => HISTORY_MODULE_ORDER,
         'primary' => 'id'
     ];
+
+    /**
+     * [beforeUpdate description]
+     * @param  [type] $sessionPath [description]
+     * @return [type]              [description]
+     */
+    protected function beforeUpdate($sessionPath, array $fieldsChanged)
+    {
+        session()->forget('session_update_order');
+        session()->put('session_update_order', $sessionPath);
+    }
 }

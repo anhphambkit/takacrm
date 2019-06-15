@@ -21,6 +21,7 @@ use AssetPipeline;
 use Plugins\Order\Services\OrderServices;
 use Plugins\Product\Repositories\Interfaces\ProductRepositories;
 use Plugins\History\Repositories\Interfaces\HistoryRepositories;
+use Plugins\History\Models\ProductOrderHistory;
 
 class OrderController extends BaseAdminController
 {
@@ -127,7 +128,7 @@ class OrderController extends BaseAdminController
      */
     public function getCreate()
     {
-        $users = User::all()->pluck('full_name', 'id');
+        $users          = User::all()->pluck('full_name', 'id');
         $paymentMethods = $this->paymentMethodRepositories->pluck('name', 'id');
         $orderSources = $this->orderSourceRepositories->pluck('name', 'id');
         $products = $this->productRepositories->all(['productCategory']);
@@ -137,7 +138,6 @@ class OrderController extends BaseAdminController
             ]
         ], ['attributeOptions']);
 
-        page_title()->setTitle(trans('plugins-customer::customer.create'));
         page_title()->setTitle(trans('plugins-order::order.create'));
 
         $this->addCustomAttributesAsset();
@@ -175,10 +175,7 @@ class OrderController extends BaseAdminController
      */
     public function getDetail($id)
     {
-        $order = $this->orderRepository->findById($id, ['products']);
-        if (empty($order)) {
-            abort(404);
-        }
+        $order = $this->orderRepository->findOrFail($id, ['products']);
 
         $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
             [
@@ -195,8 +192,10 @@ class OrderController extends BaseAdminController
             'target_id'   => $id,
             'target_type' => HISTORY_MODULE_ORDER
         ]);
-        
-        return view('plugins-order::order.detail', compact('order','histories', 'allCustomAttributes'));
+
+        $productsHistory = ProductOrderHistory::where('order_id', $id)->get()->groupBy('path_session');
+        $histories       = $histories->groupBy('path_session');
+        return view('plugins-order::order.detail', compact('order','histories', 'productsHistory', 'allCustomAttributes'));
     }
 
     /**
@@ -208,13 +207,8 @@ class OrderController extends BaseAdminController
      */
     public function getEdit($id)
     {
-        $order = $this->orderRepository->findById($id);
-
-        if (empty($order)) {
-            abort(404);
-        }
-
-        $users = User::all()->pluck('full_name', 'id');
+        $order          = $this->orderRepository->findOrFail($id);
+        $users          = User::all()->pluck('full_name', 'id');
         $paymentMethods = $this->paymentMethodRepositories->pluck('name', 'id');
         $orderSources = $this->orderSourceRepositories->pluck('name', 'id');
         $products = $this->productRepositories->all(['productCategory']);
@@ -261,12 +255,8 @@ class OrderController extends BaseAdminController
     public function getDelete(Request $request, $id)
     {
         try {
-            $order = $this->orderRepository->findById($id);
-            if (empty($order)) {
-                abort(404);
-            }
+            $order = $this->orderRepository->findOrFail($id);
             $this->orderRepository->delete($order);
-
             do_action(BASE_ACTION_AFTER_DELETE_CONTENT, ORDER_MODULE_SCREEN_NAME, $request, $order);
 
             return [

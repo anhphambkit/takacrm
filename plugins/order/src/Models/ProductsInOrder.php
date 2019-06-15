@@ -9,6 +9,7 @@
 namespace Plugins\Order\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Plugins\History\Models\ProductOrderHistory;
 
 class ProductsInOrder extends Model
 {
@@ -42,5 +43,21 @@ class ProductsInOrder extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * @author TrinhLe
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($productsOrder) {
+            $sessionUpdate = session()->get('session_update_order');
+            ProductOrderHistory::create([
+                'path_session' => $sessionUpdate,
+                'order_id'     => $productsOrder->order_id,
+                'json_product' => json_encode($productsOrder->toArray())
+            ]);
+        });
     }
 }

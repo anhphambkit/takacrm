@@ -280,7 +280,7 @@ class ProductController extends BaseAdminController
         $histories = $this->historyRepository->allBy([
             'target_id'   => $id,
             'target_type' => HISTORY_MODULE_PRODUCT
-        ]);
+        ])->groupBy('path_session');
         return view('plugins-product::product.detail', compact('product', 'galleries', 'allProductCustomAttributes', 'histories'));
     }
 
