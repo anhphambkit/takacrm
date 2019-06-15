@@ -38,4 +38,14 @@ return [
         'url'         => 'admin.order.source.method.list',
         'permissions' => ['order_sources.list']
     ],
+    [
+        'id'          => 'menu-custom-attribute-order',
+        'priority'    => 5,
+        'parent_id'   => 'menu-order-administrator',
+        'name'        => 'plugins-custom-attributes::sidebar.custom_attributes',
+        'icon'        => 'far fa-list-alt',
+        'url'         => 'admin.custom-attributes.entity.list',
+        'params_url'  => [ 'typeEntity' => 'order' ],
+        'permissions' => ['custom-attributes.list']
+    ],
 ];
