@@ -346,6 +346,7 @@ class Order extends ModelHistoryLog
      */
     protected $logBooleanAttributes = [
         'status' => ['Activated', 'Disabled'],
+        'is_discount_after_tax' => ['Checked', 'Unchecked']
     ];
 
     /**
