@@ -12,7 +12,7 @@
         <div class="col-md-9 left-info-order">
             @include('plugins-order::partials.info-detail-order')
             @include('plugins-custom-attributes::partials.custom-attribute-detail-info', [ 'entityId' => $order->id, 'classFieldWrapper' => 'form-group col-md-4 mb-2' ])
-            @include('plugins-order::partials.order-history')
+            @include('plugins-history::history-logs')
         </div>
         <div class="col-md-3 right-info-order">
             {{--@include('plugins-order::partials.info-detail-order')--}}

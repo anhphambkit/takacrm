@@ -269,7 +269,7 @@ class ProductController extends BaseAdminController
         if (empty($product))
             abort(404);
 
-        $allProductCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
             [
                 'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
             ]
@@ -280,8 +280,8 @@ class ProductController extends BaseAdminController
         $histories = $this->historyRepository->allBy([
             'target_id'   => $id,
             'target_type' => HISTORY_MODULE_PRODUCT
-        ])->groupBy('path_session');
-        return view('plugins-product::product.detail', compact('product', 'galleries', 'allProductCustomAttributes', 'histories'));
+        ])->groupBy('path_session')->sortByDesc('created_at');
+        return view('plugins-product::product.detail', compact('product', 'galleries', 'allCustomAttributes', 'histories'));
     }
 
     /**
@@ -297,6 +297,7 @@ class ProductController extends BaseAdminController
         AssetManager::addAsset('product-css', 'backend/plugins/product/assets/css/product.css');
         AssetManager::addAsset('mini-colors-css', 'libs/core/base/css/miniColors/jquery.minicolors.css');
         AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
+        AssetManager::addAsset('history-css', 'backend/plugins/history/assets/css/history.css');
 
         AssetManager::addAsset('select2-js', 'libs/plugins/product/js/select2/select2.full.min.js');
         AssetManager::addAsset('bootstrap-switch-js', 'libs/plugins/product/js/toggle/bootstrap-switch.min.js');
@@ -318,6 +319,7 @@ class ProductController extends BaseAdminController
         AssetPipeline::requireCss('switchery-css');
         AssetPipeline::requireCss('admin-gallery-css');
         AssetPipeline::requireCss('product-css');
+        AssetPipeline::requireCss('history-css');
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('bootstrap-switch-js');
         AssetPipeline::requireJs('bootstrap-checkbox-js');

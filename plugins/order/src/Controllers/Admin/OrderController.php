@@ -191,7 +191,7 @@ class OrderController extends BaseAdminController
         $histories = $this->historyRepository->allBy([
             'target_id'   => $id,
             'target_type' => HISTORY_MODULE_ORDER
-        ]);
+        ])->sortByDesc('created_at');
 
         $productsHistory = ProductOrderHistory::where('order_id', $id)->get()->groupBy('path_session');
         $histories       = $histories->groupBy('path_session');
@@ -277,6 +277,8 @@ class OrderController extends BaseAdminController
      */
     private function addDetailCRUDAssets() {
         AssetManager::addAsset('order-crud-css', 'backend/plugins/order/assets/css/order-crud.css');
+        AssetManager::addAsset('history-css', 'backend/plugins/history/assets/css/history.css');
+        AssetPipeline::requireCss('history-css');
         AssetPipeline::requireCss('order-crud-css');
     }
 

@@ -14,7 +14,7 @@
         </div>
         <div class="col-md-6 middle-info-product">
             @include('plugins-product::partials.product-info-tabs')
-            @include('plugins-product::partials.product-history')
+            @include('plugins-history::history-logs')
         </div>
         <div class="col-md-3 right-info-product">
             @include('plugins-product::partials.info-log-history-product')

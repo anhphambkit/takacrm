@@ -1,0 +1,37 @@
+#log-history-order {
+  .log-history-item {
+    .user-avatar-info {
+      float: left;
+      width: 100%;
+      .user-avatar {
+        width: 60px;
+        float: left;
+        img {
+          width: 60px;
+          height: 60px;
+        }
+      }
+      .user-name-info {
+        width: calc(100% - 70px);
+        float: left;
+        margin-left: 10px;
+        padding: 10px 0;
+      }
+    }
+
+    hr {
+      border-top: 2px solid;
+      margin-top: 5px !important;
+    }
+
+    table {
+      thead th {
+        background: #e3ebf3;
+        border: 1px solid #ccc;
+      }
+      .origin-product-logs {
+        background: #e8d43e;
+      }
+    }
+  }
+}
