@@ -127,6 +127,7 @@ manageOrder.urlSearch = API.GET_LIST_ORDER;
 manageOrder.init();
 manageOrder.handleSearchBtn();
 manageOrder.handleClearBtn();
+manageOrder.handleFilterStatus();
 
 window.getDataFormSearchOrderTable = function () {
     manageOrder.prepareDataSearch();
@@ -139,49 +140,4 @@ window.parseNewDataFormSearchOrderTable = function (data) {
 
 window.clearFormSearchOrderTable = function () {
     manageOrder.resetDataSearch();
-};
-
-$(document).on('click', '.btn-filter-status', function (e) {
-    let type = $(this).data('filter-type');
-    if (type !== 'all') {
-        let value = $(this).data('filter-value');
-
-        if ($(this).data('active')) {
-            $(this).addClass('btn-light');
-            $(this).removeClass('btn-dark active');
-            $(this).data('active', false);
-        }
-        else {
-            $(this).removeClass('btn-light');
-            $(this).addClass('btn-dark active');
-            $(this).data('active', true);
-        }
-
-        $(`.btn-filter-status[data-filter-type="${type}"][data-filter-value!="${value}"]`).removeClass('btn-dark active').addClass('btn-light').data('active', false);
-        $(`.btn-filter-status-all`).removeClass('btn-dark active').addClass('btn-light').data('active', false);
-    }
-    else {
-        $(`.btn-filter-status`).removeClass('btn-dark active').addClass('btn-light').data('active', false);
-        $(this).removeClass('btn-light');
-        $(this).addClass('btn-dark');
-    }
-
-    if ($('.btn-filter-status.btn-dark.active').length === 0) {
-        $('.btn-filter-status-all').removeClass('btn-light');
-        $('.btn-filter-status-all').addClass('btn-dark');
-    }
-    manageOrder.searchAction();
-});
-
-manageOrder.afterParseDataSearch = () => {
-    let dataFilter = {};
-    $('.btn-filter-status.active').each(function () {
-        let type = $(this).data('filter-type');
-        let value = $(this).data('filter-value');
-        let obj = {};
-        obj[type] = value;
-        dataFilter = Object.assign(dataFilter, obj);
-    });
-    manageOrder.dataSearch = Object.assign(manageOrder.dataSearch, dataFilter);
-    return manageOrder.dataSearch;
 };

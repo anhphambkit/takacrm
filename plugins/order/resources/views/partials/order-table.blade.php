@@ -25,24 +25,28 @@
     </div>
     <div class="card-content collpase show">
         <div class="card-body">
-            <div class="row filter-status">
-                <div class="col-md-6 row-filter-status">
-                    <button type="button" class="btn btn-dark mr-1 btn-filter-status-all btn-filter-status btn-filter-custom" data-filter-type="all">
+            <div class="row filter-search">
+                <div class="col-md-4 row-filter-status">
+                    <button type="button" class="btn btn-dark active mr-1 btn-filter-search-all btn-filter-search btn-filter-custom mb-2" data-filter-type-group="status" data-filter-type="ALL" data-filter-value="ALL">
                         {{ trans('plugins-order::order.all') }}
                     </button>
                     @foreach($orderStatuses as $orderStatus)
-                        <button type="button" class="btn btn-light mr-1 btn-filter-status btn-filter-custom" data-filter-type="order_status" data-filter-value="{{ $orderStatus->id }}">
+                        <button type="button" class="btn btn-light mr-1 btn-filter-search btn-filter-custom mb-2" data-filter-type-group="status" data-filter-type="order_status" data-filter-value="{{ $orderStatus->id }}">
                             {{ $orderStatus->value }}
                         </button>
                     @endforeach
-                        @foreach($paymentOrderStatuses as $paymentOrderStatus)
-                            <button type="button" class="btn btn-light mr-1 btn-filter-status btn-filter-custom" data-filter-type="payment_status" data-filter-value="{{ $paymentOrderStatus->id }}">
-                                {{ $paymentOrderStatus->value }}
-                            </button>
-                        @endforeach
+                    @foreach($paymentOrderStatuses as $paymentOrderStatus)
+                        <button type="button" class="btn btn-light mr-1 btn-filter-search btn-filter-custom mb-2" data-filter-type-group="status" data-filter-type="payment_status" data-filter-value="{{ $paymentOrderStatus->id }}">
+                            {{ $paymentOrderStatus->value }}
+                        </button>
+                    @endforeach
                 </div>
-                <div class="col-md-6 row-filter-status">
-
+                <div class="col-md-8 row-filter-time">
+                    @foreach(config('core-base.search-filter.time_filter') as $keyFilterTime => $timeFilter)
+                        <button type="button" class="{{ $timeFilter === 'ALL' ? 'btn-dark active' : 'btn-light' }} btn mr-1 btn-filter-search btn-filter-custom float-right mb-2" data-filter-type-group="time" data-filter-type="{{ config('core-base.search-filter.key_filter_time') }}" data-filter-value="{{ $timeFilter }}">
+                            {{ trans("core-base::search-filter.time_filter.{$keyFilterTime}") }}
+                        </button>
+                    @endforeach
                 </div>
             </div>
             <table id="order-table" class="b-table-custom table table-bordered table-striped order-list-table" width="100%">

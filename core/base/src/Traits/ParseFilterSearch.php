@@ -8,6 +8,8 @@
 
 namespace Core\Base\Traits;
 
+use Carbon\Carbon;
+
 trait ParseFilterSearch
 {
     /**
@@ -243,6 +245,9 @@ trait ParseFilterSearch
                     }
                 }
             }
+
+            // Parse where filter time:
+            $this->parseFilterTime($query, $filters);
         }
 
         try{
@@ -254,6 +259,44 @@ trait ParseFilterSearch
         }
 
         return $searchFilters;
+    }
+
+    public function parseFilterTime(&$query, $filters = [], $keyFilterTime = '') {
+        $columnFilterTime =  property_exists($this, 'columnFilterTime') ? $this->columnFilterTime : 'created_at';
+        $keyFilterTime = $keyFilterTime ? $keyFilterTime : config('core-base.search-filter.key_filter_time');
+        Carbon::setWeekStartsAt(Carbon::MONDAY);
+        Carbon::setWeekEndsAt(Carbon::SUNDAY);
+        if (isset($filters["$keyFilterTime"])) {
+            switch ($filters["$keyFilterTime"]) {
+                case config('core-base.search-filter.time_filter.today'):
+                    $query = $query->whereDate($columnFilterTime, Carbon::today());
+                    break;
+                case config('core-base.search-filter.time_filter.yesterday'):
+                    $query = $query->whereDate($columnFilterTime, Carbon::yesterday());
+                    break;
+                case config('core-base.search-filter.time_filter.this_week'):
+                    $startOfWeek = Carbon::now()->startOfWeek();
+                    $endOfWeek = Carbon::now()->endOfWeek();
+                    $query = $query->whereBetween($columnFilterTime, [$startOfWeek, $endOfWeek]);
+                    break;
+                case config('core-base.search-filter.time_filter.last_week'):
+                    $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
+                    $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
+                    $query = $query->whereBetween($columnFilterTime, [$startOfWeek, $endOfWeek]);
+                    break;
+                case config('core-base.search-filter.time_filter.this_month'):
+                    $query = $query->whereMonth($columnFilterTime, Carbon::now()->month);
+                    break;
+                case config('core-base.search-filter.time_filter.last_month'):
+                    $startOfMonth = Carbon::now()->startOfMonth()->subMonth();
+                    $endOfMonth = Carbon::now()->endOfWeek()->subMonth();
+                    $query = $query->whereBetween($columnFilterTime, [$startOfMonth, $endOfMonth]);
+                    break;
+                case config('core-base.search-filter.time_filter.this_year'):
+                    $query = $query->whereYear($columnFilterTime, Carbon::now()->year);
+                    break;
+            }
+        }
     }
 
     /**
