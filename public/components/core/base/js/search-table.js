@@ -224,30 +224,6 @@ class SearchTable extends Table{
             alwaysShowCalendars: true,
         });
 
-        $(`${_this.elementCustomFilterSearchCalendar}`).on('cancel.daterangepicker', function(ev, picker) {
-            let startDate = picker.startDate.format('YYYY-MM-DD');
-            let endDate = picker.endDate.format('YYYY-MM-DD');
-            let type = $(`${_this.elementCustomFilterSearchCalendar}`).data(_this.filterTypeData);
-            let typeGroup = $(`${_this.elementCustomFilterSearchCalendar}`).data(_this.filterTypeGroupData);
-            let value = $(`${_this.elementCustomFilterSearchCalendar}`).data(_this.filterValueData);
-
-            $(`${_this.elementCustomFilterSearchCalendar}`).addClass(_this.classFilterInactive);
-            $(`${_this.elementCustomFilterSearchCalendar}`).removeClass(_this.classFilterActive);
-            $(`${_this.elementCustomFilterSearchCalendar}`).data(_this.signalFilterActiceData, false);
-            $(`${_this.elementCustomFilterSearchCalendar}`).data(_this.filterStartDateData, startDate);
-            $(`${_this.elementCustomFilterSearchCalendar}`).data(_this.filterEndDateData, endDate);
-
-            $(`${_this.elementFilterSearch}[data-${_this.filterTypeGroupData}="${typeGroup}"][data-${_this.filterTypeData}="${type}"][data-${_this.filterValueData}!="${value}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
-            $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
-
-            if ($(`${_this.elementFilterSearch}.btn-dark.active[data-${_this.filterTypeGroupData}="${typeGroup}"]`).length === 0) {
-                $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterInactive);
-                $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).addClass(_this.classFilterActive);
-            }
-
-            _this.searchAction();
-        });
-
         $(`${_this.elementCustomFilterSearchCalendar}`).on('apply.daterangepicker', function(ev, picker) {
             let startDate = picker.startDate.format('YYYY-MM-DD');
             let endDate = picker.endDate.format('YYYY-MM-DD');
@@ -278,37 +254,38 @@ class SearchTable extends Table{
     handleFilterStatus() {
         this.handleEventCustomRangeTime();
         let _this = this;
-        $(document).on('click', _this.elementFilterSearch, function (e) {
+        $(document).on('click', `${_this.elementFilterSearch}[data-${_this.filterValueData}!="OTHER"]`, function (e) {
             let type = $(this).data(_this.filterTypeData);
             let typeGroup = $(this).data(_this.filterTypeGroupData);
             let value = $(this).data(_this.filterValueData);
-
-            if (value === 'ALL') {
-                $(`${_this.elementFilterSearch}[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
-                $(this).removeClass(_this.classFilterInactive);
-                $(this).addClass(_this.classFilterActive);
-            }
-            else if (value !== 'OTHER') {
-                if ($(this).data(_this.signalFilterActiceData)) {
-                    $(this).addClass(_this.classFilterInactive);
-                    $(this).removeClass(_this.classFilterActive);
-                    $(this).data(_this.signalFilterActiceData, false);
-                }
-                else {
+            if (value !== 'OTHER') {
+                if (value === 'ALL') {
+                    $(`${_this.elementFilterSearch}[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
                     $(this).removeClass(_this.classFilterInactive);
                     $(this).addClass(_this.classFilterActive);
-                    $(this).data(_this.signalFilterActiceData, true);
+                }
+                else {
+                    if ($(this).data(_this.signalFilterActiceData)) {
+                        $(this).addClass(_this.classFilterInactive);
+                        $(this).removeClass(_this.classFilterActive);
+                        $(this).data(_this.signalFilterActiceData, false);
+                    }
+                    else {
+                        $(this).removeClass(_this.classFilterInactive);
+                        $(this).addClass(_this.classFilterActive);
+                        $(this).data(_this.signalFilterActiceData, true);
+                    }
+
+                    $(`${_this.elementFilterSearch}[data-${_this.filterTypeGroupData}="${typeGroup}"][data-${_this.filterTypeData}="${type}"][data-${_this.filterValueData}!="${value}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
+                    $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
                 }
 
-                $(`${_this.elementFilterSearch}[data-${_this.filterTypeGroupData}="${typeGroup}"][data-${_this.filterTypeData}="${type}"][data-${_this.filterValueData}!="${value}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
-                $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
+                if ($(`${_this.elementFilterSearch}.btn-dark.active[data-${_this.filterTypeGroupData}="${typeGroup}"]`).length === 0) {
+                    $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterInactive);
+                    $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).addClass(_this.classFilterActive);
+                }
+                _this.searchAction();
             }
-
-            if ($(`${_this.elementFilterSearch}.btn-dark.active[data-${_this.filterTypeGroupData}="${typeGroup}"]`).length === 0) {
-                $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterInactive);
-                $(`${_this.elementFilterSearch}-all[data-${_this.filterTypeGroupData}="${typeGroup}"]`).addClass(_this.classFilterActive);
-            }
-            _this.searchAction();
         });
     }
 
