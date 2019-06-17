@@ -13,6 +13,8 @@ class SearchTable extends Table{
         this.filterTypeData = 'filter-type';
         this.filterTypeGroupData = 'filter-type-group';
         this.signalFilterActiceData = 'filter-active';
+        this.signalFilterAllData = 'ALL';
+        this.signalFilterCustomData = 'OTHER';
         this.filterStartDateData = 'filter-start-date';
         this.filterEndDateData = 'filter-end-date';
         this.filterValueData = 'filter-value';
@@ -134,13 +136,13 @@ class SearchTable extends Table{
         });
 
         let dataFilter = {};
-        $(`${self.elementFilterSearch}.active[data-${self.filterValueData}!="ALL"]`).each(function () {
+        $(`${self.elementFilterSearch}.active[data-${self.filterValueData}!=${self.signalFilterAllData}]`).each(function () {
             let type = $(this).data(self.filterTypeData);
             let value = $(this).data(self.filterValueData);
             let obj = {};
             let objRange = {};
             obj[type] = value;
-            if (value === "OTHER") {
+            if (value === self.signalFilterCustomData) {
                 objRange[self.mappingFilterStartRangeTime] = $(this).data(self.filterStartDateData);
                 objRange[self.mappingFilterEndRangeTime] = $(this).data(self.filterEndDateData);
             }
@@ -254,12 +256,12 @@ class SearchTable extends Table{
     handleFilterStatus() {
         this.handleEventCustomRangeTime();
         let _this = this;
-        $(document).on('click', `${_this.elementFilterSearch}[data-${_this.filterValueData}!="OTHER"]`, function (e) {
+        $(document).on('click', `${_this.elementFilterSearch}[data-${_this.filterValueData}!=${_this.signalFilterCustomData}]`, function (e) {
             let type = $(this).data(_this.filterTypeData);
             let typeGroup = $(this).data(_this.filterTypeGroupData);
             let value = $(this).data(_this.filterValueData);
-            if (value !== 'OTHER') {
-                if (value === 'ALL') {
+            if (value !== _this.signalFilterCustomData) {
+                if (value === _this.signalFilterAllData) {
                     $(`${_this.elementFilterSearch}[data-${_this.filterTypeGroupData}="${typeGroup}"]`).removeClass(_this.classFilterActive).addClass(_this.classFilterInactive).data(_this.signalFilterActiceData, false);
                     $(this).removeClass(_this.classFilterInactive);
                     $(this).addClass(_this.classFilterActive);
