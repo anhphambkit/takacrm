@@ -18,5 +18,8 @@ return [
         'today' => 'TODAY',
         'all' => 'ALL',
     ],
-    'key_filter_time' => 'filter_time'
+    'column_filter_time' => 'created_at',
+    'key_filter_time' => 'filter_time',
+    'key_filter_start_range_date' => 'filter_start_range_date',
+    'key_filter_end_range_date' => 'filter_end_range_date',
 ];

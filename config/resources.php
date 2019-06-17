@@ -23,6 +23,7 @@ return [
 		'tinymce-js'              => ['theme' => 'app-assets/vendors/js/editors/tinymce/tinymce.js'],
 		'slug-js'              => ['cdn' => 'backend/core/slug/assets/js/slug.js'],
 		'inputtag-js'              => ['cdn' => 'backend/core/base/packages/bootstrap-tagsinput/bootstrap-tagsinput.min.js'],
+        'moment-with-locales-js'   => ['theme' => 'plugins/pickers/js/dateTime/moment-with-locales.min.js'],
         'pickadate-picker-js'      => ['theme' => 'plugins/pickers/js/pickadate/picker.js'],
 		'pickadate-picker-date-js' => ['theme' => 'plugins/pickers/js/pickadate/picker.date.js'],
 		'datetime-js'              => ['theme' => 'plugins/pickers/cdn/dateTime/pick-a-datetime.js'],

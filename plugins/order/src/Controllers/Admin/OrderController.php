@@ -289,7 +289,17 @@ class OrderController extends BaseAdminController
     private function addListAssets() {
         AssetManager::addAsset('order-css', 'backend/plugins/order/assets/css/order.css');
         AssetManager::addAsset('order-table-js', 'backend/plugins/order/assets/js/order-table.js');
+
+        AssetPipeline::requireCss('daterangepicker-css');
+        AssetPipeline::requireCss('pickadate-css');
+        AssetPipeline::requireCss('cnddaterange-css');
         AssetPipeline::requireCss('order-css');
+
+        AssetPipeline::requireJs('moment-with-locales-js');
+        AssetPipeline::requireJs('pickadate-picker-js');
+        AssetPipeline::requireJs('pickadate-picker-date-js');
+        AssetPipeline::requireJs('daterangepicker-js');
+        AssetPipeline::requireJs('datetime-js');
         AssetPipeline::requireJs('order-table-js');
     }
 

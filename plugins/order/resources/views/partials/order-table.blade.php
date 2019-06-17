@@ -43,7 +43,7 @@
                 </div>
                 <div class="col-md-8 row-filter-time">
                     @foreach(config('core-base.search-filter.time_filter') as $keyFilterTime => $timeFilter)
-                        <button type="button" class="{{ $timeFilter === 'ALL' ? 'btn-dark active' : 'btn-light' }} btn mr-1 btn-filter-search btn-filter-custom float-right mb-2" data-filter-type-group="time" data-filter-type="{{ config('core-base.search-filter.key_filter_time') }}" data-filter-value="{{ $timeFilter }}">
+                        <button type="button" class="{{ $timeFilter === 'ALL' ? 'btn-filter-search-all btn-dark active' : 'btn-light' }} {{ $timeFilter === 'OTHER' ? 'show-custom-filter-time' : '' }} btn mr-1 btn-filter-search btn-filter-custom float-right mb-2" data-filter-type-group="time" data-filter-type="{{ config('core-base.search-filter.key_filter_time') }}" data-filter-value="{{ $timeFilter }}">
                             {{ trans("core-base::search-filter.time_filter.{$keyFilterTime}") }}
                         </button>
                     @endforeach

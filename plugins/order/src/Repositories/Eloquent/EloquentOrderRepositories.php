@@ -112,8 +112,6 @@ class EloquentOrderRepositories extends RepositoriesAbstract implements OrderRep
         15 => 'created_at',
     ];
 
-    protected $columnFilterTime = 'created_at';
-
     /**
      * @param array $data
      * @return mixed

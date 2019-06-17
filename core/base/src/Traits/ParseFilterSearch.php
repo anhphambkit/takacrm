@@ -261,9 +261,9 @@ trait ParseFilterSearch
         return $searchFilters;
     }
 
-    public function parseFilterTime(&$query, $filters = [], $keyFilterTime = '') {
-        $columnFilterTime =  property_exists($this, 'columnFilterTime') ? $this->columnFilterTime : 'created_at';
-        $keyFilterTime = $keyFilterTime ? $keyFilterTime : config('core-base.search-filter.key_filter_time');
+    public function parseFilterTime(&$query, $filters = []) {
+        $columnFilterTime =  property_exists($this, 'columnFilterTime') ? $this->columnFilterTime : config('core-base.search-filter.column_filter_time');
+        $keyFilterTime = property_exists($this, 'keyFilterTime') ? $this->keyFilterTime : config('core-base.search-filter.key_filter_time');
         Carbon::setWeekStartsAt(Carbon::MONDAY);
         Carbon::setWeekEndsAt(Carbon::SUNDAY);
         if (isset($filters["$keyFilterTime"])) {
@@ -294,6 +294,11 @@ trait ParseFilterSearch
                     break;
                 case config('core-base.search-filter.time_filter.this_year'):
                     $query = $query->whereYear($columnFilterTime, Carbon::now()->year);
+                    break;
+                case config('core-base.search-filter.time_filter.other'):
+                    $keyFilterStartRangeTime = property_exists($this, 'keyFilterStartRangeTime') ? $this->keyFilterStartRangeTime : config('core-base.search-filter.key_filter_start_range_date');
+                    $keyFilterEndRangeTime = property_exists($this, 'keyFilterEndRangeTime') ? $this->keyFilterEndRangeTime : config('core-base.search-filter.key_filter_end_range_date');
+                    $query = $query->whereBetween($columnFilterTime, [$filters["$keyFilterStartRangeTime"], $filters["$keyFilterEndRangeTime"]]);
                     break;
             }
         }
