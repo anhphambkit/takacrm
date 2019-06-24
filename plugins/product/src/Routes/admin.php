@@ -46,6 +46,11 @@ $router->group(['prefix' => 'product'], function (Router $router) {
         'uses' => 'ProductController@getDelete',
     ]);
 
+    $router->get('detail/{id}', [
+        'as'    => 'admin.product.detail',
+        'uses'  => 'ProductController@getDetail'
+    ]);
+
     $router->group(['prefix' => 'manufacturer'], function (Router $router) {
 
         $router->get('/', [
@@ -184,4 +189,3 @@ $router->group(['prefix' => 'product'], function (Router $router) {
 
 });
 
-	

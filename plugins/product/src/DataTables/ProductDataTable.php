@@ -18,7 +18,7 @@ class ProductDataTable extends DataTableAbstract
         $data = $this->datatables
             ->eloquent($this->query())
             ->editColumn('name', function ($item) {
-                return anchor_link(route('admin.product.edit', $item->id), $item->name);
+                return anchor_link(route('admin.product.detail', $item->id), $item->name);
             })
             ->editColumn('created_at', function ($item) {
                 return date_from_database($item->created_at, config('core-base.cms.date_format.date'));
@@ -88,7 +88,7 @@ class ProductDataTable extends DataTableAbstract
            'products.wholesale_price',
            'products.online_price',
            'products.purchase_price',
-           'products.discount',
+           'products.discount_percent',
            'products.wholesale_discount',
            'products.purchase_discount',
            'products.online_discount',
@@ -184,10 +184,10 @@ class ProductDataTable extends DataTableAbstract
                 'footer' => trans('plugins-product::product.form.purchase_price'),
                 'class' => 'text-left searchable',
             ],
-            'discount' => [
-                'name' => 'products.discount',
-                'title' => trans('plugins-product::product.form.discount'),
-                'footer' => trans('plugins-product::product.form.discount'),
+            'discount_percent' => [
+                'name' => 'products.discount_percent',
+                'title' => trans('plugins-product::product.form.discount_percent'),
+                'footer' => trans('plugins-product::product.form.discount_percent'),
                 'class' => 'text-left searchable',
             ],
             'wholesale_discount' => [

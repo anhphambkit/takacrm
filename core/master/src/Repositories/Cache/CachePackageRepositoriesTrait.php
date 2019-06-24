@@ -52,14 +52,12 @@ trait CachePackageRepositoriesTrait
     }
 
     /**
-     * Retrieve model by id regardless of status.
-     *
-     * @param int $id model ID
+     * @param $id
      * @param array $with
-     * @return Object object of model information
-     * @author TrinhLe
+     * @param array $select
+     * @return mixed
      */
-    public function findById($id, array $with = [])
+    public function findById($id, array $with = [], array $select = ['*'])
     {
         return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }
@@ -295,6 +293,15 @@ trait CachePackageRepositoriesTrait
      * @return mixed
      */
     public function getByWhereNotIn($column, array $value = [], array $args = []) {
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param string $column
+     * @param array $condition
+     * @return mixed
+     */
+    public function getMaxColumn(string $column = 'id', array $condition = []) {
         return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }
 }

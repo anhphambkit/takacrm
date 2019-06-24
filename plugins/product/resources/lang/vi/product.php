@@ -1,0 +1,52 @@
+<?php
+
+return [
+    'name' => 'Sản phẩm',
+    'create' => 'Tạo mới sản phẩm',
+    'edit' => 'Sửa sản phẩm',
+    'list' => 'Danh sách sản phẩm',
+
+    'detail' =>'Chi tiết sản phẩm',
+    'product_name' =>'Tên sản phẩm',
+    'product_code' =>'Mã sản phẩm',
+    'quantity' =>'Số lượng',
+    'online_price' =>'Giá trực tuyến',
+    'online_discount' =>'Giảm giá trực tuyến',
+
+    'general' => 'Thông tin cơ bản',
+    'description_info' => 'Thông tin mô tả',
+    'price_info' => 'Thông tin giá',
+    'custom_attributes' => 'Trường tùy chỉnh',
+    'advanced_info' => 'Thông tin nâng cao',
+    'url_landing_page' => 'Landing page',
+
+    'form' => [
+        'upc' => 'Mã chung của sản phẩm',
+        'upc_placeholder' => 'Mã chung của sản phẩm',
+        'sku' => 'Mã sản phẩm',
+        'sku_placeholder' => 'Mã sản phẩm',
+        'image_feature' => 'Hình ảnh tượng trưng',
+        'image_gallery' => 'Bộ sưu tập',
+        'price' => 'Giá bán',
+        'price_placeholder' => 'Giá bán',
+        'sale_price' => 'Giá đã giảm',
+        'sale_price_placeholder' => 'Giá đã giảm',
+        'manufacturer' => 'Nhà sản xuất',
+        'units' => 'Đơn vị tính',
+        'origins' => 'Nguồn gốc',
+        'category' => 'Danh mục sản phẩm',
+        'online_price' => 'Giá bán online',
+        'purchase_price' => 'Giá mua',
+        'retail_price' => 'Giá bán lẻ',
+        'wholesale_price' => 'Giá sỉ',
+        'discount' => 'Chiết khấu',
+        'discount_percent' => 'Chiết khấu (%)',
+        'wholesale_discount' => 'Chiết khấu sỉ',
+        'purchase_discount' => 'Chiết khấu mua hàng',
+        'online_discount' => 'Giảm giá trực tuyến',
+        'vat' => 'VAT',
+        'is_feature' => 'Là tính năng sản phẩm',
+        'long_desc' => 'Mô tả chi tiết',
+        'short_description' => 'Mô tả ngắn',
+    ]
+];

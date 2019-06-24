@@ -1,0 +1,10 @@
+{
+    "name": "Order",
+    "provider": "Plugins\\Order\\Providers\\OrderServiceProvider",
+    "plugin": "Plugins\\Order\\Plugin",
+    "author": "Trinh Le",
+    "version": "1.0",
+    "description": "Order",
+    "namespace": "Plugins\\Order\\",
+    "src": "plugins/order/src"
+}

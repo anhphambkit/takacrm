@@ -47,7 +47,7 @@ class CreateCustomerTable extends Migration
             $table->string('job_position', 50)->nullable();
             $table->string('phone', 50)->nullable();
             $table->string('gender', 20)->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->nullable();
             $table->date('dob')->nullable();
             $table->string('note', 400)->nullable();
             $table->boolean('is_receive_email')->unsigned()->default(1);

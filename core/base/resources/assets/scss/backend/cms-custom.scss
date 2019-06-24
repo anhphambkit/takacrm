@@ -19,3 +19,140 @@
   position: sticky;
   left: 0px;
 }
+
+.checkbox-large {
+  width: 30px;
+  .state {
+    font-size: 30px;
+  }
+}
+
+.minicolors-theme-bootstrap .minicolors-swatch {
+  top: 6px !important;
+  left: 6px !important;
+}
+
+.minicolor-preview .minicolor-square-box {
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  position: absolute;
+}
+
+.meta-box-custom {
+  border: 1px solid #aa970c;
+  .widget-body {
+    min-height: 100px;
+  }
+}
+
+.minicolor-preview {
+  background-image: url(/media/plugins/customer/jquery.minicolors.png);
+  /* top: 5px; */
+  /* left: 5px; */
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  vertical-align: middle;
+  background-position: -80px 0;
+  border: solid 1px #ccc;
+  cursor: text;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.minicolors-theme-bootstrap .minicolors-swatch {
+  top: 6px !important;
+  left: 6px !important;
+}
+
+.minicolor-preview .minicolor-square-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  position: absolute;
+}
+
+.customer-color-attr {
+  padding-left: 44px;
+}
+
+.action-option-area {
+  display: block;
+  padding: 10px 0;
+}
+
+.delete-option-action {
+  color: #ac1313 !important;
+  font-weight: 600;
+}
+
+.list-option-area {
+  padding: 20px;
+  border: 1px solid #aa970c;
+  margin-bottom: 20px;
+}
+
+.add-option {
+  color: #1e9ff2 !important;
+  font-weight: 600;
+}
+
+.action-add-option-attribute {
+  margin-bottom: 0 !important;
+}
+
+.select2-result-data__avatar.select2-image {
+  float: left;
+  width: 60px;
+  margin-right: 10px;
+  &.select-selection {
+    width: 25px;
+  }
+  .select2-image-custom {
+    height: 60px;
+    max-width: 60px;
+  }
+  .select2-image-selection {
+    height: 25px;
+    max-width: 25px;
+  }
+}
+
+.select2-result-data__meta {
+  margin-left: 65px;
+  .select2-result-data__title.select2-title {
+    color: black;
+    font-weight: 700;
+    word-wrap: break-word;
+    line-height: 1.1;
+    margin-bottom: 4px;
+    .select2-option-info {
+      font-weight: 400;
+      font-style: italic;
+    }
+  }
+
+  &.select-selection {
+    margin-left: 30px;
+    .select2-result-data__title.select2-title {
+      line-height: inherit;
+    }
+  }
+}
+
+.icon-select-info {
+  width: 18px;
+  margin-right: 5px;
+  float: left;
+  i {
+    margin: 0 !important;
+  }
+}
+
+.image-item-select {
+  height: 30px;
+  margin-right: 5px;
+}

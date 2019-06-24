@@ -10,6 +10,7 @@ namespace Plugins\Product\Controllers\Ajax\Admin;
 
 use Core\Base\Controllers\Admin\BaseAdminController;
 use Illuminate\Http\Request;
+use Plugins\Product\Models\Product;
 use Plugins\Product\Models\ProductBusinessType;
 use Plugins\Product\Models\ProductCategory;
 use Plugins\Product\Models\ProductSpace;
@@ -34,9 +35,21 @@ class ProductController extends BaseAdminController
      */
     public function getProductsByCategory(Request $request)
     {
-        $categoryId = $request->get('category_id');
+        $categoryId = (int)$request->get('category_id');
         $category = ProductCategory::find($categoryId);
         $products = $category->products()->get();
         return response()->json($products);
+    }
+
+    /**
+     * Description
+     * @param Request $request
+     * @return type
+     */
+    public function getInfoPriceProduct(Request $request)
+    {
+        $productId = (int)$request->get('product_id');
+        $product = $this->productServices->getInfoPriceProduct($productId);
+        return response()->json($product);
     }
 }

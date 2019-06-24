@@ -4,7 +4,7 @@
     Version: 1.0
     Author: AnhPham
 ==========================================================================================*/
-import Address from '@coreComponents/setting/js/address';
+import Address from '@coreComponents/base/js/address';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

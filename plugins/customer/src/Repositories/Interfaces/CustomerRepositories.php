@@ -23,4 +23,16 @@ interface CustomerRepositories extends RepositoryInterface
      * @return mixed
      */
     public function getListCustomerIntroducedByTypeAndId(string $type, int $id);
+
+    /**
+     * @param array $filters
+     * @return mixed
+     */
+    public function searchAjaxCustomer(array $filters);
+
+    /**
+     * @param int $customerId
+     * @return mixed
+     */
+    public function getInfoWithContactOfCustomer(int $customerId);
 }

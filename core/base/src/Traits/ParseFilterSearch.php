@@ -8,6 +8,8 @@
 
 namespace Core\Base\Traits;
 
+use Carbon\Carbon;
+
 trait ParseFilterSearch
 {
     /**
@@ -19,12 +21,10 @@ trait ParseFilterSearch
     ];
 
     /**
-     * Description
-     * @param type|array $filters
-     * @return type
+     * @param array $filters
+     * @return array
      */
     protected function getDataPageLoad($filters = []){
-
         $columnsTable = config('agoyu.column-sort-table');
         $sortOrder = null;
         $orderBy = null;
@@ -39,6 +39,144 @@ trait ParseFilterSearch
             'limit' => empty($filters['limit']) ? null : intval($filters['limit']),
             'orderBy' => $orderBy,
             'sortOrder' => $sortOrder
+        ];
+    }
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    protected function getFilterAjaxSearch(array $filters = []){
+        $page = empty($filters['page']) ? 0 : intval($filters['page']);
+        $limit = empty($filters['limit']) ? 0 : intval($filters['limit']);
+        $offset = ($page<2) ? 0 : ($page-1)*$limit;
+        $searchKey = empty($filters['searchKey']) ? null : trim($filters['searchKey']);
+        return [
+            'page'  => $page,
+            'offset'  => $offset,
+            'limit'  => $limit,
+            'search_key' => $searchKey,
+        ];
+    }
+
+    /**
+     * @param $currentModel
+     * @param $query
+     * @param array $request
+     * @param string $key
+     * @return array
+     */
+    public function getDataPageLoadDataTable($currentModel, $query, array $request = [], string $key = '') {
+        $mappingColumns =  property_exists($this, 'mappingColumns') ? $this->mappingColumns : [];
+        $searchOptions =  property_exists($this, 'searchOptions') ? $this->searchOptions : [];
+
+        $draw = (int)$request['draw'];
+        $start = (int)$request['start'];
+        $limit = (int)$request['length'];
+        $searchValue = trim($request['search']['value']);
+        $searchRegex = $request['search']['regex'];
+
+        // Get array columns order able and search able
+        $requestColumns = $request['columns'];
+        $orderAbleColumns = [];
+        $searchColumns = [];
+        $searchAbleColumns = [];
+        foreach ($requestColumns as $keyColumn => $requestColumn) {
+            if (($requestColumn['orderable'] === "true" || $requestColumn['orderable'] === "1") && array_search((!empty($requestColumn['name']) ? $requestColumn['name'] : $requestColumn['data']), $mappingColumns) !== false)
+                array_push($orderAbleColumns, array_search((!empty($requestColumn['name']) ? $requestColumn['name'] : $requestColumn['data']), $mappingColumns));
+
+            if (($requestColumn['searchable'] === "true" || $requestColumn['searchable'] === "1") && array_search((!empty($requestColumn['name']) ? $requestColumn['name'] : $requestColumn['data']), $mappingColumns) !== false) {
+                if (!empty($requestColumn['search']['value']))
+                    array_push($searchColumns, [
+                        'id' => array_search((!empty($requestColumn['name']) ? $requestColumn['name'] : $requestColumn['data']), $mappingColumns),
+                        'value' => $requestColumn['search']['value'],
+                        'search_regex' => $requestColumn['search']['regex'],
+                    ]);
+                array_push($searchAbleColumns, array_search((!empty($requestColumn['name']) ? $requestColumn['name'] : $requestColumn['data']), $mappingColumns));
+            }
+        }
+
+        // Get array order columns:
+        $orders = [];
+        $requestOrders = $request['order'];
+        foreach ($requestOrders as $keyRequestOrder => $requestOrder) {
+            if (in_array((int)$requestOrder['column'], $orderAbleColumns))
+                $orders[$requestOrder['column']] = $requestOrder['dir'];
+        }
+
+        $whereConditions = $orWhereConditions = [];
+        // Get array where conditions and orWhere conditions:
+        if (!empty($searchValue)) {
+            $isWhereSearch = true;
+            foreach ($searchAbleColumns as $keySearchAbleColumn => $searchAbleColumn) {
+                if (isset($mappingColumns[$searchAbleColumn]) && isset($searchOptions["$key"][$mappingColumns[$searchAbleColumn]])) {
+                    $columnSearch = $searchOptions["$key"][$mappingColumns[$searchAbleColumn]]['column'];
+                    $typeSearch = $searchOptions["$key"][$mappingColumns[$searchAbleColumn]]['search_type'];
+                    $operatorSearch = $searchOptions["$key"][$mappingColumns[$searchAbleColumn]]['operator'];
+                    $condition = [];
+                    switch ($typeSearch) {
+                        case 'string':
+                            if (!empty($searchValue)) {
+                                $valueSearch = $searchValue;
+                                if ($operatorSearch === "ILIKE" || $operatorSearch === "LIKE")
+                                    $valueSearch = "%{$searchValue}%";
+                                $condition = [
+                                    $columnSearch, $operatorSearch, $valueSearch
+                                ];
+                            }
+                            break;
+                        case 'int':
+                            $condition = [
+                                $columnSearch, $operatorSearch, (int)$searchValue
+                            ];
+                            break;
+                        case 'bool':
+                            $condition = [
+                                $columnSearch, $operatorSearch, (bool)$searchValue
+                            ];
+                            break;
+                        case 'date':
+                            $searchValue = format_date_time(trim($searchValue), $searchOptions["$key"][$mappingColumns[$searchAbleColumn]]['date_options']['timezone'], $searchOptions["$key"][$mappingColumns[$searchAbleColumn]]['date_options']['format_input'], $searchOptions["$key"][$mappingColumns[$searchAbleColumn]]['date_options']['format_output']);
+                            $condition = [
+                                $columnSearch, $operatorSearch, $searchValue
+                            ];
+                            break;
+                    }
+                    if (!empty($condition)) {
+                        if ($isWhereSearch)
+                            array_push($whereConditions, $condition);
+                        else
+                            array_push($orWhereConditions, $condition);
+                    }
+                    $isWhereSearch = false;
+                }
+            }
+        }
+
+        // Add where search
+        if (!empty($whereConditions))
+            $query = $query->where($whereConditions);
+
+        // Add orWhere search:
+        foreach ($orWhereConditions as $orWhereCondition) {
+            $query = $query->orWhere([$orWhereCondition]);
+        }
+
+        // Parse order query:
+        foreach ($orders as $keyOrder => $order) {
+            $columnOrder = $searchOptions["$key"][$mappingColumns[$keyOrder]]['column'];
+            $query = $query->orderBy($columnOrder, $order);
+        }
+
+        $queryCount = clone $query;
+        $data = $query->offset($start)->limit($limit)->get();
+        $totalFiltered = $queryCount->count();
+        $totalData = $currentModel->count();
+        return [
+            "draw"            => $draw,
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data
         ];
     }
 
@@ -107,6 +245,9 @@ trait ParseFilterSearch
                     }
                 }
             }
+
+            // Parse where filter time:
+            $this->parseFilterTime($query, $filters);
         }
 
         try{
@@ -118,6 +259,49 @@ trait ParseFilterSearch
         }
 
         return $searchFilters;
+    }
+
+    public function parseFilterTime(&$query, $filters = []) {
+        $columnFilterTime =  property_exists($this, 'columnFilterTime') ? $this->columnFilterTime : config('core-base.search-filter.column_filter_time');
+        $keyFilterTime = property_exists($this, 'keyFilterTime') ? $this->keyFilterTime : config('core-base.search-filter.key_filter_time');
+        Carbon::setWeekStartsAt(Carbon::MONDAY);
+        Carbon::setWeekEndsAt(Carbon::SUNDAY);
+        if (isset($filters["$keyFilterTime"])) {
+            switch ($filters["$keyFilterTime"]) {
+                case config('core-base.search-filter.time_filter.today'):
+                    $query = $query->whereDate($columnFilterTime, Carbon::today());
+                    break;
+                case config('core-base.search-filter.time_filter.yesterday'):
+                    $query = $query->whereDate($columnFilterTime, Carbon::yesterday());
+                    break;
+                case config('core-base.search-filter.time_filter.this_week'):
+                    $startOfWeek = Carbon::now()->startOfWeek();
+                    $endOfWeek = Carbon::now()->endOfWeek();
+                    $query = $query->whereBetween($columnFilterTime, [$startOfWeek, $endOfWeek]);
+                    break;
+                case config('core-base.search-filter.time_filter.last_week'):
+                    $startOfWeek = Carbon::now()->startOfWeek()->subWeek();
+                    $endOfWeek = Carbon::now()->endOfWeek()->subWeek();
+                    $query = $query->whereBetween($columnFilterTime, [$startOfWeek, $endOfWeek]);
+                    break;
+                case config('core-base.search-filter.time_filter.this_month'):
+                    $query = $query->whereMonth($columnFilterTime, Carbon::now()->month);
+                    break;
+                case config('core-base.search-filter.time_filter.last_month'):
+                    $startOfMonth = Carbon::now()->startOfMonth()->subMonth();
+                    $endOfMonth = Carbon::now()->endOfWeek()->subMonth();
+                    $query = $query->whereBetween($columnFilterTime, [$startOfMonth, $endOfMonth]);
+                    break;
+                case config('core-base.search-filter.time_filter.this_year'):
+                    $query = $query->whereYear($columnFilterTime, Carbon::now()->year);
+                    break;
+                case config('core-base.search-filter.time_filter.other'):
+                    $keyFilterStartRangeTime = property_exists($this, 'keyFilterStartRangeTime') ? $this->keyFilterStartRangeTime : config('core-base.search-filter.key_filter_start_range_date');
+                    $keyFilterEndRangeTime = property_exists($this, 'keyFilterEndRangeTime') ? $this->keyFilterEndRangeTime : config('core-base.search-filter.key_filter_end_range_date');
+                    $query = $query->whereBetween($columnFilterTime, [$filters["$keyFilterStartRangeTime"], $filters["$keyFilterEndRangeTime"]]);
+                    break;
+            }
+        }
     }
 
     /**
@@ -146,8 +330,11 @@ trait ParseFilterSearch
     }
 
     /**
-     * Search results
-     * @return type
+     * @param $db
+     * @param int $offset
+     * @param array $dataPageLoad
+     * @param $count
+     * @return array
      */
     protected function searchResults($db, $offset = 0, $dataPageLoad = [], $count)
     {

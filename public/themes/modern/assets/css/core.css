@@ -611,3 +611,24 @@ small.charcounter {
     top: 0;
     right: 20px;
 }
+
+.header-navbar.front-end-header {
+    height: 100px !important;
+}
+
+.navbar-header.front-end-header {
+    position: relative !important;
+    width: auto !important;
+}
+
+.nav-item.nav-logo {
+    margin-right: 20px;
+}
+
+.nav-item.nav-logo .navbar-brand {
+    padding: 10px 0;
+}
+
+.nav-item.nav-logo img.brand-logo {
+    width: 45px;
+}
