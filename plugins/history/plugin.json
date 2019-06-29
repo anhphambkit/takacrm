@@ -1,0 +1,10 @@
+{
+    "name": "History",
+    "provider": "Plugins\\History\\Providers\\HistoryServiceProvider",
+    "plugin": "Plugins\\History\\Plugin",
+    "author": "Trinh Le",
+    "version": "1.0",
+    "description": "History",
+    "namespace": "Plugins\\History\\",
+    "src": "plugins/history/src"
+}

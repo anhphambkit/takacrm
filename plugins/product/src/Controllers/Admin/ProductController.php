@@ -19,7 +19,7 @@ use Core\Base\Controllers\Admin\BaseAdminController;
 use AssetManager;
 use AssetPipeline;
 use Plugins\Product\Services\ProductServices;
-
+use Plugins\History\Repositories\Interfaces\HistoryRepositories;
 class ProductController extends BaseAdminController
 {
     /**
@@ -58,6 +58,12 @@ class ProductController extends BaseAdminController
     protected $productServices;
 
     /**
+     * [$historyRepository description]
+     * @var [type]
+     */
+    private $historyRepository;
+
+    /**
      * ProductController constructor.
      * @param ProductRepositories $productRepository
      * @param ProductCategoryRepositories $productCategoryRepositories
@@ -66,20 +72,27 @@ class ProductController extends BaseAdminController
      * @param ProductOriginRepositories $productOriginRepositories
      * @param CustomAttributeServices $customAttributeServices
      * @param ProductServices $productServices
+     * @param HistoryRepositories $history
      */
-    public function __construct(ProductRepositories $productRepository, ProductCategoryRepositories $productCategoryRepositories,
-                                ManufacturerRepositories $manufacturerRepositories, ProductUnitRepositories $productUnitRepositories,
-                                ProductOriginRepositories $productOriginRepositories, CustomAttributeServices $customAttributeServices,
-                                ProductServices $productServices
+    public function __construct(
+        ProductRepositories $productRepository,
+        ProductCategoryRepositories $productCategoryRepositories,
+        ManufacturerRepositories $manufacturerRepositories,
+        ProductUnitRepositories $productUnitRepositories,
+        ProductOriginRepositories $productOriginRepositories,
+        CustomAttributeServices $customAttributeServices,
+        ProductServices $productServices,
+        HistoryRepositories $history
     )
     {
-        $this->productRepository = $productRepository;
+        $this->productRepository           = $productRepository;
         $this->productCategoryRepositories = $productCategoryRepositories;
-        $this->manufacturerRepositories = $manufacturerRepositories;
-        $this->productUnitRepositories = $productUnitRepositories;
-        $this->productOriginRepositories = $productOriginRepositories;
-        $this->customAttributeServices = $customAttributeServices;
-        $this->productServices = $productServices;
+        $this->manufacturerRepositories    = $manufacturerRepositories;
+        $this->productUnitRepositories     = $productUnitRepositories;
+        $this->productOriginRepositories   = $productOriginRepositories;
+        $this->customAttributeServices     = $customAttributeServices;
+        $this->productServices             = $productServices;
+        $this->historyRepository           = $history;
     }
 
     /**
@@ -90,7 +103,6 @@ class ProductController extends BaseAdminController
      */
     public function getList(ProductDataTable $dataTable)
     {
-
         page_title()->setTitle(trans('plugins-product::product.list'));
 
         return $dataTable->renderTable(['title' => trans('plugins-product::product.list')]);
@@ -115,7 +127,7 @@ class ProductController extends BaseAdminController
         $origins = $this->productOriginRepositories->pluck('name', 'id');
         $origins = [ 0 => "Please select a product origin" ] + $origins;
 
-        $allProductCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
             [
                 'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
             ]
@@ -125,7 +137,7 @@ class ProductController extends BaseAdminController
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.create', compact('categories', 'manufacturer', 'units', 'origins', 'allProductCustomAttributes'));
+        return view('plugins-product::product.create', compact('categories', 'manufacturer', 'units', 'origins', 'allCustomAttributes'));
     }
 
     /**
@@ -179,7 +191,7 @@ class ProductController extends BaseAdminController
             $galleries = $product->galleries->pluck('media')->all();
         }
 
-        $allProductCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
             [
                 'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
             ]
@@ -189,7 +201,7 @@ class ProductController extends BaseAdminController
 
         $this->addDetailAssets();
 
-        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries', 'units', 'origins', 'allProductCustomAttributes'));
+        return view('plugins-product::product.edit', compact('product', 'categories', 'manufacturer', 'galleries', 'units', 'origins', 'allCustomAttributes'));
     }
 
     /**
@@ -245,7 +257,8 @@ class ProductController extends BaseAdminController
      * @return mixed
      * @author Tu Nguyen
      */
-    public function getDetail($id){
+    public function getDetail($id)
+    {
         page_title()->setTitle(trans('plugins-product::product.detail') . ' #' . $id);
         $product = $this->productRepository->findById($id);
 
@@ -256,8 +269,19 @@ class ProductController extends BaseAdminController
         if (empty($product))
             abort(404);
 
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
+            ]
+        ], ['attributeOptions']);
+
         $this->addDetailAssets();
-        return view('plugins-product::product.detail', compact('product', 'galleries'));
+
+        $histories = $this->historyRepository->allBy([
+            'target_id'   => $id,
+            'target_type' => HISTORY_MODULE_PRODUCT
+        ])->groupBy('path_session')->sortByDesc('created_at');
+        return view('plugins-product::product.detail', compact('product', 'galleries', 'allCustomAttributes', 'histories'));
     }
 
     /**
@@ -272,8 +296,8 @@ class ProductController extends BaseAdminController
         AssetManager::addAsset('admin-gallery-css', 'libs/core/base/css/gallery/admin-gallery.css');
         AssetManager::addAsset('product-css', 'backend/plugins/product/assets/css/product.css');
         AssetManager::addAsset('mini-colors-css', 'libs/core/base/css/miniColors/jquery.minicolors.css');
-        AssetManager::addAsset('pick-date-css', 'libs/core/base/css/date-picker/pickadate.css');
         AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
+        AssetManager::addAsset('history-css', 'backend/plugins/history/assets/css/history.css');
 
         AssetManager::addAsset('select2-js', 'libs/plugins/product/js/select2/select2.full.min.js');
         AssetManager::addAsset('bootstrap-switch-js', 'libs/plugins/product/js/toggle/bootstrap-switch.min.js');
@@ -282,39 +306,20 @@ class ProductController extends BaseAdminController
         AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
         AssetManager::addAsset('switch-js', 'backend/plugins/product/assets/scripts/switch.min.js');
 
-        AssetManager::addAsset('product-detail', 'plugins/product/app-assets/backend/ecommerce-shop.min.css');
-
-        AssetManager::addAsset('product-detail-slider-js', 'plugins/product/app-assets/backend/slick/slick.js');
-        AssetManager::addAsset('product-detail-slider-css', 'plugins/product/app-assets/backend/slick/slick.css');
-        AssetManager::addAsset('product-detail-slider-theme-css', 'plugins/product/app-assets/backend/slick/slick-theme.css');
-        AssetManager::addAsset('product-js', 'backend/plugins/product/assets/scripts/product.js');
-
-
-        AssetPipeline::requireCss('product-detail');
-        AssetPipeline::requireJs('product-detail-slider-js');
-        AssetPipeline::requireCss('product-detail-slider-css');
-        AssetPipeline::requireCss('product-detail-slider-theme-css');
-        AssetPipeline::requireJs('product-js');
-
-
         AssetManager::addAsset('mini-colors-js', 'libs/core/base/js/miniColors/jquery.minicolors.min.js');
         AssetManager::addAsset('spectrum-js', 'libs/core/base/js/spectrum/spectrum.js');
         AssetManager::addAsset('picker-color-js', 'backend/core/base/assets/scripts/picker-color.min.js');
-        AssetManager::addAsset('picker-js', 'libs/core/base/js/date-picker/picker.js');
-        AssetManager::addAsset('picker-date-js', 'libs/core/base/js/date-picker/picker.date.js');
-        AssetManager::addAsset('picker-time-js', 'libs/core/base/js/date-picker/picker.time.js');
         AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
         AssetManager::addAsset('custom-field-js', 'backend/core/base/assets/scripts/custom-field.js');
+        AssetManager::addAsset('product-js', 'backend/plugins/product/assets/js/product.js');
 
         AssetPipeline::requireCss('mini-colors-css');
-
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('bootstrap-switch-css');
         AssetPipeline::requireCss('switchery-css');
         AssetPipeline::requireCss('admin-gallery-css');
         AssetPipeline::requireCss('product-css');
-        AssetPipeline::requireCss('pick-date-css');
-
+        AssetPipeline::requireCss('history-css');
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('bootstrap-switch-js');
         AssetPipeline::requireJs('bootstrap-checkbox-js');
@@ -323,13 +328,17 @@ class ProductController extends BaseAdminController
         AssetPipeline::requireJs('mini-colors-js');
         AssetPipeline::requireJs('spectrum-js');
         AssetPipeline::requireJs('picker-color-js');
-        AssetPipeline::requireJs('picker-js');
-        AssetPipeline::requireJs('picker-date-js');
-        AssetPipeline::requireJs('picker-time-js');
         AssetPipeline::requireJs('legacy-js');
         AssetPipeline::requireJs('form-select2-js');
         AssetPipeline::requireCss('pretty-checkbox');
+        AssetPipeline::requireCss('daterangepicker-css');
+        AssetPipeline::requireCss('pickadate-css');
+        AssetPipeline::requireCss('cnddaterange-css');
+        AssetPipeline::requireJs('pickadate-picker-js');
+        AssetPipeline::requireJs('pickadate-picker-date-js');
+        AssetPipeline::requireJs('daterangepicker-js');
+        AssetPipeline::requireJs('datetime-js');
         AssetPipeline::requireJs('custom-field-js');
-
+        AssetPipeline::requireJs('product-js');
     }
 }

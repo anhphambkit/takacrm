@@ -21,6 +21,7 @@
 }
 
 .checkbox-large {
+  width: 30px;
   .state {
     font-size: 30px;
   }
@@ -101,4 +102,57 @@
 
 .action-add-option-attribute {
   margin-bottom: 0 !important;
+}
+
+.select2-result-data__avatar.select2-image {
+  float: left;
+  width: 60px;
+  margin-right: 10px;
+  &.select-selection {
+    width: 25px;
+  }
+  .select2-image-custom {
+    height: 60px;
+    max-width: 60px;
+  }
+  .select2-image-selection {
+    height: 25px;
+    max-width: 25px;
+  }
+}
+
+.select2-result-data__meta {
+  margin-left: 65px;
+  .select2-result-data__title.select2-title {
+    color: black;
+    font-weight: 700;
+    word-wrap: break-word;
+    line-height: 1.1;
+    margin-bottom: 4px;
+    .select2-option-info {
+      font-weight: 400;
+      font-style: italic;
+    }
+  }
+
+  &.select-selection {
+    margin-left: 30px;
+    .select2-result-data__title.select2-title {
+      line-height: inherit;
+    }
+  }
+}
+
+.icon-select-info {
+  width: 18px;
+  margin-right: 5px;
+  float: left;
+  i {
+    margin: 0 !important;
+  }
+}
+
+.image-item-select {
+  height: 30px;
+  margin-right: 5px;
 }

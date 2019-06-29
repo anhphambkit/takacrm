@@ -208,21 +208,28 @@ class ImplementCustomAttributeServices implements CustomAttributeServices
             // validation type data
             switch ($customAttribute->type_value) {
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_TEXT:
-                    $request["cf_$customAttribute->slug"] .= '';
+                    if (!empty($request["cf_$customAttribute->slug"]))
+                        $request["cf_$customAttribute->slug"] .= '';
                     break;
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_NUMBER:
-                    $request["cf_$customAttribute->slug"] .= '|numeric';
+                    if (!empty($request["cf_$customAttribute->slug"]))
+                        $request["cf_$customAttribute->slug"] .= '|numeric';
                     break;
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_OPTION:
-                    $request["cf_$customAttribute->slug"] .= '';
+                    if (!empty($request["cf_$customAttribute->slug"]))
+                        $request["cf_$customAttribute->slug"] .= '';
                     break;
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_DATE:
-                    $request["cf_$customAttribute->slug"] .= '';
+                    if (!empty($request["cf_$customAttribute->slug"]))
+                        $request["cf_$customAttribute->slug"] .= '';
                     break;
                 case CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUE_STRING:
-                    $request["cf_$customAttribute->slug"] .= '|max:255';
-                    if ($customAttribute->type_render === str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_URL_INPUT, '_'))
-                        $request["cf_$customAttribute->slug"] .= '|url';
+                    if (!empty($request["cf_$customAttribute->slug"]))
+                        $request["cf_$customAttribute->slug"] .= '|max:255';
+                    if ($customAttribute->type_render === str_slug(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_RENDER_URL_INPUT, '_')) {
+                        if (!empty($request["cf_$customAttribute->slug"]))
+                            $request["cf_$customAttribute->slug"] .= '|url';
+                    }
                     break;
             }
         }
@@ -236,10 +243,16 @@ class ImplementCustomAttributeServices implements CustomAttributeServices
      */
     public function createOrUpdateDataEntityCustomAttributes(&$entity, $allEntityCustomAttributes, array $dataEntity) {
         // Delete Old Value Custom Field:
+        $allIdEntityCustomAttributes = $allEntityCustomAttributes->pluck('id')->toArray();
         foreach (CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_VALUES as $typeValue) {
             $typeValue = ucfirst($typeValue);
-            app("\Plugins\CustomAttributes\Models\CustomAttributeValue{$typeValue}")::with('customAttribute')->where('entity_id', $entity->id)->delete();
+            app("\Plugins\CustomAttributes\Models\CustomAttributeValue{$typeValue}")::with('customAttribute')
+                ->where('entity_id', $entity->id)
+                ->whereIn('custom_attribute_id', $allIdEntityCustomAttributes)
+                ->delete();
         }
+
+
         foreach ($allEntityCustomAttributes as $allEntityCustomAttribute) {
             $methodAttributeRelation = "{$allEntityCustomAttribute->type_value}ValueAttributes";
             switch ($allEntityCustomAttribute->type_value) {

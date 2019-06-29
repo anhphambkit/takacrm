@@ -28,4 +28,10 @@ interface ProductServices {
      * @return mixed
      */
     public function prepareDataForCreateOrUpdateProduct(array $data, bool $isModeCreate = true);
+
+    /**
+     * @param int $productId
+     * @return mixed
+     */
+    public function getInfoPriceProduct(int $productId);
 }

@@ -47,4 +47,12 @@ class CacheCustomerRepositories extends CacheAbstractDecorator implements Custom
     public function getListCustomerIntroducedByTypeAndId(string $type, int $id) {
         $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }
+
+    /**
+     * @param array $filters
+     * @return mixed
+     */
+    public function searchAjaxCustomer(array $filters) {
+        $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+    }
 }

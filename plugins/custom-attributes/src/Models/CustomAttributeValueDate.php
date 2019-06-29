@@ -62,6 +62,6 @@ class CustomAttributeValueDate extends Model
      */
     public function setValueAttribute($value)
     {
-        $this->attributes['value'] = (empty($value)) ? null : format_date_time($value, 'Asia/Ho_Chi_Minh', 'd/m/Y', 'Y-m-d');
+        $this->attributes['value'] = (empty($value)) ? null : $value;
     }
 }

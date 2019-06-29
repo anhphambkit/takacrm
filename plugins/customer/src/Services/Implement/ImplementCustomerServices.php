@@ -8,11 +8,13 @@
 
 namespace Plugins\Customer\Services\Implement;
 
+use Core\Base\Traits\ParseFilterSearch;
 use Plugins\Customer\Repositories\Interfaces\CustomerRepositories;
 use Plugins\Customer\Services\CustomerServices;
 
 class ImplementCustomerServices implements CustomerServices
 {
+    use ParseFilterSearch;
     /**
      * @var CustomerRepositories
      */
@@ -29,10 +31,27 @@ class ImplementCustomerServices implements CustomerServices
 
     /**
      * @param array $request
-     * @return mixed|void
+     * @return mixed
      */
     public function searchListCustomer(array $request)
     {
         return $this->customerRepository->searchListCustomer($request);
+    }
+
+    /**
+     * @param array $filters
+     * @return array|mixed
+     */
+    public function searchAjaxCustomer(array $filters) {
+        $filters = $this->getFilterAjaxSearch($filters);
+        return $customers = $this->customerRepository->searchAjaxCustomer($filters);
+    }
+
+    /**
+     * @param int $customerId
+     * @return mixed
+     */
+    public function getInfoWithContactOfCustomer(int $customerId) {
+        return $this->customerRepository->getInfoWithContactOfCustomer($customerId);
     }
 }

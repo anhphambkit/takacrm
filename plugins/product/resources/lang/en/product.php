@@ -7,11 +7,18 @@ return [
     'list' => 'List product',
 
     'detail' =>'Product Detail',
+    'product_name' =>'Product name',
+    'product_code' =>'Product code',
+    'quantity' =>'Quantity',
+    'online_price' =>'Online price',
+    'online_discount' =>'Online discount',
 
     'general' => 'General Information',
     'description_info' => 'Description Information',
     'price_info' => 'Price Information',
     'custom_attributes' => 'Custom Attributes',
+    'advanced_info' => 'Advanced Information',
+    'url_landing_page' => 'Landing page',
 
     'form' => [
         'upc' => 'UPC',
@@ -33,6 +40,7 @@ return [
         'retail_price' => 'Retail Price',
         'wholesale_price' => 'Wholesale Price',
         'discount' => 'Discount',
+        'discount_percent' => 'Discount (%)',
         'wholesale_discount' => 'Wholesale Discount',
         'purchase_discount' => 'Purchase Discount',
         'online_discount' => 'Online Discount',

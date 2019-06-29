@@ -81,7 +81,7 @@
                                     <div class="row">
                                         <div class="form-group col-md-12 mb-2 @if ($errors->has('short_description')) has-error @endif">
                                             <label for="name">{{ trans('plugins-product::product.form.short_description') }}</label>
-                                            {!! render_editor('short_description', old('short_description'), true) !!}
+                                            {!! Form::textarea('short_description', !empty(old('short_description')) ? old('short_description') : '', ['class' => 'form-control short_description', 'id' => 'short_description']) !!}
                                             {!! Form::error('short_description', $errors) !!}
                                         </div>
                                     </div>
@@ -139,10 +139,10 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="form-group col-md-6 mb-2 @if ($errors->has('discount')) has-error @endif">
-                                            <label class="control-label required" for="role">{{ trans('plugins-product::product.form.discount') }}</label>
-                                            {!! Form::number('discount', old('discount'), ['class' => 'form-control', 'id' => 'discount', 'type' => 'number', 'min' => 0, 'placeholder' => trans('plugins-product::product.form.discount')]) !!}
-                                            {!! Form::error('discount', $errors) !!}
+                                        <div class="form-group col-md-6 mb-2 @if ($errors->has('discount_percent')) has-error @endif">
+                                            <label class="control-label required" for="role">{{ trans('plugins-product::product.form.discount_percent') }}</label>
+                                            {!! Form::number('discount_percent', old('discount_percent'), ['class' => 'form-control', 'id' => 'discount_percent', 'type' => 'number', 'min' => 0, 'placeholder' => trans('plugins-product::product.form.discount_percent')]) !!}
+                                            {!! Form::error('discount_percent', $errors) !!}
                                         </div>
                                         <div class="form-group col-md-6 mb-2 @if ($errors->has('wholesale_discount')) has-error @endif">
                                             <label for="name">{{ trans('plugins-product::product.form.wholesale_discount') }}</label>
@@ -181,31 +181,7 @@
                     {{--End Price--}}
 
                     {{--Custom Attribute--}}
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title" id="from-actions-bottom-right">{{ trans('plugins-product::product.custom_attributes') }}</h4>
-                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                            <div class="heading-elements">
-                                <ul class="list-inline mb-0">
-                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card-content collpase show">
-                            <div class="card-body">
-                                <div class="form-body">
-                                    @foreach($allProductCustomAttributes as $allProductCustomAttribute)
-                                        <div class="row">
-                                            @component('plugins-custom-attributes::components.custom-field')
-                                                @slot('customAttributeEntity', $allProductCustomAttribute)
-                                            @endcomponent
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @include('plugins-custom-attributes::partials.card-custom-attributes')
                     {{--End Custom Attribute--}}
                 </div>
                 @php do_action(BASE_ACTION_META_BOXES, PRODUCT_MODULE_SCREEN_NAME, 'advanced') @endphp

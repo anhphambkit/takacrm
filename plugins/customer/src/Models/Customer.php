@@ -75,6 +75,7 @@ class Customer extends Model
         'user_manage_instance',
         'introduce_person_instance',
         'created_by_instance',
+        'address_full',
     ];
 
     /**
@@ -285,14 +286,14 @@ class Customer extends Model
      * @return string
      */
     public function getDistrictDataAttribute() {
-        return $this->districtName ? $this->districtName->color_code : null;
+        return $this->districtName ? $this->districtName->name : null;
     }
 
     /**
      * @return string
      */
     public function getProvinceDataAttribute() {
-        return $this->provinceCityName ? $this->provinceCityName->color_code : null;
+        return $this->provinceCityName ? $this->provinceCityName->name : null;
     }
 
     /**
@@ -319,5 +320,17 @@ class Customer extends Model
      */
     public function getCreatedByInstanceAttribute() {
         return $this->createdByUser;
+    }
+
+    public function getAddressFullAttribute() {
+        $fullAddress = $this->address;
+        if ($this->ward_data)
+            $fullAddress .= ", {$this->ward_data}";
+        if ($this->district_data)
+            $fullAddress .= ", {$this->district_data}";
+        if ($this->province_data)
+            $fullAddress .= ", {$this->province_data}";
+
+        return $fullAddress;
     }
 }

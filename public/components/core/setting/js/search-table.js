@@ -1,4 +1,4 @@
-import Table from '@coreComponents/setting/js/table';
+import Table from '@coreComponents/base/js/table';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

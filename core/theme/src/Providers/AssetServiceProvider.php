@@ -120,5 +120,6 @@ class AssetServiceProvider extends ServiceProvider
     protected function registerComposers()
     {
         view()->composer('layouts.master', \Core\Theme\Composers\AssetsViewComposer::class);
+        view()->composer('layouts.front-end', \Core\Theme\Composers\AssetsViewComposer::class);
     }
 }

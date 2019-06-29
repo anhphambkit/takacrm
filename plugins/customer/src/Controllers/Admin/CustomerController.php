@@ -9,6 +9,9 @@ use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
+use Plugins\CustomAttributes\Services\CustomAttributeServices;
+use Plugins\Customer\Contracts\CustomerConfig;
 use Plugins\Customer\Repositories\Interfaces\CustomerJobRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerQueryListRepositories;
 use Plugins\Customer\Repositories\Interfaces\CustomerRelationRepositories;
@@ -71,6 +74,11 @@ class CustomerController extends BaseAdminController
     protected $customerQueryListRepositories;
 
     /**
+     * @var CustomAttributeServices
+     */
+    protected $customAttributeServices;
+
+    /**
      * CustomerController constructor.
      * @param CustomerRepositories $customerRepository
      * @param AddressGeneralInfoService $addressGeneralInfoService
@@ -81,11 +89,13 @@ class CustomerController extends BaseAdminController
      * @param UserInterface $userRepository
      * @param CustomerQueryListRepositories $customerQueryListRepositories
      * @param CustomerJobRepositories $customerJobRepositories
+     * @param CustomAttributeServices $customAttributeServices
      */
     public function __construct(CustomerRepositories $customerRepository, AddressGeneralInfoService $addressGeneralInfoService,
                                 ReferenceServices $referenceServices, GroupCustomerRepositories $groupCustomerRepositories,
                                 CustomerSourceRepositories $customerSourceRepositories, CustomerRelationRepositories $customerRelationRepositories,
-                                UserInterface $userRepository, CustomerQueryListRepositories $customerQueryListRepositories, CustomerJobRepositories $customerJobRepositories)
+                                UserInterface $userRepository, CustomerQueryListRepositories $customerQueryListRepositories,
+                                CustomerJobRepositories $customerJobRepositories, CustomAttributeServices $customAttributeServices)
     {
         $this->customerRepository = $customerRepository;
         $this->addressGeneralInfoService = $addressGeneralInfoService;
@@ -96,6 +106,7 @@ class CustomerController extends BaseAdminController
         $this->customerQueryListRepositories = $customerQueryListRepositories;
         $this->customerJobRepositories = $customerJobRepositories;
         $this->userRepository = $userRepository;
+        $this->customAttributeServices = $customAttributeServices;
     }
 
     /**
@@ -127,7 +138,6 @@ class CustomerController extends BaseAdminController
         $users = $this->userRepository->getAllUsers();
         page_title()->setTitle(trans('plugins-customer::customer.list'));
         $this->addAssets();
-//        return $dataTable->renderTable(['title' => trans('plugins-customer::customer.list')]);
         return view('plugins-customer::list', compact('customerRelations', 'genders', 'provincesCities', 'typeReferenceData', 'customerGroups', 'customerSources', 'introducePersonIds', 'users', 'customerQueryList'));
     }
 
@@ -158,10 +168,18 @@ class CustomerController extends BaseAdminController
         $customerRelationships = $this->customerRelationRepositories->all();
         $users = $this->userRepository->getAllUsers();
 
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['attributeOptions']);
+
         page_title()->setTitle(trans('plugins-customer::customer.create'));
+        $this->addCustomAttributesAsset();
         $this->addCreateEditAssets();
+
         return view('plugins-customer::create', compact('provincesCities', 'genders', 'typeReferenceData', 'customerJobs',
-            'customerGroups', 'customerSources', 'customerRelationships', 'introducePersonIds', 'users'));
+            'customerGroups', 'customerSources', 'customerRelationships', 'introducePersonIds', 'users', 'allCustomAttributes'));
     }
 
     /**
@@ -171,11 +189,22 @@ class CustomerController extends BaseAdminController
     public function postCreate(CustomerRequest $request)
     {
         $data = $request->input();
-
+        $maxCustomerId = (int)$this->customerRepository->getMaxColumn() + 1;
         $data['created_by'] = Auth::id();
+        $data['customer_code'] = !empty($data['customer_code']) ? $data['customer_code'] : CustomerConfig::CUSTOMER . "-{$maxCustomerId}";
 
-        $customer = DB::transaction(function () use ($data, $request) {
-            $customer = $this->customerRepository->createOrUpdate($data);
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['stringValueAttributes', 'numberValueAttributes', 'textValueAttributes', 'dateValueAttributes', 'optionValueAttributes']);
+
+        $customer = DB::transaction(function () use ($data, $request, $allCustomAttributes) {
+            $customer = $this->customerRepository->createOrUpdate($data, [
+                [
+                    'email', '=', $data['email']
+                ]
+            ]);
 
             $customerGroups = $request->input('customer_group_id', []);
             $customer->customerGroups()->attach($customerGroups);
@@ -191,7 +220,10 @@ class CustomerController extends BaseAdminController
                 $customer->customerContacts()->create(array_merge($customerContact, ['created_by' => Auth::id()]));
             }
 
-            return $customer->save();
+            $this->customAttributeServices->createOrUpdateDataEntityCustomAttributes($customer, $allCustomAttributes, $data);
+
+            $customer->save();
+            return $customer;
         }, 3);
 
         do_action(BASE_ACTION_AFTER_CREATE_CONTENT, CUSTOMER_MODULE_SCREEN_NAME, $request, $customer);
@@ -214,8 +246,14 @@ class CustomerController extends BaseAdminController
         $customerRelationshipIds = $this->customerRelationRepositories->all();
         $customerIntroduces = $this->customerRepository->getListCustomerIntroducedByTypeAndId(ReferenceConfig::REFERENCE_CUSTOMER_DATA, $id);
         page_title()->setTitle(trans('plugins-customer::customer.detail') . ' #' . $id);
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['attributeOptions']);
+
         $this->addDetailAssets();
-        return view('plugins-customer::detail', compact('customer', 'customerRelationshipIds', 'customerContacts', 'customerIntroduces'));
+        return view('plugins-customer::detail', compact('customer', 'customerRelationshipIds', 'customerContacts', 'customerIntroduces', 'allCustomAttributes'));
     }
 
     /**
@@ -266,13 +304,20 @@ class CustomerController extends BaseAdminController
 
         $customerContacts = $customer->customerContacts->toArray();
 
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['attributeOptions']);
+
         page_title()->setTitle(trans('plugins-customer::customer.edit') . ' #' . $id);
+        $this->addCustomAttributesAsset();
         $this->addCreateEditAssets();
         return view('plugins-customer::edit', compact('customer', 'customerContacts', 'provincesCities',
                                                                     'genders', 'typeReferenceData', 'introducePersonIds',
                                                                     'customerRelationshipIds', 'customerGroups', 'customerSources',
                                                                     'users', 'selectedCustomerJobs', 'selectedCustomerGroups',
-                                                                    'selectedCustomerSources', 'customerJobs')
+                                                                    'selectedCustomerSources', 'customerJobs', 'allCustomAttributes')
         );
     }
 
@@ -293,7 +338,13 @@ class CustomerController extends BaseAdminController
 
         $data['updated_by'] = Auth::id();
 
-        $customer = DB::transaction(function () use ($data, $customer, $request) {
+        $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['stringValueAttributes', 'numberValueAttributes', 'textValueAttributes', 'dateValueAttributes', 'optionValueAttributes']);
+
+        $customer = DB::transaction(function () use ($data, $customer, $request, $allCustomAttributes) {
             $customer->fill($data);
 
             $this->customerRepository->createOrUpdate($customer);
@@ -316,6 +367,9 @@ class CustomerController extends BaseAdminController
                 $customer->customerContacts()->create(array_merge($customerContact, ['created_by' => Auth::id(), 'updated_by' => Auth::id()]));
             }
 
+            $this->customAttributeServices->createOrUpdateDataEntityCustomAttributes($customer, $allCustomAttributes, $data);
+
+            $customer->save();
             return $customer;
         }, 3);
 
@@ -363,28 +417,70 @@ class CustomerController extends BaseAdminController
      */
     private function addCreateEditAssets()
     {
-        AssetManager::addAsset('pick-date-css', 'libs/core/base/css/date-picker/pickadate.css');
         AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
         AssetManager::addAsset('customer-css', 'backend/plugins/customer/assets/css/customer.css');
 
         AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
         AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
-        AssetManager::addAsset('picker-js', 'libs/core/base/js/date-picker/picker.js');
-        AssetManager::addAsset('picker-date-js', 'libs/core/base/js/date-picker/picker.date.js');
-        AssetManager::addAsset('picker-time-js', 'libs/core/base/js/date-picker/picker.time.js');
-        AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
         AssetManager::addAsset('customer-js', 'backend/plugins/customer/assets/js/customer.js');
 
-        AssetPipeline::requireCss('pick-date-css');
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('customer-css');
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('form-select2-js');
-        AssetPipeline::requireJs('picker-js');
-        AssetPipeline::requireJs('picker-date-js');
-        AssetPipeline::requireJs('picker-time-js');
-        AssetPipeline::requireJs('legacy-js');
         AssetPipeline::requireJs('customer-js');
+    }
+
+    /**
+     * Add frontend plugins for layout
+     * @author AnhPham
+     */
+    private function addCustomAttributesAsset()
+    {
+        AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
+        AssetManager::addAsset('bootstrap-switch-css', 'libs/plugins/product/css/toggle/bootstrap-switch.min.css');
+        AssetManager::addAsset('switchery-css', 'libs/plugins/product/css/toggle/switchery.min.css');
+        AssetManager::addAsset('admin-gallery-css', 'libs/core/base/css/gallery/admin-gallery.css');
+        AssetManager::addAsset('mini-colors-css', 'libs/core/base/css/miniColors/jquery.minicolors.css');
+        AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
+
+        AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
+        AssetManager::addAsset('bootstrap-switch-js', 'libs/plugins/product/js/toggle/bootstrap-switch.min.js');
+        AssetManager::addAsset('bootstrap-checkbox-js', 'libs/plugins/product/js/toggle/bootstrap-checkbox.min.js');
+        AssetManager::addAsset('switchery-js', 'libs/plugins/product/js/toggle/switchery.min.js');
+        AssetManager::addAsset('form-select2-js', 'backend/core/base/assets/scripts/form-select2.min.js');
+        AssetManager::addAsset('switch-js', 'backend/plugins/product/assets/scripts/switch.min.js');
+        AssetManager::addAsset('mini-colors-js', 'libs/core/base/js/miniColors/jquery.minicolors.min.js');
+        AssetManager::addAsset('spectrum-js', 'libs/core/base/js/spectrum/spectrum.js');
+        AssetManager::addAsset('picker-color-js', 'backend/core/base/assets/scripts/picker-color.min.js');
+        AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
+        AssetManager::addAsset('custom-field-js', 'backend/core/base/assets/scripts/custom-field.js');
+
+        AssetPipeline::requireCss('mini-colors-css');
+        AssetPipeline::requireCss('select2-css');
+        AssetPipeline::requireCss('bootstrap-switch-css');
+        AssetPipeline::requireCss('switchery-css');
+        AssetPipeline::requireCss('admin-gallery-css');
+        AssetPipeline::requireCss('pretty-checkbox');
+        AssetPipeline::requireCss('daterangepicker-css');
+        AssetPipeline::requireCss('pickadate-css');
+        AssetPipeline::requireCss('cnddaterange-css');
+
+        AssetPipeline::requireJs('select2-js');
+        AssetPipeline::requireJs('bootstrap-switch-js');
+        AssetPipeline::requireJs('bootstrap-checkbox-js');
+        AssetPipeline::requireJs('switchery-js');
+        AssetPipeline::requireJs('switch-js');
+        AssetPipeline::requireJs('mini-colors-js');
+        AssetPipeline::requireJs('spectrum-js');
+        AssetPipeline::requireJs('picker-color-js');
+        AssetPipeline::requireJs('legacy-js');
+        AssetPipeline::requireJs('form-select2-js');
+        AssetPipeline::requireJs('pickadate-picker-js');
+        AssetPipeline::requireJs('pickadate-picker-date-js');
+        AssetPipeline::requireJs('daterangepicker-js');
+        AssetPipeline::requireJs('datetime-js');
+        AssetPipeline::requireJs('custom-field-js');
     }
 
     /**
@@ -395,20 +491,22 @@ class CustomerController extends BaseAdminController
         AssetManager::addAsset('pick-date-css', 'libs/core/base/css/date-picker/pickadate.css');
         AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
         AssetManager::addAsset('customer-css', 'backend/plugins/customer/assets/css/customer.css');
-        AssetManager::addAsset('picker-js', 'libs/core/base/js/date-picker/picker.js');
-        AssetManager::addAsset('picker-date-js', 'libs/core/base/js/date-picker/picker.date.js');
-        AssetManager::addAsset('picker-time-js', 'libs/core/base/js/date-picker/picker.time.js');
         AssetManager::addAsset('legacy-js', 'libs/core/base/js/date-picker/legacy.js');
         AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
         AssetManager::addAsset('customer-table-js', 'backend/plugins/customer/assets/js/customer-table.js');
         AssetManager::addAsset('customer-list-js', 'backend/plugins/customer/assets/js/customer-list.js');
 
+        AssetPipeline::requireCss('daterangepicker-css');
+        AssetPipeline::requireCss('pickadate-css');
+        AssetPipeline::requireCss('cnddaterange-css');
+        AssetPipeline::requireJs('pickadate-picker-js');
+        AssetPipeline::requireJs('pickadate-picker-date-js');
+        AssetPipeline::requireJs('daterangepicker-js');
+        AssetPipeline::requireJs('datetime-js');
+
         AssetPipeline::requireCss('pick-date-css');
         AssetPipeline::requireCss('select2-css');
         AssetPipeline::requireCss('customer-css');
-        AssetPipeline::requireJs('picker-js');
-        AssetPipeline::requireJs('picker-date-js');
-        AssetPipeline::requireJs('picker-time-js');
         AssetPipeline::requireJs('legacy-js');
         AssetPipeline::requireJs('select2-js');
         AssetPipeline::requireJs('customer-table-js');

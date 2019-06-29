@@ -23,8 +23,7 @@ class ProductRequest extends CoreRequest
                 ]
             ]
         );
-//        dd($customAttributeRequest);
-//        dd(request()->all());
+
         return array_merge([
             'name' => 'required',
             'sku' => 'required',
@@ -32,6 +31,11 @@ class ProductRequest extends CoreRequest
             'manufacturer_id' => 'required',
             'image_gallery' => 'required',
             'image_feature' => 'required',
+            'discount_percent' => 'required|numeric|min:0|max:100',
+            'wholesale_discount' => 'required|numeric|min:0|max:100',
+            'purchase_discount' => 'required|numeric|min:0|max:100',
+            'online_discount' => 'required|numeric|min:0|max:100',
+            'vat' => 'required|numeric|min:0|max:100',
         ], $customAttributeRequest);
     }
 }
