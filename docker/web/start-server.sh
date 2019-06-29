@@ -6,7 +6,7 @@ echo alias u=\'php /var/www/html/upgrade\' >> /etc/bash.bashrc
 source /etc/bash.bashrc
 service php7.1-fpm start
 chmod 600 /var/www/html/docker/ssh/ssh_ifoss
-service ssh start
+#service ssh start
 service supervisor start
 supervisorctl reread
 supervisorctl update
