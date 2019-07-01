@@ -25,18 +25,18 @@ class CacheCustomerRepositories extends CacheAbstractDecorator implements Custom
     }
 
     /**
-     * @return mixed|void
+     * @return mixed
      */
     public function getAllCustomers() {
-        $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }
 
     /**
      * @param array $request
-     * @return mixed|void
+     * @return mixed
      */
     public function searchListCustomer(array $request) {
-        $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -45,7 +45,7 @@ class CacheCustomerRepositories extends CacheAbstractDecorator implements Custom
      * @return mixed
      */
     public function getListCustomerIntroducedByTypeAndId(string $type, int $id) {
-        $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -53,6 +53,14 @@ class CacheCustomerRepositories extends CacheAbstractDecorator implements Custom
      * @return mixed
      */
     public function searchAjaxCustomer(array $filters) {
-        $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param int $customerId
+     * @return mixed
+     */
+    public function getInfoWithContactOfCustomer(int $customerId) {
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
     }
 }

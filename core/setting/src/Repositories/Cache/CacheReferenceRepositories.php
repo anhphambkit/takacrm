@@ -27,4 +27,24 @@ class CacheReferenceRepositories extends CacheAbstractDecorator implements Refer
         $this->repository = $repository;
         $this->entityName = 'cache_reference'; # Please setup reference name of cache.
     }
+
+    /**
+     * @param $table
+     * @param $where
+     * @param bool $isUnique
+     * @param string $orderBy
+     * @return mixed
+     */
+    public function getReferenceFromAttribute($table, $where, $isUnique = false, $orderBy = 'id') {
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param string $type
+     * @param string|null $value
+     * @return mixed
+     */
+    public function getReferenceFromAttributeType(string $type, string $value = null) {
+        return $this->getDataIfExistCache(__FUNCTION__, func_get_args());
+    }
 }
