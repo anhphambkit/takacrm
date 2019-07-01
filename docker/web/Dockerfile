@@ -34,7 +34,7 @@ RUN curl -LO https://deployer.org/deployer.phar && \
     chmod +x /usr/local/bin/dep
 # COPY init script
 USER root
-COPY crontab /etc/cron.d
+COPY crontab /etc/cron.d/crontab
 COPY start-server.sh /home
 RUN chmod 755 /home/start-server.sh && \
         dos2unix /home/start-server.sh && \
