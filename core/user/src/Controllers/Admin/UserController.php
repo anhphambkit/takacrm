@@ -14,6 +14,7 @@ use Core\User\Services\Interfaces\CreateUserServiceInterface;
 use Core\User\Services\Interfaces\UpdateProfileImageServiceInterface;
 use AssetManager;
 use AssetPipeline;
+use Request;
 
 class UserController extends BaseAdminController{
     
@@ -212,6 +213,37 @@ class UserController extends BaseAdminController{
 
         return redirect()->route('admin.user.profile', [$id])
             ->with('success_msg', trans('core-user::users.password_update_success'));
+    }
+
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return array|\Illuminate\Http\JsonResponse
+     * @author Sang Nguyen
+     */
+    public function getDelete($id, Request $request)
+    {
+        if (auth()->id() == $id) {
+            return [
+                'error' => true,
+                'message' => trans('core-user::users.delete_user_logged_in'),
+            ];
+        }
+
+        try {
+            $user = $this->userRepository->findById($id);
+            $this->userRepository->delete($user);
+            return [
+                'error' => false,
+                'message' => trans('core-user::users.deleted'),
+            ];
+        } catch (Exception $e) {
+            return [
+                'error' => true,
+                'message' => trans('core-user::users.cannot_delete'),
+            ];
+        }
     }
 
     /**

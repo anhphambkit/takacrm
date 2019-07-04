@@ -21,24 +21,24 @@
                 		<h4 class="form-section"><i class="la la-eye"></i> About User</h4>
                 		<div class="row">
 	                        <div class="form-group col-md-6 mb-2 @if ($errors->has('first_name')) has-error @endif">
-	                        	<label for="userinput1">Fist Name</label>
+	                        	<label for="userinput_firstname">First Name </label>
 	                        	{!! Form::text('first_name', old('first_name'), ['class' => 'form-control', 'id' => 'first_name', 'data-counter' => 30, 'placeholder' => 'first name']) !!}
                             	{!! Form::error('first_name', $errors) !!}
 	                        </div>
 	                        <div class="form-group col-md-6 mb-2 @if ($errors->has('last_name')) has-error @endif">
-	                        	<label for="userinput2">Last Name</label>
+	                        	<label for="userinput_lastname">Last Name</label>
 	                        	{!! Form::text('last_name', old('last_name'), ['class' => 'form-control', 'id' => 'last_name', 'data-counter' => 30, 'placeholder' => 'last name']) !!}
                             	{!! Form::error('last_name', $errors) !!}
 	                        </div>
                         </div>
                         <div class="row">
 	                        <div class="form-group col-md-6 mb-2 @if ($errors->has('username')) has-error @endif">
-	                        	<label for="userinput3">Username</label>
+	                        	<label for="userinput_username">Username</label>
 	                        	 {!! Form::text('username', old('username'), ['class' => 'form-control', 'id' => 'username', 'data-counter' => 30, 'placeholder' => 'username']) !!}
                             	 {!! Form::error('username', $errors) !!}
 	                        </div>
 	                        <div class="form-group col-md-6 mb-2 @if ($errors->has('email')) has-error @endif">
-	                        	<label for="userinput4">Email</label>
+	                        	<label for="userinput_email">Email</label>
 	                        	{!! Form::text('email', old('email'), ['class' => 'form-control', 'id' => 'email', 'data-counter' => 30, 'placeholder' => 'email']) !!}
                             	{!! Form::error('email', $errors) !!}
 	                        </div>
@@ -46,13 +46,13 @@
 
                         <div class="row">
 	                        <div class="form-group col-md-6 mb-2 @if ($errors->has('password')) has-error @endif">
-	                        	<label for="userinput3">Password</label>
+	                        	<label for="userinput_password">Password</label>
 	                        	 {!! Form::password('password', ['class' => 'form-control', 'id' => 'password', 'data-counter' => 60, 'placeholder' => 'password']) !!}
                             	 <div class="pwstrength_viewport_progress"></div>
                             	 {!! Form::error('password', $errors) !!}
 	                        </div>
 	                        <div class="form-group col-md-6 mb-2">
-	                        	<label for="userinput4">Re-type password</label>
+	                        	<label for="userinput_repassword">Re-type password</label>
 	                        	{!! Form::password('password_confirmation', ['class' => 'form-control', 'id' => 'password_confirmation', 'data-counter' => 60, 'placeholder' => 're-type']) !!}
                             	{!! Form::error('password_confirmation', $errors) !!}
 	                        </div>
@@ -72,4 +72,26 @@
 	</div>
 </div>
 {!! Form::close() !!}
+@endsection
+
+@section('master-footer')
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			let labels = [
+				'userinput_firstname',
+				'userinput_lastname',
+				'userinput_username',
+				'userinput_email',
+				'userinput_password',
+				'userinput_repassword',
+				'role',
+			];
+
+			labels.forEach(item => {
+				$(`label[for="${item}"]`).append('<span class="text-required">(*)</span>');
+			})
+
+		})
+	</script>
 @endsection
