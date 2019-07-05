@@ -124,7 +124,7 @@
 											<div class="row">
 												<div class="form-group col-md-6">
 													<label class="control-label required" for="role">Role</label>
-													{!! Form::select('role_id', $roles, $user->roles->first()->id, ['class' => 'form-control roles-list']) !!}
+													{!! Form::select('role_id', $roles, $user->roles->first()->id ?? null, ['class' => 'form-control roles-list']) !!}
 												</div>
 											</div>
 										</div>

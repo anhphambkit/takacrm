@@ -15,7 +15,7 @@ class ModifyCustomerContact extends Migration
     {
         if (Schema::hasColumn('customer_contacts', 'email')) {
             Schema::table('customer_contacts', function (Blueprint $table) {
-                $table->dropUnique('customer_contacts_email_unique');
+                //$table->dropUnique('customer_contacts_email_unique');
                 $table->string('email')->nullable(true)->change();
             });
         }

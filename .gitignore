@@ -20,3 +20,5 @@ docker/web/logs/access.log
 docker/web/logs/error.log
 docker/web/logs/error.log
 *.log
+.DS_Store
+storage/.DS_Store
