@@ -35,9 +35,9 @@ class UserDataTable extends DataTableAbstract
                 return table_status(AclManager::getActivationRepository()->completed($item) ? 1 : 0);
             })
             ->addColumn('operations', function ($item) {
-                if (auth()->user()->id !== $item->id) {
-                    return table_actions('admin.user.profile', 'admin.user.delete', $item);
-                }
+                // if (auth()->user()->id !== $item->id) {
+                return table_actions('admin.user.profile', 'admin.user.delete', $item);
+                // }
             })
             ->removeColumn('role_id')
             ->escapeColumns([])

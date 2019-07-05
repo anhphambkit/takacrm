@@ -36,8 +36,8 @@ $router->group(['prefix' =>'user'], function (Router $router) {
 
     $router->get('/delete/{id}', [
         'as' => 'admin.user.delete',
-        'uses' => 'UserController@index',
-        'middleware' => 'access:user.create'
+        'uses' => 'UserController@getDelete',
+        'middleware' => 'access:user.delete'
     ]);
 
     $router->get('/search', [
@@ -49,25 +49,25 @@ $router->group(['prefix' =>'user'], function (Router $router) {
     $router->get('/profile/{id}', [
         'as' => 'admin.user.profile',
         'uses' => 'UserController@getUserProfile',
-        'middleware' => 'access:user.profile'
+        'middleware' => 'access:user.update-profile'
     ]);
 
     $router->post('/update-profile/{id}', [
         'as' => 'admin.user.update-profile',
         'uses' => 'UserController@postUpdateProfile',
-        'middleware' => 'access:user.profile'
+        'middleware' => 'access:user.update-profile'
     ]);
 
     $router->post('/profile/image', [
         'as' => 'admin.profile.image',
         'uses' => 'UserController@postModifyProfileImage',
-        'middleware' => 'access:user.profile'
+        'middleware' => 'access:user.update-profile'
     ]);
 
     $router->post('/change-password/{id}', [
         'as' => 'admin.user.change-password',
         'uses' => 'UserController@postChangePassword',
-        'middleware' => 'access:user.profile'
+        'middleware' => 'access:user.update-profile'
     ]);
     
 });

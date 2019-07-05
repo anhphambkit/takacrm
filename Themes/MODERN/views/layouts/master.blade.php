@@ -20,6 +20,11 @@
         <link media="all" type="text/css" rel="stylesheet" href="{{ URL::asset($css) }}">
     @endforeach
 
+    <style type="text/css">
+        .text-required {
+            color: red;
+        }
+    </style>
     @section('styles')
     @show
 

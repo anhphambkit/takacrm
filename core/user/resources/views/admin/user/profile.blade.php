@@ -61,7 +61,7 @@
 											<h4 class="form-section"><i class="la la-eye"></i> About User</h4>
 					                		<div class="row">
 						                        <div class="form-group col-md-6 mb-2 @if ($errors->has('first_name')) has-error @endif">
-						                        	<label for="userinput1">Fist Name</label>
+						                        	<label for="userinput1">First Name</label>
 						                        	{!! Form::text('first_name', $user->first_name, ['class' => 'form-control', 'id' => 'first_name', 'placeholder' => 'first name', 'data-counter' => 60]) !!}
 					                            	{!! Form::error('first_name', $errors) !!}
 						                        </div>
