@@ -8,7 +8,7 @@ return [
 		'name'        => 'plugins-customer::sidebar.administrator',
 		'icon'        => 'fas fa-user-friends',
 		'url'         => null,
-		'permissions' => ['customer.index']
+		'permissions' => ['plugins.customer']
     ],
     [
 		'id'          => 'menu-customer-customer',

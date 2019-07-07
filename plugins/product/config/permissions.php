@@ -3,6 +3,7 @@ return [
     [
         'name' => 'Product',
         'flag' => 'plugins.product',
+        'is_feature' => true,
     ],
 
     // Products:
@@ -14,6 +15,11 @@ return [
     [
         'name'        => 'Create',
         'flag'        => 'products.create',
+        'parent_flag' => 'products.list',
+    ],
+    [
+        'name'        => 'View',
+        'flag'        => 'products.view',
         'parent_flag' => 'products.list',
     ],
     [

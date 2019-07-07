@@ -3,6 +3,7 @@ return [
     [
         'name' => 'Customer',
         'flag' => 'plugins.customer',
+        'is_feature' => true,
     ],
 
     // Customer
@@ -19,6 +20,11 @@ return [
     [
         'name' => 'Edit',
         'flag' => 'customer.edit',
+        'parent_flag' => 'customer.list',
+    ],
+    [
+        'name' => 'View',
+        'flag' => 'customer.view',
         'parent_flag' => 'customer.list',
     ],
     [
