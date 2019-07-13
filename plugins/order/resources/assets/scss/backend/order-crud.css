@@ -48,4 +48,19 @@
   color: #1e9ff2;
 }
 
+.action-add-contact {
+  font-size: 60px;
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+  border: 1px dashed #cccc;
+  padding: 20px;
+  background: #fff;
+  cursor: pointer;
+}
+.action-add-contact:hover {
+  background: #eee;
+  color: #1d99e9;
+}
+
 /*# sourceMappingURL=order-crud.css.map */

@@ -373,9 +373,20 @@
             GET_INFO_PRICE_OF_PRODUCT : "{{ route('ajax.admin.get_info_price_product') }}",
 
             QUICK_ADD: {
-                ORDER_RESOURCE: "{{ route('ajax.admin.order.quick_add_resource') }}"
+                ORDER_RESOURCE: "{{ route('ajax.admin.order.quick_add_resource') }}",
+                CUSTOMER_GROUP: "{{ route('ajax.admin.order.quick_add_customer_group') }}",
+                CUSTOMER_SOURCE: "{{ route('ajax.admin.order.quick_add_customer_source') }}",
+                CUSTOMER_JOB: "{{ route('ajax.admin.order.quick_add_customer_job') }}",
+                CUSTOMER: "{{ route('ajax.admin.order.quick_add_customer') }}"
             }
         };
+        const CONFIG = {
+            HTTP_CODE: {
+                VALIDATE_ERROR: 1,
+            }
+        }
         const PRODUCTS = {!! json_encode($products) !!};
+        const CARD_CONTACT_INDEX = 1;
+        const LIST_GENDER = {!! json_encode($genders) !!};
     </script>
 @stop

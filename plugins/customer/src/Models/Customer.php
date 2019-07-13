@@ -118,7 +118,7 @@ class Customer extends Model
      */
     public function setDobAttribute($value)
     {
-        $this->attributes['dob'] = (empty($value)) ? null : format_date_time($value, 'Asia/Ho_Chi_Minh', 'd/m/Y', 'Y-m-d');
+        $this->attributes['dob'] = (empty($value)) ? null : format_date_time($value, 'Asia/Ho_Chi_Minh', 'Y-m-d', 'Y-m-d');
     }
 
     /**
@@ -127,7 +127,7 @@ class Customer extends Model
      */
     public function createdByUser()
     {
-        return $this->belongsTo(User::class, 'created_by')->select('id', 'first_name', 'last_name', DB::raw("CONCAT(lcms_users.first_name, ' ', lcms_users.last_name) as full_name"),'username', 'profile_image as avatar');
+        return $this->belongsTo(User::class, 'created_by')->select(['id', 'first_name', 'last_name', DB::raw("CONCAT(users.first_name, ' ', users.last_name) as full_name"),'username', 'profile_image as avatar']);
     }
 
     /**
@@ -136,7 +136,7 @@ class Customer extends Model
      */
     public function userManage()
     {
-        return $this->belongsTo(User::class, 'user_manage_id')->select('id', 'first_name', 'last_name', DB::raw("CONCAT(lcms_users.first_name, ' ', lcms_users.last_name) as full_name"),'username', 'profile_image as avatar');
+        return $this->belongsTo(User::class, 'user_manage_id')->select(['id', 'first_name', 'last_name', DB::raw("CONCAT(users.first_name, ' ', users.last_name) as full_name"),'username', 'profile_image as avatar']);
     }
 
     /**

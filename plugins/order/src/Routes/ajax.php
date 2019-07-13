@@ -23,6 +23,18 @@ $router->group(['prefix' => 'admin'], function (Router $router) {
     /** quick add resource */
     $router->post('/quick-add-order-resource', 'Admin\OrderController@quickAddOrderSource')
            ->name('ajax.admin.order.quick_add_resource');
+
+    $router->post('/quick-add-customer-group', 'Admin\OrderController@quickAddCustomerGroup')
+        ->name('ajax.admin.order.quick_add_customer_group');
+
+    $router->post('/quick-add-customer-source', 'Admin\OrderController@quickAddCustomerSource')
+        ->name('ajax.admin.order.quick_add_customer_source');
+
+    $router->post('/quick-add-customer-job', 'Admin\OrderController@quickAddCustomerJob')
+        ->name('ajax.admin.order.quick_add_customer_job');
+
+    $router->post('quick-add-customer', 'Admin\OrderController@quickAddCustomer')
+        ->name('ajax.admin.order.quick_add_customer');
     /** end quick add resource */
 
 });

@@ -187,6 +187,13 @@ class OrderController extends BaseAdminController
             ]
         ], ['attributeOptions']);
 
+        $allCustomerCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_CUSTOMER)
+            ]
+        ], ['attributeOptions']);
+
+
         $introducePersonIds = [];
 
         $customerGroups = $this->groupCustomerRepositories->pluck('name', 'id');
@@ -205,7 +212,7 @@ class OrderController extends BaseAdminController
             ->toArray();
         //end quick add customer
 
-        return view('plugins-order::order.create', compact('users', 'paymentMethods', 'orderSources', 'products', 'allCustomAttributes', 'genders', 'customerJobs', 'provincesCities', 'introducePersonIds', 'customerGroups', 'customerSources', 'customerRelationships'));
+        return view('plugins-order::order.create', compact('users', 'paymentMethods', 'orderSources', 'products', 'allCustomAttributes', 'allCustomerCustomAttributes', 'genders', 'customerJobs', 'provincesCities', 'introducePersonIds', 'customerGroups', 'customerSources', 'customerRelationships'));
     }
 
     /**
@@ -409,6 +416,9 @@ class OrderController extends BaseAdminController
         AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
 
         AssetManager::addAsset('select2-js', 'libs/core/base/js/select2/select2.full.min.js');
+
+        AssetManager::addAsset('button-loader', 'components/core/base/js/jquery.buttonLoader.js');
+
         AssetManager::addAsset('bootstrap-switch-js', 'libs/plugins/product/js/toggle/bootstrap-switch.min.js');
         AssetManager::addAsset('bootstrap-checkbox-js', 'libs/plugins/product/js/toggle/bootstrap-checkbox.min.js');
         AssetManager::addAsset('switchery-js', 'libs/plugins/product/js/toggle/switchery.min.js');
@@ -446,5 +456,7 @@ class OrderController extends BaseAdminController
         AssetPipeline::requireJs('daterangepicker-js');
         AssetPipeline::requireJs('datetime-js');
         AssetPipeline::requireJs('custom-field-js');
+
+        AssetPipeline::requireJs('button-loader');
     }
 }

@@ -1,8 +1,13 @@
+<?php
+    $entityId = !empty($entityId) ? $entityId : null;
+    $classFieldWrapper = !empty($classFieldWrapper) ? $classFieldWrapper : 'form-group col-md-12 mb-2';
+?>
 <!-- The Modal -->
 <div class="modal" id="modQuickAddCustomer">
     <div class="modal-dialog modal-lg">
+
         <div class="modal-content">
-            <form>
+            <form role="form" id="form-quick-add-customer">
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Thêm nhanh khách hàng</h4>
@@ -24,6 +29,7 @@
                                     <label class="control-label required" for="role">{{ trans('plugins-customer::customer.form.gender') }}</label>
                                     {!! Form::select('gender', $genders, old('gender'), ['class' => 'select2-placeholder-multiple form-control gender-list', "id" => "select-gender-list" ]) !!}
                                     {!! Form::error('gender', $errors) !!}
+                                    <ul class="content-text description-text" data-validation="data-validation" data-field="gender"></ul>
                                 </div>
                             </div>
                             {{--End Gender--}}
@@ -33,6 +39,7 @@
                                     <label for="full_name">{{ trans('plugins-customer::customer.form.full_name') }}</label>
                                     {!! Form::text('full_name', old('full_name'), ['class' => 'form-control', 'id' => 'full_name', 'data-counter' => 255, 'placeholder' => trans('plugins-customer::customer.form.full_name')]) !!}
                                     {!! Form::error('full_name', $errors) !!}
+                                    <ul class="content-text description-text" data-validation="data-validation" data-field="full_name"></ul>
                                 </div>
                             </div>
                             {{--End Full Name--}}
@@ -91,6 +98,7 @@
                                     <label for="email">{{ trans('plugins-customer::customer.form.email') }}</label>
                                     {!! Form::text('email', old('email'), ['class' => 'form-control', 'id' => 'email', 'data-counter' => 120, 'placeholder' => trans('plugins-customer::customer.form.email')]) !!}
                                     {!! Form::error('email', $errors) !!}
+                                    <ul class="content-text description-text" data-validation="data-validation" data-field="email"></ul>
                                 </div>
                             </div>
                             {{--End Email--}}
@@ -101,6 +109,7 @@
                                     <label for="value">{{ trans('plugins-customer::customer.form.value') }}</label>
                                     {!! Form::text('value', old('value'), ['class' => 'form-control', 'id' => 'value', 'data-counter' => 120, 'placeholder' => trans('plugins-customer::customer.form.value')]) !!}
                                     {!! Form::error('value', $errors) !!}
+                                    <ul class="content-text description-text" data-validation="data-validation" data-field="value"></ul>
                                 </div>
                             </div>
                             {{--End Value--}}
@@ -161,7 +170,7 @@
                                                             <div class="panel" id="pnQuickAddCustomerGroup">
                                                                 <div class="panel-body">
                                                                     <label>@lang('plugins-customer::customer.form.customer_group')</label>
-                                                                    <input type="text" name="name" id="resourceName" class="form-control"/>
+                                                                    <input type="text" name="name" id="customerGroupName" class="form-control"/>
                                                                 </div>
                                                                 <div class="panel-footer mt-1">
                                                                     <button type="button" class="btn btn-primary btn-sm" id="btnQuickAddCustomerGroup">Thêm</button>
@@ -196,13 +205,13 @@
                                                         <i class="fa fa-plus m-0"></i>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-modal">
-                                                        <div class="panel" id="pnQuickAddCustomerGroup">
+                                                        <div class="panel" id="pnQuickAddCustomerSource">
                                                             <div class="panel-body">
                                                                 <label>@lang('plugins-customer::customer.form.customer_source')</label>
-                                                                <input type="text" name="name" id="resourceName" class="form-control"/>
+                                                                <input type="text" name="name" id="customerSourceName" class="form-control"/>
                                                             </div>
                                                             <div class="panel-footer mt-1">
-                                                                <button type="button" class="btn btn-primary btn-sm" id="btnQuickAddCustomerGroup">Thêm</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="btnQuickAddCustomerSource">Thêm</button>
                                                                 <button type="button" data-toggle="dismiss" class="btn btn-danger btn-sm mr5">Đóng</button>
                                                             </div>
                                                         </div>
@@ -223,7 +232,7 @@
 
                                     <div class="row">
                                         <div class="col-md-11 pr-0">
-                                            {!! Form::select('customer_job_id[]', $customerJobs, old('customer_job_id'), ['class' => 'select2-placeholder-multiple form-control job_id-list', "id" => "select-job_id-list", "multiple" => "multiple" ]) !!}
+                                            {!! Form::select('customer_job_id[]', $customerJobs, old('customer_job_id'), ['class' => 'select2-placeholder-multiple form-control job_id-list', "id" => "select-customer_job-list", "multiple" => "multiple" ]) !!}
                                         </div>
                                         <div class="col-md-1 pl-0">
                                             <div class="input-group-append">
@@ -232,13 +241,13 @@
                                                         <i class="fa fa-plus m-0"></i>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-modal">
-                                                        <div class="panel" id="pnQuickAddCustomerGroup">
+                                                        <div class="panel" id="pnQuickAddCustomerJob">
                                                             <div class="panel-body">
                                                                 <label>@lang('plugins-customer::customer.form.jobs')</label>
-                                                                <input type="text" name="name" id="resourceName" class="form-control"/>
+                                                                <input type="text" name="name" id="customerJobName" class="form-control"/>
                                                             </div>
                                                             <div class="panel-footer mt-1">
-                                                                <button type="button" class="btn btn-primary btn-sm" id="btnQuickAddCustomerGroup">Thêm</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="btnQuickAddCustomerJob">Thêm</button>
                                                                 <button type="button" data-toggle="dismiss" class="btn btn-danger btn-sm mr5">Đóng</button>
                                                             </div>
                                                         </div>
@@ -350,16 +359,34 @@
                             </div>
                             {{--End Note--}}
 
+                            <div class="row">
+                                @foreach($allCustomerCustomAttributes as $allCustomAttribute)
+                                    @component('plugins-custom-attributes::components.custom-field')
+                                        @slot('customAttributeEntity', $allCustomAttribute)
+                                        @slot('entityId', $entityId)
+                                        @slot('classFieldWrapper', $classFieldWrapper)
+                                    @endcomponent
+                                @endforeach
+                            </div>
+
                         </div>
                         <div id="contact" class="tab-pane fade">
-                            <h3>Menu 1</h3>
-                            <p>Some content in menu 1.</p>
+                            <div class="list-contacts">
+                                @include('plugins-customer::partials.customer-contact')
+                            </div>
+                            <div class="action-add-contact">
+                                <i class="fas fa-id-card"></i>
+                                <h6 class="add-new-contact">
+                                    {{ trans('plugins-customer::customer.new_contact') }}
+                                </h6>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
+                    <button type="button" data-control="submit" class="btn btn-primary">Thêm</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </form>

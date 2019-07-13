@@ -312,9 +312,11 @@ class ImplementProductServices implements ProductServices {
                     'wholesale_discount'        => floatval($row[trans('plugins-product::product.form.wholesale_discount').'(%)']),
                     'purchase_discount'         => floatval($row[trans('plugins-product::product.form.purchase_discount').'(%)']),
                     'online_discount'           => floatval($row[trans('plugins-product::product.form.online_discount').'(%)']),
-                    'vat'                       => floatval($row[trans('plugins-product::product.form.vat').'(%)'])
+                    'vat'                       => floatval($row[trans('plugins-product::product.form.vat').'(%)']),
+                    'created_by'                => Auth::id()
                 ];
-                dd($products);
+                $product = $this->repository->createOrUpdate($products);
+                if(!$product) return false;
             });
 
             DB::commit();

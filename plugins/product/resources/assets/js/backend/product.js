@@ -62,6 +62,7 @@ $('#btnUploadFile').click(function () {
         }
     }).then((response)=>{
         MessageService.showMessage('success', response.message, 'Hoàn Thành')
+        $('#exampleModal').modal('hide')
     }).catch((error)=>{
         MessageService.showMessage('error', error.message, 'Lỗi')
     })
