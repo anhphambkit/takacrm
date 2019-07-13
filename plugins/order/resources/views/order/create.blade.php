@@ -1,8 +1,9 @@
 @extends('layouts.master')
 @section('content')
+    @include('plugins-order::partials.form-quick-add-customer')
     {!! Form::open(['route' => 'admin.order.create']) !!}
     @php do_action(BASE_FILTER_BEFORE_RENDER_FORM, ORDER_MODULE_SCREEN_NAME, request(), null) @endphp
-    <div class="form-general-info">
+    <div class="form-general-info form-order-crud">
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
@@ -22,7 +23,16 @@
                                 <div class="row">
                                     <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_id')) has-error @endif">
                                         <label class="control-label required" for="role">{{ trans('plugins-order::order.form.search_customer_on_system') }}</label>
-                                        {!! Form::select('customer_id', [], old('customer_id'), ['class' => 'custom-select select2-placeholder-single form-control customer-list', "id" => "select-customer-list" ]) !!}
+                                        <div class="row">
+                                            <div class="col-md-10 pr-0">
+                                                {!! Form::select('customer_id', [], old('customer_id'), ['class' => 'custom-select select2-placeholder-single form-control customer-list', "id" => "select-customer-list" ]) !!}
+                                            </div>
+                                            <div class="col-md-2 pl-0">
+                                                <button class="btn btn-primary" data-toggle="modal" data-target="#modQuickAddCustomer" type="button">
+                                                    <i class="fa fa-plus m-0"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                         {!! Form::error('customer_id', $errors) !!}
                                     </div>
                                     <div class="form-group col-md-6 mb-2 @if ($errors->has('customer_contact_id')) has-error @endif">
@@ -107,7 +117,28 @@
                                     </div>
                                     <div class="form-group col-md-6 mb-2 @if ($errors->has('order_source_id')) has-error @endif">
                                         <label for="order_source_id">{{ trans('plugins-order::order.form.order_source') }}</label>
-                                        {!! Form::select('order_source_id', $orderSources, old('order_source_id'), ['class' => 'custom-select select2-placeholder-single form-control source-order-list', "id" => "select-source-order-list" ]) !!}
+                                        <div class="input-group">
+                                            {!! Form::select('order_source_id', $orderSources, old('order_source_id'), ['class' => 'custom-select select2-placeholder-single form-control source-order-list', "id" => "select-source-order-list" ]) !!}
+                                            <div class="input-group-append">
+                                                <div class="dropdown">
+                                                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-plus m-0"></i>
+                                                  </button>
+                                                  <div class="dropdown-menu dropdown-modal">
+                                                    <div class="panel" id="pnQuickAddResource">
+                                                        <div class="panel-body">
+                                                            <label>@lang('plugins-order::order.form.order_source')</label>
+                                                            <input type="text" name="name" id="resourceName" class="form-control"/>
+                                                        </div>
+                                                        <div class="panel-footer mt-1">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="btnAddResource">Thêm</button>
+                                                            <button type="button" data-toggle="dismiss" class="btn btn-danger btn-sm mr5">Đóng</button>
+                                                        </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         {!! Form::error('order_source_id', $errors) !!}
                                     </div>
                                 </div>
@@ -340,6 +371,10 @@
             SEARCH_AJAX_CUSTOMER : "{{ route('ajax.admin.search_ajax_customer') }}",
             GET_INFO_WITH_CONTACT_OF_CUSTOMER : "{{ route('ajax.admin.get_info_with_contact_of_customer') }}",
             GET_INFO_PRICE_OF_PRODUCT : "{{ route('ajax.admin.get_info_price_product') }}",
+
+            QUICK_ADD: {
+                ORDER_RESOURCE: "{{ route('ajax.admin.order.quick_add_resource') }}"
+            }
         };
         const PRODUCTS = {!! json_encode($products) !!};
     </script>

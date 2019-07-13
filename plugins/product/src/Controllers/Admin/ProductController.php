@@ -104,8 +104,8 @@ class ProductController extends BaseAdminController
     public function getList(ProductDataTable $dataTable)
     {
         page_title()->setTitle(trans('plugins-product::product.list'));
-
-        return $dataTable->renderTable(['title' => trans('plugins-product::product.list')]);
+        $this->addDetailAssets();
+        return $dataTable->renderTable(['title' => trans('plugins-product::product.list')], [], 'plugins-product::product.list');
     }
 
     /**

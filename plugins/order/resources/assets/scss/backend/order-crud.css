@@ -1,0 +1,51 @@
+.form-actions-area {
+  position: fixed;
+  bottom: 0;
+  width: calc(100% - 4.4rem);
+  z-index: 9;
+}
+.form-actions-area .card {
+  margin: 0 !important;
+  background: #dfdfdf;
+  border: 1px solid #090909;
+}
+
+.form-general-info {
+  margin-bottom: 60px;
+}
+
+.box-order-info {
+  margin-bottom: 60px !important;
+}
+
+.form-order-crud .dropdown.show:hover .dropdown-modal {
+  display: none;
+}
+.form-order-crud .dropdown.show:hover .dropdown-modal.show {
+  display: block;
+}
+
+.form-order-crud .dropdown .dropdown-menu.dropdown-modal {
+  transform: translate3d(-255px, 45px, 0px) !important;
+  width: 21.5rem;
+  padding: 10px;
+}
+
+.form-order-crud .dropdown > button.dropdown-toggle {
+  text-align: center;
+}
+
+.form-order-crud .dropdown > button.dropdown-toggle:after {
+  display: none;
+}
+
+#modQuickAddCustomer ul.nav.nav-tabs li > a {
+  padding: 10px 20px 10px 0;
+  color: #464855;
+}
+
+#modQuickAddCustomer ul.nav.nav-tabs li > a.active {
+  color: #1e9ff2;
+}
+
+/*# sourceMappingURL=order-crud.css.map */

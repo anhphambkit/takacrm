@@ -14,8 +14,15 @@ use Plugins\CustomAttributes\Contracts\CustomAttributeConfig;
 use Plugins\CustomAttributes\Repositories\Interfaces\CustomAttributesRepositories;
 use Plugins\CustomAttributes\Services\CustomAttributeServices;
 use Plugins\Product\Models\ProductGallery;
+use Plugins\Product\Repositories\Interfaces\ManufacturerRepositories;
+use Plugins\Product\Repositories\Interfaces\ProductCategoryRepositories;
+use Plugins\Product\Repositories\Interfaces\ProductOriginRepositories;
 use Plugins\Product\Repositories\Interfaces\ProductRepositories;
+use Plugins\Product\Repositories\Interfaces\ProductUnitRepositories;
 use Plugins\Product\Services\ProductServices;
+use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Filesystem\Filesystem as File;
+
 
 class ImplementProductServices implements ProductServices {
 
@@ -35,16 +42,58 @@ class ImplementProductServices implements ProductServices {
     private $customAttributeServices;
 
     /**
+     * @var file
+     */
+    private $file;
+
+    /**
+     * @var ProductCategoryRepositories
+     */
+    protected $productCategoryRepositories;
+
+    /**
+     * @var ManufacturerRepositories
+     */
+    protected $manufacturerRepositories;
+
+    /**
+     * @var ProductUnitRepositories
+     */
+    protected $productUnitRepositories;
+
+    /**
+     * @var ProductOriginRepositories
+     */
+    protected $productOriginRepositories;
+
+    /**
      * ImplementProductServices constructor.
      * @param ProductRepositories $productRepository
      * @param CustomAttributesRepositories $customAttributesRepositories
      * @param CustomAttributeServices $customAttributeServices
+     * @param File $file
+     * @param ManufacturerRepositories $manufacturerRepositories
+     * @param ProductUnitRepositories $productUnitRepositories
+     * @param ProductCategoryRepositories $productCategoryRepositories
+     * @param ProductOriginRepositories $productOriginRepositories
      */
-    public function __construct(ProductRepositories $productRepository, CustomAttributesRepositories $customAttributesRepositories, CustomAttributeServices $customAttributeServices)
-    {
+    public function __construct(ProductRepositories $productRepository,
+                                CustomAttributesRepositories $customAttributesRepositories,
+                                CustomAttributeServices $customAttributeServices,
+                                File $file,
+                                ManufacturerRepositories $manufacturerRepositories,
+                                ProductUnitRepositories $productUnitRepositories,
+                                ProductCategoryRepositories $productCategoryRepositories,
+                                ProductOriginRepositories $productOriginRepositories){
         $this->repository = $productRepository;
         $this->customAttributesRepositories = $customAttributesRepositories;
         $this->customAttributeServices = $customAttributeServices;
+        $this->file = $file;
+
+        $this->manufacturerRepositories = $manufacturerRepositories;
+        $this->productCategoryRepositories = $productCategoryRepositories;
+        $this->productOriginRepositories = $productOriginRepositories;
+        $this->productUnitRepositories = $productUnitRepositories;
     }
 
     /**
@@ -147,4 +196,136 @@ class ImplementProductServices implements ProductServices {
     public function getInfoPriceProduct(int $productId) {
         return $this->repository->findById($productId, [], ['id', 'slug', 'sku', 'name', 'retail_price', 'discount_percent', 'vat', 'unit_id', 'short_description']);
     }
+
+    /**
+     * @return mixed|string
+     * @throws \Box\Spout\Common\Exception\IOException
+     * @throws \Box\Spout\Common\Exception\InvalidArgumentException
+     * @throws \Box\Spout\Common\Exception\UnsupportedTypeException
+     * @throws \Box\Spout\Writer\Exception\WriterNotOpenedException
+     */
+    public function getTemplateExcel(){
+        $allProductCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
+            [
+                'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
+            ]
+        ], ['attributeOptions']);
+        $dataColumns = [
+            trans('plugins-product::product.product_code')                          => '',
+            trans('plugins-product::product.product_name')                          => '',
+            trans('plugins-product::product.form.category')                         => '',
+            trans('plugins-product::product.form.units')                            => '',
+            trans('plugins-product::product.form.manufacturer')                     => '',
+            trans('plugins-product::product.form.origins')                          => '',
+            trans('plugins-product::product.form.short_description')                => '',
+            trans('plugins-product::product.form.long_desc')                        => '',
+            trans('plugins-product::product.form.retail_price')                     => '',
+            trans('plugins-product::product.form.wholesale_price')                  => '',
+            trans('plugins-product::product.form.discount').'(%)'                   => '',
+            trans('plugins-product::product.form.wholesale_discount').'(%)'         => '',
+            trans('plugins-product::product.form.online_price')                     => '',
+            trans('plugins-product::product.form.online_discount').'(%)'            => '',
+            trans('plugins-product::product.form.purchase_price')                   => '',
+            trans('plugins-product::product.form.purchase_discount').'(%)'          => '',
+            trans('plugins-product::product.form.vat').'(%)'                        => ''
+        ];
+
+        if($allProductCustomAttributes)
+            foreach ($allProductCustomAttributes as $attribute){
+                $dataColumns[$attribute->name] = '';
+            }
+
+        $list = collect([
+            $dataColumns
+        ]);
+
+        $path = public_path().'/download/template/products';
+        if(!$this->file->isDirectory($path))
+            $this->file->makeDirectory($path, 0755, true);
+
+        $name = time().'-product-template.xlsx';
+        (new FastExcel($list))->export($path.'/'.$name);
+        return $name;
+    }
+
+    /**
+     * Get id of product properties by name
+     * @param $name
+     * @param string $type
+     * @return mixed
+     */
+    public function quickAddProductProperties($name, $type = 'manufacturer'){
+        if(empty($name)) return false;
+        $repositories = $this->manufacturerRepositories;
+        $slug = str_slug($name);
+        $dataCreate = ['name' => $name, 'slug'  => $slug, 'created_by' => Auth::id()];
+        switch ($type){
+            case 'unit':
+                $repositories = $this->productUnitRepositories;
+                break;
+            case 'origin':
+                $repositories = $this->productOriginRepositories;
+                break;
+            case 'category':
+                $repositories = $this->productCategoryRepositories;
+                $dataCreate['parent_id']  = 0;
+                $dataCreate['order']      = 0;
+                break;
+            default: $repositories = $this->manufacturerRepositories;
+                break;
+        }
+        $data = $repositories->select(['*'], ['slug'  => $slug])->first();
+        if(!$data) $data = $repositories->create($dataCreate);
+        return $data;
+    }
+
+    /** import product from excel */
+    public function importProduct($templates){
+        DB::beginTransaction();
+        try{
+
+            (new FastExcel)->import($templates[0], function($row){
+
+                $manufacturer = $this->quickAddProductProperties($row[trans('plugins-product::product.form.manufacturer')], 'manufacturer');
+                $unit = $this->quickAddProductProperties($row[trans('plugins-product::product.form.units')], 'unit');
+                $origin = $this->quickAddProductProperties($row[trans('plugins-product::product.form.origins')], 'origin');
+                $category = $this->quickAddProductProperties($row[trans('plugins-product::product.form.category')], 'category');
+
+
+                if(!$manufacturer || !$unit || !$origin || !$category) return false;
+
+                $products = [
+                    'sku'                       => $row[trans('plugins-product::product.product_code')],
+                    'name'                      => $row[trans('plugins-product::product.product_name')],
+                    'slug'                      => str_slug($row[trans('plugins-product::product.product_name')]),
+                    'short_description'         => $row[trans('plugins-product::product.form.short_description')],
+                    'long_desc'                 => $row[trans('plugins-product::product.form.long_desc')],
+                    'manufacturer_id'           => $manufacturer->id,
+                    'unit_id'                   => $unit->id,
+                    'origin_id'                 => $origin->id,
+                    'category_id'               => $category->id,
+                    'retail_price'              => floatval($row[trans('plugins-product::product.form.retail_price')]),
+                    'wholesale_price'           => floatval($row[trans('plugins-product::product.form.wholesale_price')]),
+                    'online_price'              => floatval($row[trans('plugins-product::product.form.online_price')]),
+                    'purchase_price'            => floatval($row[trans('plugins-product::product.form.purchase_price')]),
+                    'discount_percent'          => floatval($row[trans('plugins-product::product.form.discount').'(%)']),
+                    'wholesale_discount'        => floatval($row[trans('plugins-product::product.form.wholesale_discount').'(%)']),
+                    'purchase_discount'         => floatval($row[trans('plugins-product::product.form.purchase_discount').'(%)']),
+                    'online_discount'           => floatval($row[trans('plugins-product::product.form.online_discount').'(%)']),
+                    'vat'                       => floatval($row[trans('plugins-product::product.form.vat').'(%)'])
+                ];
+                dd($products);
+            });
+
+            DB::commit();
+            return true;
+        }catch(\Exception $error){
+            DB::rollBack();
+            dd($error->getMessage());
+            return false;
+        }
+
+
+    }
+
 }

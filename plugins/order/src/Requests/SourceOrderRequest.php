@@ -21,7 +21,7 @@ class SourceOrderRequest extends CoreRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|unique:order_sources',
         ];
     }
 }

@@ -17,3 +17,39 @@
 .box-order-info {
   margin-bottom: 60px !important;
 }
+
+.form-order-crud{
+    .dropdown.show:hover .dropdown-modal{
+        display: none;
+    }
+    .dropdown.show:hover .dropdown-modal.show{
+        display: block;
+    }
+
+}
+
+.form-order-crud .dropdown .dropdown-menu.dropdown-modal{
+    transform: translate3d(-255px, 45px, 0px) !important;
+    width: 21.5rem;
+    padding: 10px;
+}
+
+.form-order-crud .dropdown>button.dropdown-toggle{
+    text-align: center;
+}
+
+.form-order-crud .dropdown>button.dropdown-toggle:after{
+    display: none;
+}
+
+#modQuickAddCustomer .nav.nav-tabs{}
+
+#modQuickAddCustomer ul.nav.nav-tabs li{}
+#modQuickAddCustomer ul.nav.nav-tabs li>a{
+    padding: 10px 20px 10px 0;
+    color: #464855;
+}
+
+#modQuickAddCustomer ul.nav.nav-tabs li>a.active{
+    color: #1e9ff2;
+}

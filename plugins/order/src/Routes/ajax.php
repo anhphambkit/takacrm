@@ -19,4 +19,9 @@ $router->group(['prefix' => 'admin'], function (Router $router) {
         'uses' => 'Admin\OrderController@getListOrder',
     ]);
 
+    /** quick add resource */
+    $router->post('/quick-add-order-resource', 'Admin\OrderController@quickAddOrderSource')
+           ->name('ajax.admin.order.quick_add_resource');
+    /** end quick add resource */
+
 });

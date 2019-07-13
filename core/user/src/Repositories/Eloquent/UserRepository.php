@@ -47,9 +47,10 @@ class UserRepository extends RepositoriesAbstract implements UserInterface
      */
     public function getAllUsers()
     {
+        $table = $this->model->getTable();
         $data = $this->model
-                    ->select('id', DB::raw("CONCAT(lcms_users.first_name, ' ', lcms_users.last_name) as text"), 'profile_image as avatar')
-                    ->orderBy(DB::raw("CONCAT(lcms_users.first_name, ' ', lcms_users.last_name)"), 'asc')
+                    ->select('id', DB::raw("CONCAT(".$table.".first_name, ' ', ".$table.".last_name) as text"), 'profile_image as avatar')
+                    ->orderBy(DB::raw("CONCAT(".$table.".first_name, ' ', ".$table.".last_name)"), 'asc')
                     ->get();
         $this->resetModel();
         return $data;

@@ -19,6 +19,9 @@ return [
     'custom_attributes' => 'Trường tùy chỉnh',
     'advanced_info' => 'Thông tin nâng cao',
     'url_landing_page' => 'Landing page',
+    'upload_product'    => 'Upload Sản Phẩm',
+    'upload'            => 'Tải lên',
+    'close'             => 'Đóng',
 
     'form' => [
         'upc' => 'Mã chung của sản phẩm',

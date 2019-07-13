@@ -2,6 +2,8 @@
 
 namespace Plugins\Order\Controllers\Admin;
 
+use Core\Setting\Contracts\ReferenceConfig;
+use Core\Setting\Services\AddressGeneralInfoService;
 use Core\Setting\Services\ReferenceServices;
 use Core\User\Models\User;
 use Core\User\Repositories\Interfaces\UserInterface;
@@ -21,7 +23,14 @@ use AssetPipeline;
 use Plugins\Order\Services\OrderServices;
 use Plugins\Product\Repositories\Interfaces\ProductRepositories;
 use Plugins\History\Repositories\Interfaces\HistoryRepositories;
+use Plugins\Customer\Repositories\Interfaces\CustomerJobRepositories;
+
+use Plugins\Customer\Repositories\Interfaces\CustomerRelationRepositories;
+use Plugins\Customer\Repositories\Interfaces\CustomerSourceRepositories;
+use Plugins\Customer\Repositories\Interfaces\GroupCustomerRepositories;
+
 use Plugins\History\Models\ProductOrderHistory;
+
 
 class OrderController extends BaseAdminController
 {
@@ -46,6 +55,21 @@ class OrderController extends BaseAdminController
     protected $orderSourceRepositories;
 
     /**
+     * @var CustomerSourceRepositories
+     */
+    protected $customerSourceRepositories;
+
+    /**
+     * @var CustomerRelationRepositories
+     */
+    protected $customerRelationRepositories;
+
+    /**
+     * @var CustomerJobRepositories
+     */
+    protected $customerJobRepositories;
+
+    /**
      * @var ProductRepositories
      */
     protected $productRepositories;
@@ -59,6 +83,12 @@ class OrderController extends BaseAdminController
      * @var ReferenceServices
      */
     protected $referenceServices;
+
+    /**
+     * @var AddressGeneralInfoService
+     */
+    protected $addressGeneralInfoService;
+
 
     /**
      * [$historyRepository description]
@@ -82,6 +112,11 @@ class OrderController extends BaseAdminController
      * @param ReferenceServices $referenceServices
      * @param HistoryRepositories $historyRepository
      * @param CustomAttributeServices $customAttributeServices
+     * @param CustomerJobRepositories $customerJobRepositories
+     * @param AddressGeneralInfoService $addressGeneralInfoService
+     * @param GroupCustomerRepositories $groupCustomerRepositories
+     * @param CustomerSourceRepositories $customerSourceRepositories
+     * @param CustomerRelationRepositories $customerRelationRepositories
      */
     public function __construct(
         OrderRepositories $orderRepository,
@@ -92,7 +127,12 @@ class OrderController extends BaseAdminController
         OrderServices $orderServices,
         ReferenceServices $referenceServices,
         HistoryRepositories $historyRepository,
-        CustomAttributeServices $customAttributeServices
+        CustomAttributeServices $customAttributeServices,
+        CustomerJobRepositories $customerJobRepositories,
+        AddressGeneralInfoService $addressGeneralInfoService,
+        GroupCustomerRepositories $groupCustomerRepositories,
+        CustomerSourceRepositories $customerSourceRepositories,
+        CustomerRelationRepositories $customerRelationRepositories
     )
     {
         $this->orderRepository           = $orderRepository;
@@ -104,6 +144,11 @@ class OrderController extends BaseAdminController
         $this->referenceServices         = $referenceServices;
         $this->historyRepository         = $historyRepository;
         $this->customAttributeServices   = $customAttributeServices;
+        $this->customerJobRepositories   = $customerJobRepositories;
+        $this->addressGeneralInfoService = $addressGeneralInfoService;
+        $this->groupCustomerRepositories = $groupCustomerRepositories;
+        $this->customerSourceRepositories = $customerSourceRepositories;
+        $this->customerRelationRepositories = $customerRelationRepositories;
     }
 
     /**
@@ -132,11 +177,21 @@ class OrderController extends BaseAdminController
         $paymentMethods = $this->paymentMethodRepositories->pluck('name', 'id');
         $orderSources = $this->orderSourceRepositories->pluck('name', 'id');
         $products = $this->productRepositories->all(['productCategory']);
+        $customerJobs = $this->customerJobRepositories->pluck('name', 'id');
+        $provincesCities = $this->addressGeneralInfoService->getProvincesCitiesByCountryId()
+            ->pluck('name', 'id')
+            ->toArray();
         $allCustomAttributes = $this->customAttributeServices->getAllCustomAttributeByConditions([
             [
                 'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_ORDER)
             ]
         ], ['attributeOptions']);
+
+        $introducePersonIds = [];
+
+        $customerGroups = $this->groupCustomerRepositories->pluck('name', 'id');
+        $customerSources = $this->customerSourceRepositories->pluck('name', 'id');
+        $customerRelationships = $this->customerRelationRepositories->pluck('name', 'id');
 
         page_title()->setTitle(trans('plugins-order::order.create'));
 
@@ -144,7 +199,13 @@ class OrderController extends BaseAdminController
         $this->addDetailAssets();
         $this->addDetailCRUDAssets();
 
-        return view('plugins-order::order.create', compact('users', 'paymentMethods', 'orderSources', 'products', 'allCustomAttributes'));
+        //quick add customer
+        $genders = $this->referenceServices->getReferenceFromAttributeType(ReferenceConfig::REFERENCE_TYPE_GENDER)
+            ->pluck('value', 'value')
+            ->toArray();
+        //end quick add customer
+
+        return view('plugins-order::order.create', compact('users', 'paymentMethods', 'orderSources', 'products', 'allCustomAttributes', 'genders', 'customerJobs', 'provincesCities', 'introducePersonIds', 'customerGroups', 'customerSources', 'customerRelationships'));
     }
 
     /**
@@ -322,9 +383,13 @@ class OrderController extends BaseAdminController
 
         AssetManager::addAsset('order-js', 'backend/plugins/order/assets/js/order.js');
 
+        AssetManager::addAsset('quick-add-resource-js', 'backend/plugins/order/assets/js/quick-add-resource.js');
+
         AssetPipeline::requireCss('order-css');
 
         AssetPipeline::requireJs('order-js');
+
+        AssetPipeline::requireJs('quick-add-resource-js');
     }
 
     /**
@@ -334,6 +399,9 @@ class OrderController extends BaseAdminController
     private function addCustomAttributesAsset()
     {
         AssetManager::addAsset('select2-css', 'libs/core/base/css/select2/select2.min.css');
+
+        AssetManager::addAsset('select2-bootstrap-css', 'libs/core/base/css/select2/select2-bootstrap.css');
+
         AssetManager::addAsset('bootstrap-switch-css', 'libs/plugins/product/css/toggle/bootstrap-switch.min.css');
         AssetManager::addAsset('switchery-css', 'libs/plugins/product/css/toggle/switchery.min.css');
         AssetManager::addAsset('admin-gallery-css', 'libs/core/base/css/gallery/admin-gallery.css');
@@ -354,6 +422,7 @@ class OrderController extends BaseAdminController
 
         AssetPipeline::requireCss('mini-colors-css');
         AssetPipeline::requireCss('select2-css');
+        AssetPipeline::requireCss('select2-bootstrap-css');
         AssetPipeline::requireCss('bootstrap-switch-css');
         AssetPipeline::requireCss('switchery-css');
         AssetPipeline::requireCss('admin-gallery-css');

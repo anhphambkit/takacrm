@@ -34,4 +34,17 @@ interface ProductServices {
      * @return mixed
      */
     public function getInfoPriceProduct(int $productId);
+
+    /**
+     * Get template excel to import
+     * @return mixed
+     */
+    public function getTemplateExcel();
+
+    /**
+     * import product from template excel
+     * @param $template
+     * @return mixed
+     */
+    public function importProduct($template);
 }

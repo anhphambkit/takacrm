@@ -24,4 +24,15 @@ $router->group(['prefix' => 'admin'], function (Router $router) {
         'uses' => 'Admin\ProductController@getInfoPriceProduct',
     ]);
 
+    /** import product */
+    $router->group(['prefix' => 'product'], function (Router $route){
+        $route->get('/import/download', 'Admin\ProductController@downloadTemplateExcel')
+            ->name('ajax.admin.product.import.download');
+
+        $route->post('/import/process', 'Admin\ProductController@importProduct')
+            ->name('ajax.admin.product.import.process');
+    });
+
+    /** end import product */
+
 });

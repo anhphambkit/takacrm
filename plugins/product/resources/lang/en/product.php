@@ -19,6 +19,7 @@ return [
     'custom_attributes' => 'Custom Attributes',
     'advanced_info' => 'Advanced Information',
     'url_landing_page' => 'Landing page',
+    'upload_product'    => 'Upload Product',
 
     'form' => [
         'upc' => 'UPC',
