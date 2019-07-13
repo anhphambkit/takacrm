@@ -3,6 +3,7 @@ return [
     [
         'name' => 'Order',
         'flag' => 'plugins.order',
+        'is_feature' => true,
     ],
 
     [
@@ -13,6 +14,11 @@ return [
     [
         'name' => 'Create',
         'flag' => 'order.create',
+        'parent_flag' => 'order.list',
+    ],
+    [
+        'name' => 'View',
+        'flag' => 'order.view',
         'parent_flag' => 'order.list',
     ],
     [
@@ -35,20 +41,20 @@ return [
     [
         'name'        => 'Create',
         'flag'        => 'order.payments.create',
-        'parent_flag' => 'order_payments.list',
+        'parent_flag' => 'order.payments.list',
     ],
     [
         'name'        => 'Edit',
         'flag'        => 'order.payments.edit',
-        'parent_flag' => 'order_payments.list',
+        'parent_flag' => 'order.payments.list',
     ],
     [
         'name'        => 'Delete',
         'flag'        => 'order.payments.delete',
-        'parent_flag' => 'order_payments.list',
+        'parent_flag' => 'order.payments.list',
     ],
 
-    //Order
+    //Order Source
     [
         'name'        => 'Sources Order',
         'flag'        => 'order.sources.list',
@@ -57,16 +63,16 @@ return [
     [
         'name'        => 'Create',
         'flag'        => 'order.sources.create',
-        'parent_flag' => 'order_sources.list',
+        'parent_flag' => 'order.sources.list',
     ],
     [
         'name'        => 'Edit',
         'flag'        => 'order.sources.edit',
-        'parent_flag' => 'order_sources.list',
+        'parent_flag' => 'order.sources.list',
     ],
     [
         'name'        => 'Delete',
         'flag'        => 'order.sources.delete',
-        'parent_flag' => 'order_sources.list',
+        'parent_flag' => 'order.sources.list',
     ],
 ];

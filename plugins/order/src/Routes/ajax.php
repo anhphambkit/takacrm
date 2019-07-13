@@ -17,6 +17,7 @@ $router->group(['prefix' => 'admin'], function (Router $router) {
     $router->get('/get-list-order', [
         'as' => 'ajax.admin.get_list_order',
         'uses' => 'Admin\OrderController@getListOrder',
+        'middleware' => 'access:order.list'
     ]);
 
     /** quick add resource */

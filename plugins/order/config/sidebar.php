@@ -9,7 +9,7 @@ return [
         'name'        => 'plugins-order::sidebar.administrator',
         'icon'        => 'fas fa-users-cog',
         'url'         => null,
-        'permissions' => ['orders.list']
+        'permissions' => ['plugins.order']
     ],
     [
         'id'          => 'menu-order-order',
@@ -18,7 +18,7 @@ return [
         'name'        => 'plugins-order::sidebar.order',
         'icon'        => 'fas fa-users-cog',
         'url'         => 'admin.order.list',
-        'permissions' => ['orders.list']
+        'permissions' => ['order.list']
     ],
     [
         'id'          => 'menu-order-payment',
@@ -27,7 +27,7 @@ return [
         'name'        => 'plugins-order::sidebar.payment',
         'icon'        => 'fas fa-money-check',
         'url'         => 'admin.order.payment.method.list',
-        'permissions' => ['order_payments.list']
+        'permissions' => ['order.payments.list']
     ],
     [
         'id'          => 'menu-order-source',
@@ -36,7 +36,7 @@ return [
         'name'        => 'plugins-order::sidebar.source_order',
         'icon'        => 'fab fa-sourcetree',
         'url'         => 'admin.order.source.method.list',
-        'permissions' => ['order_sources.list']
+        'permissions' => ['order.sources.list']
     ],
     [
         'id'          => 'menu-custom-attribute-order',
