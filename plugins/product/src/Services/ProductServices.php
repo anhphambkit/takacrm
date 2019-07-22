@@ -46,5 +46,5 @@ interface ProductServices {
      * @param $template
      * @return mixed
      */
-    public function importProduct($template);
+    public function importProduct($override, $template);
 }

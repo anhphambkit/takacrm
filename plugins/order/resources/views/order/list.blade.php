@@ -14,6 +14,7 @@
                 {{--@include('plugins-order::partials.layout-search-filter')--}}
             </div>
         </div>
+
         <div class="row table-order-area">
             <div class="col-md-12">
                 @include('plugins-order::partials.order-table')

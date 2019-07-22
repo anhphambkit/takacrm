@@ -1,14 +1,14 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modUploadProduct">
     <i class="fa fa-upload"></i> @lang('plugins-product::product.upload_product')
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modUploadProduct" tabindex="-1" role="dialog" aria-labelledby="modUploadProduct" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-uppercase blue mb10 font20 mg0" id="exampleModalLabel">Tải lên danh sách sản phẩm</h5>
+                <h5 class="modal-title text-uppercase blue mb10 font20 mg0" id="modUploadProduct">Tải lên danh sách sản phẩm</h5>
                 <!--button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button-->
@@ -39,7 +39,7 @@
             <div class="modal-footer">
                 <div class="col-md-8 p-0 tl mt10">
                     <div class="checkbox">
-                        <label><input type="checkbox" value="">&nbsp;Ghi đè dữ liệu nếu trùng mã</label>
+                        <label><input type="checkbox" value="" id="overwriteDuplicateCode">&nbsp;Ghi đè dữ liệu nếu trùng mã</label>
                     </div>
                 </div>
                 <div class="col-md-4 p-0 tr text-right">

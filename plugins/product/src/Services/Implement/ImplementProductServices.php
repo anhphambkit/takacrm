@@ -210,26 +210,7 @@ class ImplementProductServices implements ProductServices {
                 'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
             ]
         ], ['attributeOptions']);
-        $dataColumns = [
-            trans('plugins-product::product.product_code')                          => '',
-            trans('plugins-product::product.product_name')                          => '',
-            trans('plugins-product::product.form.category')                         => '',
-            trans('plugins-product::product.form.units')                            => '',
-            trans('plugins-product::product.form.manufacturer')                     => '',
-            trans('plugins-product::product.form.origins')                          => '',
-            trans('plugins-product::product.form.short_description')                => '',
-            trans('plugins-product::product.form.long_desc')                        => '',
-            trans('plugins-product::product.form.retail_price')                     => '',
-            trans('plugins-product::product.form.wholesale_price')                  => '',
-            trans('plugins-product::product.form.discount').'(%)'                   => '',
-            trans('plugins-product::product.form.wholesale_discount').'(%)'         => '',
-            trans('plugins-product::product.form.online_price')                     => '',
-            trans('plugins-product::product.form.online_discount').'(%)'            => '',
-            trans('plugins-product::product.form.purchase_price')                   => '',
-            trans('plugins-product::product.form.purchase_discount').'(%)'          => '',
-            trans('plugins-product::product.form.vat').'(%)'                        => ''
-        ];
-
+        $dataColumns = config('plugins-product.product.export_columns');
         if($allProductCustomAttributes)
             foreach ($allProductCustomAttributes as $attribute){
                 $dataColumns[$attribute->name] = '';
@@ -280,20 +261,25 @@ class ImplementProductServices implements ProductServices {
     }
 
     /** import product from excel */
-    public function importProduct($templates){
+    public function importProduct($override, $templates){
         DB::beginTransaction();
         try{
+            $customAttrs = $this->customAttributeServices->getAllCustomAttributeByConditions([
+                [
+                    'type_entity', '=', strtolower(CustomAttributeConfig::REFERENCE_CUSTOM_ATTRIBUTE_TYPE_ENTITY_PRODUCT)
+                ]
+            ], ['attributeOptions']);
 
-            (new FastExcel)->import($templates[0], function($row){
+            $availableAttrs = $customAttrs->pluck('name')->toArray();
+            $mainColumns = config('plugins-product.product.export_columns');
 
+            (new FastExcel)->import($templates[0], function($row) use($override, $mainColumns, $availableAttrs){
                 $manufacturer = $this->quickAddProductProperties($row[trans('plugins-product::product.form.manufacturer')], 'manufacturer');
                 $unit = $this->quickAddProductProperties($row[trans('plugins-product::product.form.units')], 'unit');
                 $origin = $this->quickAddProductProperties($row[trans('plugins-product::product.form.origins')], 'origin');
                 $category = $this->quickAddProductProperties($row[trans('plugins-product::product.form.category')], 'category');
 
-
                 if(!$manufacturer || !$unit || !$origin || !$category) return false;
-
                 $products = [
                     'sku'                       => $row[trans('plugins-product::product.product_code')],
                     'name'                      => $row[trans('plugins-product::product.product_name')],
@@ -315,8 +301,32 @@ class ImplementProductServices implements ProductServices {
                     'vat'                       => floatval($row[trans('plugins-product::product.form.vat').'(%)']),
                     'created_by'                => Auth::id()
                 ];
+                $productOrigin = $this->repository->getModel()->where('sku', $products['sku'])->first();
+                if($override && $productOrigin)
+                    $products = $productOrigin->fill($products); 
                 $product = $this->repository->createOrUpdate($products);
+
                 if(!$product) return false;
+                //check row in attrbutes
+                //if row in attributes -> detach and add new
+                //if row not in attributes -> add attr to product attr -> add product attrs
+                //array_walk
+                //save()
+                // foreach($row as $key => $item){
+                //     if(array_key_exists($key, $mainColumns)) continue;
+                //     if(in_array($key, $availableAttrs)){
+                //         //update product attribute
+                //         echo 'available: ';
+                //         echo $key;
+                //         echo '<br/>';
+                //     }else{
+                //         //add new attribute and update product attribute
+                //         echo 'not available';
+                //         echo $key;
+                //         echo '<br/>';
+                //     }
+                // }
+                // dd('here');
             });
 
             DB::commit();

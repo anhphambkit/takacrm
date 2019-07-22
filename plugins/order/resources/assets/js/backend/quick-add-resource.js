@@ -216,7 +216,13 @@ customerForm.hasSwal = false;
 customerForm.hasToastr = false
 customerForm.beforeSubmit = (data)=>{}
 customerForm.afterDone = (response)=>{
-
+    $('#customer_name').val(response.data.full_name)
+    $('#customer_code').val(response.data.customer_code)
+    $('#customer_phone').val(response.data.phone)
+    $('#customer_email').val(response.data.email)
+    $('#customer_address').val(response.data.address_full)
+    $('#customer_id').val(response.data.id)
+    $('#modQuickAddCustomer').modal('hide')
     // $('#select-customer-list').select2({
     //     templateResult: function (response){
     //         return Helper.formatDataResultCustomerSelect2(this, response.data)

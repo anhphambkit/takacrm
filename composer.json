@@ -22,6 +22,7 @@
         "nette/utils": "^3.0",
         "predis/predis": "^1.1",
         "ramsey/uuid": "^3.8",
+        "rap2hpoutre/fast-excel": "^1.2",
         "srmklive/paypal": "~1.0",
         "yajra/laravel-datatables-buttons": "^4.5",
         "yajra/laravel-datatables-oracle": "~8.0"
