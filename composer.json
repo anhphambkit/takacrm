@@ -57,7 +57,8 @@
             "Plugins\\Address\\": "plugins/address/src",
             "Plugins\\Order\\": "plugins/order/src",
             "Plugins\\CustomAttributes\\": "plugins/custom-attributes/src",
-            "Plugins\\History\\": "plugins/history/src"
+            "Plugins\\History\\": "plugins/history/src",
+            "Plugins\\Tenancy\\": "plugins/tenancy/src"
         },
         "files": [
             "helpers.php"

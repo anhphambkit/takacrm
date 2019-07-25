@@ -12,9 +12,13 @@
 */
 use Illuminate\Routing\Router;
 
-Route::get('/', function () {
-	return view('homepage');
-});
+/**
+ * @var Router $router
+ */
+$router->get('/', [
+    'as'         => 'homepage',
+    'uses'       => 'WebController@showHomePage',
+]);
 
 /** @var Router $router */
 $router->group(['prefix' => 'auth'], function (Router $router) {

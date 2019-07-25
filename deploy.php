@@ -37,11 +37,11 @@ task('deploy:dev', [
 //    'deploy:mkdir-framework',
 //    'deploy:vendors',
 //    'deploy:node',
-//    'deploy:build',
+    'deploy:build',
     'deploy:upload',
     'deploy:clear-cache',
-//    'deploy:permission',
-//    'deploy:chmod',
+    'deploy:permission',
+    'deploy:chmod',
 ]);
 
 task('deploy:upload', function(){ //
@@ -130,7 +130,14 @@ task('deploy:build', function(){ // Build frontend
     ];
 
     $pluginModules = [
+        'blog',
+        'customer-attributes',
         'customer',
+        'faq',
+        'history',
+        'newsletter',
+        'order',
+        'product',
     ];
 
     foreach ($coreModules as $coreModule) {

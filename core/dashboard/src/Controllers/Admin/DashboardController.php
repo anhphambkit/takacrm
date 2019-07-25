@@ -1,6 +1,7 @@
 <?php
 namespace Core\Dashboard\Controllers\Admin;
 use Core\Base\Controllers\Admin\BaseAdminController;
+use Core\User\Models\User;
 use Illuminate\Validation\ValidationException;
 
 class DashboardController extends BaseAdminController{
@@ -16,6 +17,7 @@ class DashboardController extends BaseAdminController{
      */
     public function index()
     {
+        dd(User::all());
         return view('core-dashboard::admin.index');
     }
 }

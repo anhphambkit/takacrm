@@ -1,5 +1,7 @@
 <?php 
 namespace Core\Base\Providers;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Core\Master\Supports\Helper;
 use Core\Master\Providers\MasterServiceProvider;

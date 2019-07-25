@@ -23,6 +23,10 @@ class WebController extends BasePublicController{
         return view('core-user::auth.login');
     }
 
+    public function showHomePage() {
+        return view('homepage');
+    }
+
     /**
      * Validate login system
      * @author TrinhLe

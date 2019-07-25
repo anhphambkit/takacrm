@@ -1,0 +1,10 @@
+{
+    "name": "Tenancy",
+    "provider": "Plugins\\Tenancy\\Providers\\TenancyServiceProvider",
+    "plugin": "Plugins\\Tenancy\\Plugin",
+    "author": "Trinh Le",
+    "version": "1.0",
+    "description": "Tenancy",
+    "namespace": "Plugins\\Tenancy\\",
+    "src": "plugins/tenancy/src"
+}
