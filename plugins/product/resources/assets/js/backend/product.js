@@ -55,14 +55,16 @@ $('#btnUploadFile').click(function () {
     $files.forEach((item)=>{
         formData.append('templates[]', item.file)
     })
-
+    let overwriteDuplicateCode = $('#overwriteDuplicateCode').is(":checked")
+    formData.append('overwrite', overwriteDuplicateCode)
     axios.post(API.IMPORT.PROCESS, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     }).then((response)=>{
+        console.log(response)
         MessageService.showMessage('success', response.message, 'Hoàn Thành')
-        $('#exampleModal').modal('hide')
+        $('#modUploadProduct').modal('hide')
     }).catch((error)=>{
         MessageService.showMessage('error', error.message, 'Lỗi')
     })

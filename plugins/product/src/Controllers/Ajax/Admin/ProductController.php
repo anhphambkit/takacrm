@@ -70,7 +70,7 @@ class ProductController extends BaseAdminController
      * @return \Illuminate\Http\JsonResponse
      */
     public function importProduct(ImportProductRequest $request){
-        $result = $this->productServices->importProduct($request->file('templates'));
+        $result = $this->productServices->importProduct($request->get('overwrite'),$request->file('templates'));
         if(!$result)
             return response()->json(['message' => 'Vui lòng điền đầy đủ thông tin'], 400);
         return response()->json(['message'  => 'File has been import success']);

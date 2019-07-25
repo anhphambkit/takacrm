@@ -26,6 +26,7 @@
                                         <div class="row">
                                             <div class="col-md-10 pr-0">
                                                 {!! Form::select('customer_id', [], old('customer_id'), ['class' => 'custom-select select2-placeholder-single form-control customer-list', "id" => "select-customer-list" ]) !!}
+                                                <input type="hidden" name="customer_id" id="customer_id"/>
                                             </div>
                                             <div class="col-md-2 pl-0">
                                                 <button class="btn btn-primary" data-toggle="modal" data-target="#modQuickAddCustomer" type="button">

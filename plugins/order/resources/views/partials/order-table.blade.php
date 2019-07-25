@@ -25,6 +25,27 @@
     </div>
     <div class="card-content collpase show">
         <div class="card-body">
+
+            <div class="row mb-1">
+                <div class="fr col-12 text-right" id="toolbar">  
+                    <div class="btn-group" id="upload_panel"> 
+                        <button class="btn btn-primary btn-sm excel_upload" data-toggle="modal" data-target="#myModal"> Upload&nbsp;&nbsp;<i class="fa fa-upload"></i> </button> 
+                    </div>   
+                    <div class="btn-group" id="download_panel"> 
+                        <div class="dropdown">
+                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-download"></i>&nbsp;Download
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#"><i class="fa fa-file-excel-o green pr10" aria-hidden="true"></i> Bản download rút gọn</a>
+                                <a class="dropdown-item" href="#"><i class="fa fa-file-excel-o green pr10" aria-hidden="true"></i> Bản download đầy đủ có sản phẩm</a>
+                                <a class="dropdown-item" href="#"><i class="fa fa-file-pdf-o red pr10" aria-hidden="true"></i> In toàn bộ</a>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+
             <div class="row filter-search">
                 <div class="col-md-4 row-filter-status">
                     <button type="button" class="btn btn-dark active mr-1 btn-filter-search-all btn-filter-search btn-filter-custom mb-2" data-filter-type-group="status" data-filter-type="ALL" data-filter-value="ALL">
