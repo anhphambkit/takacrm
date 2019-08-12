@@ -14,7 +14,7 @@
 
 namespace Plugins\Tenancy\Commands;
 
-use Plugins\Tenancy\Contracts\Repositories\WebsiteRepository;
+use Plugins\Tenancy\Repositories\Interfaces\WebsiteRepository;
 use Plugins\Tenancy\Environment;
 use Plugins\Tenancy\Traits\DispatchesEvents;
 use Illuminate\Console\Command;

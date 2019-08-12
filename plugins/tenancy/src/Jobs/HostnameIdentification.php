@@ -15,7 +15,7 @@
 namespace Plugins\Tenancy\Jobs;
 
 use Plugins\Tenancy\Contracts\Hostname;
-use Plugins\Tenancy\Contracts\Repositories\HostnameRepository;
+use Plugins\Tenancy\Repositories\Interfaces\HostnameRepository;
 use Plugins\Tenancy\Events;
 use Plugins\Tenancy\Traits\DispatchesEvents;
 use Illuminate\Http\Request;

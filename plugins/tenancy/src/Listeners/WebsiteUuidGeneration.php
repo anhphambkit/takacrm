@@ -54,8 +54,10 @@ class WebsiteUuidGeneration
      */
     public function addUuid(Creating $event)
     {
-        if (! $event->website->uuid && $this->config->get('tenancy.website.disable-random-id') !== true) {
-            $event->website->uuid = $this->generator->generate($event->website);
-        }
+//        if (! $event->website->uuid && $this->config->get('tenancy.website.disable-random-id') !== true) {
+//            $event->website->uuid = $this->generator->generate($event->website);
+//        }
+        $event->website->uuid = $event->tenantName;
+        $event->website->host_name = $event->tenantName;
     }
 }

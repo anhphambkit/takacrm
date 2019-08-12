@@ -14,7 +14,7 @@
 
 namespace Plugins\Tenancy\Traits;
 
-use Plugins\Tenancy\Contracts\Repositories\WebsiteRepository;
+use Plugins\Tenancy\Repositories\Interfaces\WebsiteRepository;
 use Plugins\Tenancy\Database\Connection;
 use Plugins\Tenancy\Contracts\Website;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;

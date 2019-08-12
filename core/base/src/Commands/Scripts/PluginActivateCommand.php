@@ -80,6 +80,7 @@ class PluginActivateCommand extends Command
             }
 
             $plugin = app(PluginRepositories::class)->getFirstBy(['provider' => $content['provider']]);
+
             if (empty($plugin) || $plugin->status != 1) {
                 if (empty($plugin)) {
                     $plugin = app(PluginRepositories::class)->getModel();

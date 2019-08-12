@@ -36,14 +36,7 @@ class TenancyProvider extends ServiceProvider
             'tenancy'
         );
 
-        $this->publishes(
-            [__DIR__ . '/../../assets/migrations' => database_path('migrations')],
-            'tenancy'
-        );
-
         $this->registerModels();
-
-        $this->registerRepositories();
 
         $this->registerProviders();
 
@@ -65,18 +58,6 @@ class TenancyProvider extends ServiceProvider
         $this->app->bind(WebsiteContract::class, $config['website']);
 
         forward_static_call([$config['hostname'], 'observe'], FlushHostnameCache::class);
-    }
-
-    protected function registerRepositories()
-    {
-        $this->app->singleton(
-            Contracts\Repositories\HostnameRepository::class,
-            Repositories\HostnameRepository::class
-        );
-        $this->app->singleton(
-            Contracts\Repositories\WebsiteRepository::class,
-            Repositories\WebsiteRepository::class
-        );
     }
 
     protected function registerProviders()

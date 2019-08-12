@@ -38,6 +38,14 @@ class Hostname extends SystemModel implements HostnameContract
 
     protected $dates = ['under_maintenance_since'];
 
+    protected $fillable = [
+        'fqdn',
+        'redirect_to',
+        'force_https',
+        'under_maintenance_since',
+        'website_id' ,
+    ];
+
     public function website(): BelongsTo
     {
         return $this->belongsTo(config('tenancy.models.website'));

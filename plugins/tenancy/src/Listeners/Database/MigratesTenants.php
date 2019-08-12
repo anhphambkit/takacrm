@@ -60,10 +60,15 @@ class MigratesTenants
 
     protected function getMigrationPaths()
     {
-        if (($path = config('tenancy.db.tenant-migrations-path')) && ! empty($path)) {
-            return (array) $path;
+        $paths = [];
+
+        if (($systemPath = config('tenancy.db.system-migrations-path')) && !empty($systemPath))
+            array_push($paths, $systemPath);
+
+        if (($path = config('tenancy.db.tenant-migrations-path')) && !empty($path)) {
+            array_push($paths, $path);
         }
 
-        return [];
+        return $paths;
     }
 }

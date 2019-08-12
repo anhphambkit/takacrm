@@ -57,5 +57,6 @@ return [
         'api'   => 'api',
         'ajax'  => 'ajax',
     ],
-    'public_single_ending_url' => env('PUBLIC_SINGLE_ENDING_URL', null), 
+    'public_single_ending_url' => env('PUBLIC_SINGLE_ENDING_URL', null),
+    'current_database_connection' => env('DB_CONNECTION', 'mysql'),
 ];

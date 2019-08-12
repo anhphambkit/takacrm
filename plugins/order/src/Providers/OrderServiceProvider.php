@@ -46,7 +46,7 @@ class OrderServiceProvider extends ServiceProvider
      * @author TrinhLe
      * @return [array] [description]
      */
-    public function getRespositories():array
+    public function getRepositories():array
     {
         return [
             OrderRepositories::class           => \Plugins\Order\Models\Order::class,

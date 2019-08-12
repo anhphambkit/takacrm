@@ -307,12 +307,12 @@ abstract class RepositoriesAbstract implements RepositoryInterface
     /**
      * @param array $select
      * @param array $condition
+     * @param array $with
      * @return mixed
-     * @author TrinhLe
      */
-    public function select(array $select = ['*'], array $condition = [])
+    public function select(array $select = ['*'], array $condition = [], array $with = [])
     {
-        $data = $this->model->where($condition)->select($select);
+        $data = $this->model->with($with)->where($condition)->select($select);
         $this->resetModel();
         return $data;
     }

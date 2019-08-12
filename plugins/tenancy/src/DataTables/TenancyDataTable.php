@@ -3,7 +3,7 @@
 namespace Plugins\Tenancy\DataTables;
 
 use Core\Base\DataTables\DataTableAbstract;
-use Plugins\Tenancy\Repositories\Interfaces\TenancyRepositories;
+use Plugins\Tenancy\Repositories\Interfaces\HostnameRepository;
 
 class TenancyDataTable extends DataTableAbstract
 {
@@ -17,12 +17,6 @@ class TenancyDataTable extends DataTableAbstract
     {
         $data = $this->datatables
             ->eloquent($this->query())
-            ->editColumn('name', function ($item) {
-                return anchor_link(route('admin.tenancy.edit', $item->id), $item->name);
-            })
-            ->editColumn('checkbox', function ($item) {
-                return table_checkbox($item->id);
-            })
             ->editColumn('created_at', function ($item) {
                 return date_from_database($item->created_at, config('core-base.cms.date_format.date'));
             })
@@ -46,11 +40,20 @@ class TenancyDataTable extends DataTableAbstract
      */
     public function query()
     {
-       $model = app(TenancyRepositories::class)->getModel();
+       $model = app(HostnameRepository::class);
        /**
         * @var \Eloquent $model
         */
-       $query = $model->select(['tenancy.id', 'tenancy.name', 'tenancy.created_at', 'tenancy.status']);
+       $query = $model->select([
+           'hostnames.id',
+           'hostnames.fqdn',
+           'hostnames.force_https',
+           'hostnames.under_maintenance_since',
+           'hostnames.redirect_to',
+           'hostnames.created_at'
+       ], [], [
+           'website'
+       ]);
        return $query;
     }
 
@@ -63,30 +66,24 @@ class TenancyDataTable extends DataTableAbstract
     {
         return [
             'id' => [
-                'name' => 'tenancy.id',
+                'name' => 'hostnames.id',
                 'title' => trans('core-base::tables.id'),
                 'footer' => trans('core-base::tables.id'),
                 'width' => '20px',
                 'class' => 'searchable searchable_id',
             ],
-            'name' => [
-                'name' => 'tenancy.name',
+            'fqdn' => [
+                'name' => 'hostnames.fqdn',
                 'title' => trans('core-base::tables.name'),
                 'footer' => trans('core-base::tables.name'),
                 'class' => 'text-left searchable',
             ],
             'created_at' => [
-                'name' => 'tenancy.created_at',
+                'name' => 'hostnames.created_at',
                 'title' => trans('core-base::tables.created_at'),
                 'footer' => trans('core-base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'searchable',
-            ],
-            'status' => [
-                'name' => 'tenancy.status',
-                'title' => trans('core-base::tables.status'),
-                'footer' => trans('core-base::tables.status'),
-                'width' => '100px',
             ],
         ];
     }

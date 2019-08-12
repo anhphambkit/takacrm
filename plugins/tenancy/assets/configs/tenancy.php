@@ -213,6 +213,7 @@ return [
          * base_path() or database_path() to set this up.
          */
         'tenant-migrations-path' => database_path('migrations/tenant'),
+        'system-migrations-path' => database_path('migrations'),
 
         /**
          * The default Seeder class used on newly created databases and while
@@ -244,7 +245,7 @@ return [
          *
          * @info set to false to disable.
          */
-        'auto-create-tenant-database-user' => true,
+        'auto-create-tenant-database-user' => false,
 
         /**
          * Automatically rename the tenant database when the random id of the

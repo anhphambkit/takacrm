@@ -23,8 +23,19 @@ abstract class WebsiteEvent extends AbstractEvent
      */
     public $website;
 
-    public function __construct(Website &$website)
+    /**
+     * @var string
+     */
+    public $tenantName;
+
+    /**
+     * WebsiteEvent constructor.
+     * @param Website $website
+     * @param string|null $tenantName
+     */
+    public function __construct(Website &$website, string $tenantName = null)
     {
         $this->website = &$website;
+        $this->tenantName = $tenantName;
     }
 }

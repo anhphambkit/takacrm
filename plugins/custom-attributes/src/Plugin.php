@@ -12,9 +12,16 @@ class Plugin
      */
     public static function activate()
     {
+        $databaseConnection = config('core-base.cms.current_database_connection');
         Artisan::call('migrate', [
             '--force' => true,
             '--path' => 'plugins/custom-attributes/database/migrations',
+            '--database' => $databaseConnection,
+        ]);
+        Artisan::call('migrate', [
+            '--force' => true,
+            '--path' => "plugins/custom-attributes/database/migrations/{$databaseConnection}",
+            '--database' => $databaseConnection,
         ]);
     }
 
@@ -31,9 +38,16 @@ class Plugin
      */
     public static function remove()
     {
+        $databaseConnection = config('core-base.cms.current_database_connection');
         Artisan::call('migrate:rollback', [
             '--force' => true,
             '--path' => 'plugins/custom-attributes/database/migrations',
+            '--database' => $databaseConnection,
+        ]);
+        Artisan::call('migrate:rollback', [
+            '--force' => true,
+            '--path' => "plugins/custom-attributes/database/migrations/{$databaseConnection}",
+            '--database' => $databaseConnection,
         ]);
     }
 }

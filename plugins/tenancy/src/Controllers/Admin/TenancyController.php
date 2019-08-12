@@ -4,25 +4,23 @@ namespace Plugins\Tenancy\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Plugins\Tenancy\Requests\TenancyRequest;
-use Plugins\Tenancy\Repositories\Interfaces\TenancyRepositories;
 use Plugins\Tenancy\DataTables\TenancyDataTable;
 use Core\Base\Controllers\Admin\BaseAdminController;
+use AssetManager;
+use AssetPipeline;
+use Plugins\Tenancy\Services\TenancyServices;
 
 class TenancyController extends BaseAdminController
 {
-    /**
-     * @var TenancyRepositories
-     */
-    protected $tenancyRepository;
+    protected $tenancyServices;
 
     /**
      * TenancyController constructor.
-     * @param TenancyRepositories $tenancyRepository
-     * @author TrinhLe
+     * @param TenancyServices $tenancyServices
      */
-    public function __construct(TenancyRepositories $tenancyRepository)
+    public function __construct(TenancyServices $tenancyServices)
     {
-        $this->tenancyRepository = $tenancyRepository;
+        $this->tenancyServices = $tenancyServices;
     }
 
     /**
@@ -48,19 +46,18 @@ class TenancyController extends BaseAdminController
     {
         page_title()->setTitle(trans('plugins-tenancy::tenancy.create'));
 
+        $this->addAssets();
+
         return view('plugins-tenancy::create');
     }
 
     /**
-     * Insert new Tenancy into database
-     *
      * @param TenancyRequest $request
      * @return \Illuminate\Http\RedirectResponse
-     * @author TrinhLe
      */
     public function postCreate(TenancyRequest $request)
     {
-        $tenancy = $this->tenancyRepository->createOrUpdate($request->input());
+        $tenancy = $this->tenancyServices->registerTenant($request->all());
 
         do_action(BASE_ACTION_AFTER_CREATE_CONTENT, TENANCY_MODULE_SCREEN_NAME, $request, $tenancy);
 
@@ -142,5 +139,10 @@ class TenancyController extends BaseAdminController
                 'message' => trans('core-base::notices.cannot_delete'),
             ];
         }
+    }
+
+    public function addAssets() {
+        AssetManager::addAsset('pretty-checkbox', 'https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css');
+        AssetPipeline::requireCss('pretty-checkbox');
     }
 }

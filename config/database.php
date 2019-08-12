@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -54,11 +53,11 @@ return [
             'engine' => null,
         ],
 
-        'pgsql' => [
+        'tenant' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST', '127.0.0.1'),
             'port'     => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
+            'database' => 'bi_aaa',
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'prefix'   => env('DB_PREFIX', ''),
@@ -79,18 +78,16 @@ return [
         ],
 
         'system' => [
-            'driver' => 'mysql',
-            'host' => env('TENANCY_HOST', '127.0.0.1'),
-            'port' => env('TENANCY_PORT', '3306'),
-            'database' => env('TENANCY_DATABASE', 'tenancy'),
-            'username' => env('TENANCY_USERNAME', 'tenancy'),
-            'password' => env('TENANCY_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'prefix'   => env('DB_PREFIX', 'bi_'),
+            'charset' => 'utf8',
+            'schema'   => 'public',
+            'sslmode'  => 'prefer',
         ]
 
     ],

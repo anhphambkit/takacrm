@@ -33,6 +33,14 @@ class Website extends SystemModel implements WebsiteContract
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'uuid',
+        'host_name',
+        'host_ip',
+        'host_port',
+        'managed_by_database_connection'
+    ];
+
     public function hostnames(): HasMany
     {
         return $this->hasMany(config('tenancy.models.hostname'));

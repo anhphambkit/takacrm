@@ -146,10 +146,10 @@ interface RepositoryInterface
     /**
      * @param array $select
      * @param array $condition
+     * @param array $with
      * @return mixed
-     * @author TrinhLe
      */
-    public function select(array $select = ['*'], array $condition = []);
+    public function select(array $select = ['*'], array $condition = [], array $with = []);
 
     /**
      * @param array $condition

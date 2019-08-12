@@ -15,7 +15,12 @@ class TenancyRequest extends CoreRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'tenancy_name' => 'required|string',
+            'username' => 'required|string',
+            'password' => 'required|string|min:6',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email',
         ];
     }
 }
