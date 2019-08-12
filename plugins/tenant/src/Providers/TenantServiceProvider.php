@@ -9,8 +9,11 @@ use Plugins\Tenant\Repositories\Interfaces\TenantRepositories;
 use Plugins\Tenant\Services\DatabaseConnection;
 use Plugins\Tenant\Services\DatabaseGenerator;
 use Plugins\Tenant\Services\Implement\ImplementDatabaseConnection;
+use Plugins\Tenant\Services\Implement\ImplementServerServices;
 use Plugins\Tenant\Services\Implement\ImplementTenantServices;
+use Plugins\Tenant\Services\ServerServices;
 use Plugins\Tenant\Services\TenantServices;
+use Plugins\Tenant\Services\VhostGenerator;
 
 class TenantServiceProvider extends ServiceProvider
 {
@@ -41,6 +44,8 @@ class TenantServiceProvider extends ServiceProvider
         $this->app->singleton(TenantServices::class, ImplementTenantServices::class);
         $this->app->singleton(DatabaseConnection::class, ImplementDatabaseConnection::class);
         $this->app->singleton(DatabaseGenerator::class);
+        $this->app->singleton(VhostGenerator::class);
+        $this->app->singleton(ServerServices::class, ImplementServerServices::class);
         register_repositories($this);
     }
 

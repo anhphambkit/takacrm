@@ -28,4 +28,7 @@ interface TenantContracts
      * Allows manually setting the configuration during event callbacks.
      */
     const DIVISION_MODE_BYPASS = 'bypass';
+
+    const SERVER_NGINX = 'nginx';
+    const SERVER_APACHE = 'apache2';
 }

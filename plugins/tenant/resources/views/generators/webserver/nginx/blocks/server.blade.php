@@ -11,7 +11,7 @@ server {
 
     # root path of website; serve files from here
     root {{ public_path() }};
-    index index.php;
+    index index.php index.html index.htm index.nginx-debian.html;
 
     # logging
     access_log {{ storage_path('logs/')  }}{{ $hostname->fqdn }}.access.log;
@@ -24,17 +24,24 @@ server {
     @endif
 
     location / {
-        index index.php;
-        try_files $uri $uri/ $uri/index.php?$args /index.php?$args;
+        try_files $uri $uri/ /index.php?$query_string;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 
     # pass the PHP scripts to FastCGI server from upstream phpfcgi
     location ~ \.php(/|$) {
+        try_files        $uri =404;
         fastcgi_pass {{ array_get($config, 'php-sock') }};
         include fastcgi_params;
 
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
 
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param    SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
+
+    client_max_body_size 200M;
 }
+

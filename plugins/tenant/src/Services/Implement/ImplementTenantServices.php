@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Core\User\Models\User;
 use Plugins\Tenant\Repositories\Interfaces\TenantRepositories;
 use Plugins\Tenant\Services\DatabaseConnection;
+use Plugins\Tenant\Services\ServerServices;
 use Plugins\Tenant\Services\TenantServices;
 use Plugins\Tenant\Traits\DatabaseConnectionTrait;
 
@@ -31,13 +32,21 @@ class ImplementTenantServices implements TenantServices
     protected $databaseConnection;
 
     /**
+     * @var ServerServices
+     */
+    protected $serverServices;
+
+    /**
      * ImplementTenantServices constructor.
      * @param TenantRepositories $tenantRepositories
+     * @param ServerServices $serverServices
      * @param DatabaseConnection $databaseConnection
      */
-    public function __construct(TenantRepositories $tenantRepositories, DatabaseConnection $databaseConnection){
+    public function __construct(TenantRepositories $tenantRepositories, ServerServices $serverServices,
+                                DatabaseConnection $databaseConnection){
         $this->tenantRepositories = $tenantRepositories;
         $this->databaseConnection = $databaseConnection;
+        $this->serverServices = $serverServices;
     }
 
     /**
@@ -67,7 +76,10 @@ class ImplementTenantServices implements TenantServices
 
         }, 3);
 
+        // Create DB for tenant:
         $this->databaseConnection->createAndMigrateNewTenantDatabase($tenant);
+
+        // Create admin login for tenant:
         $adminData = [
             'username' => $data['username'],
             'email' => $data['email'],
@@ -76,6 +88,9 @@ class ImplementTenantServices implements TenantServices
             'last_name' => $data['last_name'],
         ];
         $this->databaseConnection->makeAdminTenant($adminData);
+
+        // Create vhost for server tenant:
+        $this->serverServices->generate($tenant);
     }
 
     /**

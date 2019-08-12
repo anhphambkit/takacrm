@@ -1,18 +1,10 @@
 <?php
 
-/*
- * This file is part of the hyn/multi-tenant package.
- *
- * (c) Daniël Klabbers <daniel@klabbers.email>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @see https://laravel-tenancy.com
- * @see https://github.com/hyn/multi-tenant
- */
-
 return [
+
+    'use_server_type' => env('USE_SERVER_TYPE', 'nginx'),
+    'default_localhost_ip' => env('DEFAULT_LOCALHOST_IP', '127.0.0.1'),
+    'path_server_hosts' => env('PATH_SERVER_HOSTS', '/etc/hosts'),
 
     /**
      * Apache2 is one of the most widely adopted webserver packages available.
@@ -45,14 +37,9 @@ return [
         ],
 
         /**
-         * The generator taking care of hooking into the Apache services and files.
-         */
-        'generator' => \Plugins\Tenancy\Generators\Webserver\Vhost\ApacheGenerator::class,
-
-        /**
          * The view that holds the vhost configuration template.
          */
-        'view' => 'tenancy.generators::webserver.apache.vhost',
+        'view' => 'plugins-tenant::generators.webserver.apache.vhost',
 
         /**
          * Specify the disk you configured in the filesystems.php file where to store
@@ -110,7 +97,7 @@ return [
         /**
          * The php sock to be used.
          */
-        'php-sock' => 'unix:/var/run/php/php7.1-fpm.sock',
+        'php-sock' => 'unix:/Applications/MAMP/Library/logs/fastcgi/nginxFastCGI.sock',
 
         /**
          * Define the ports of your nginx service.
@@ -121,7 +108,7 @@ return [
              *
              * @default 80
              */
-            'http' => 80,
+            'http' => 81,
             /**
              * HTTPS, SSL port.
              *
@@ -131,14 +118,9 @@ return [
         ],
 
         /**
-         * The generator taking care of hooking into the nginx services and files.
-         */
-        'generator' => \Plugins\Tenancy\Generators\Webserver\Vhost\NginxGenerator::class,
-
-        /**
          * The view that holds the vhost configuration template.
          */
-        'view' => 'tenancy.generators::webserver.nginx.vhost',
+        'view' => 'plugins-tenant::generators.webserver.nginx.vhost',
 
         /**
          * Specify the disk you configured in the filesystems.php file where to store
@@ -153,10 +135,7 @@ return [
             /**
              * Location where vhost configuration files can be found.
              */
-            'vhost-files' => [
-                '/etc/nginx/sites-enabled/',
-//                '/Applications/MAMP/conf/nginx/sites-enabled/'
-            ],
+            'vhost-files' => '/Applications/MAMP/conf/nginx/sites-enabled/',
 
             /**
              * Actions to run to work with the Nginx service.
