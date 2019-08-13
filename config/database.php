@@ -57,7 +57,7 @@ return [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST', '127.0.0.1'),
             'port'     => env('DB_PORT', '5432'),
-            'database' => 'bi_aaa',
+            'database' => 'bi_anh_pham',
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'prefix'   => env('DB_PREFIX', ''),

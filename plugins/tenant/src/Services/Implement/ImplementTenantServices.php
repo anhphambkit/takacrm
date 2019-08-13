@@ -60,7 +60,7 @@ class ImplementTenantServices implements TenantServices
     public function registerTenant(array $data)
     {
         $tenant = DB::transaction(function () use ($data) {
-            $baseUrl = config('plugins-tenant.tenant.tenant_default_hostname');
+            $baseUrl = config('tenant.tenant_default_hostname');
             $portalName = strtolower(str_slug($data['host_name'], "_"));
             $dataTenant = [
                 'host_name' => $data['host_name'],
@@ -90,6 +90,8 @@ class ImplementTenantServices implements TenantServices
             'password' => bcrypt($data['password']),
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
+            'super_user' => true,
+            'manage_supers' => true,
         ];
 
         $this->databaseConnection->makeAdminTenant($adminData);

@@ -135,7 +135,8 @@ class DashboardMenu
     public function getAll()
     {
         if (config('core-base.cms.enable_cache_dashboard_menu')) {
-            $cache_key = md5('cache-dashboard-menu-' . Auth::user()->getKey());
+            $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
+            $cache_key = md5("{$subDomain}_cache-dashboard-menu-" . Auth::user()->getKey());
             if (!cache()->has($cache_key)) {
                 $links = collect($this->getChildren())->sortBy('priority');
                 cache()->forever($cache_key, $links);

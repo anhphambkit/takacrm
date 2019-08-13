@@ -43,6 +43,10 @@ class TenantServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->publishes([
+            __DIR__ . '/../../config/tenant.php' => config_path('tenant.php')
+        ], 'tenant-config');
+
         $this->app->singleton(TenantServices::class, ImplementTenantServices::class);
         $this->app->singleton(DatabaseConnection::class, ImplementDatabaseConnection::class);
         $this->app->singleton(DatabaseGenerator::class);
@@ -74,7 +78,7 @@ class TenantServiceProvider extends ServiceProvider
             if ($this->app->runningInConsole()) {
                 // Publish tenant migrations:
                 $tenantSources = $this->loadPackages(TENANT_SOURCE_MIGRATIONS);
-                $tenantPath = config('plugins-tenant.tenant.db.tenant-connection-name');
+                $tenantPath = config('tenant.db.tenant-connection-name');
                 foreach ($tenantSources as $group => $dir) {
                     $this->publishes([
                         $dir => database_path("migrations/{$tenantPath}"),
@@ -83,7 +87,7 @@ class TenantServiceProvider extends ServiceProvider
 
                 // Publish system migrations:
                 $systemSources = $this->loadPackages(SYSTEM_SOURCE_MIGRATIONS);
-                $systemPath = config('plugins-tenant.tenant.db.system-connection-name');
+                $systemPath = config('tenant.db.system-connection-name');
                 foreach ($systemSources as $group => $dir) {
                     $this->publishes([
                         $dir => database_path("migrations/{$systemPath}"),

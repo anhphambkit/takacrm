@@ -109,7 +109,7 @@ class PluginActiveTenant extends Command
 
             $connectionName = $connectionName ?? $this->databaseConnection->tenantName();
 
-            $this->databaseConnection->updateConfigurationConnectionTenant($tenant, $connectionName);
+            update_configuration_connection_tenant($tenant, $connectionName);
             $dbExt = $this->databaseConnection->connectToDBByConnectionName($connectionName);
             $tableName = app(PluginRepositories::class)->getTable();
 

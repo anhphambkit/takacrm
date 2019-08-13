@@ -22,6 +22,8 @@ use Core\Base\Repositories\Eloquent\EloquentPluginRepositories;
 use Core\Base\Repositories\Cache\CachePluginRepositories;
 use Illuminate\Support\Facades\Validator;
 use Event;
+use Plugins\Tenant\Repositories\Interfaces\TenantRepositories;
+use Plugins\Tenant\Services\DatabaseConnection;
 
 class BaseServiceProvider extends ServiceProvider
 {	
@@ -38,13 +40,11 @@ class BaseServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-        $this->publishes([
-            __DIR__ . '/../../config/core-general.php' => config_path('core-general.php')
-        ], 'core-general');
+        Helper::autoloadHelpers();
 
-		Helper::autoloadHelpers();
-		
-		/**
+        function_exists('set_current_database_connection') ? set_current_database_connection() : null;
+
+        /**
          * @var Router $router
          */
         $router = $this->app['router'];
@@ -56,7 +56,8 @@ class BaseServiceProvider extends ServiceProvider
 		
 		$this->app->singleton(ExceptionHandler::class, Handler::class);
 
-		$this->app->singleton(PluginRepositories::class, function () {
+
+        $this->app->singleton(PluginRepositories::class, function () {
             $repository = new EloquentPluginRepositories(new \Core\Base\Models\Plugin());
 
             if (! setting('enable_cache', false)) {
@@ -64,6 +65,7 @@ class BaseServiceProvider extends ServiceProvider
             }
             return new CachePluginRepositories($repository);
         });
+
 
         $this->app->register(PluginServiceProvider::class);
 	}
@@ -74,13 +76,6 @@ class BaseServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
-
-//        if (!empty($subDomain)) {
-//            config()->set('database.default', 'pgsql');
-//            DB::connection()->reconnect();
-//        }
-
         # load config important use helper.
 		$this->cmsLoadTranslates();
 		$this->cmsLoadConfigs();
@@ -100,7 +95,7 @@ class BaseServiceProvider extends ServiceProvider
 		
         add_filter(DASHBOARD_FILTER_MENU_NAME, [\Core\Dashboard\Hooks\DashboardMenuHook::class, 'renderMenuDashboard']);
         add_filter(BASE_FILTER_GET_LIST_DATA, [$this, 'addLanguageColumn'], 50, 2);
-        
+
         Event::listen(RouteMatched::class, function () {
             dashboard_menu()->loadRegisterMenus();
         });

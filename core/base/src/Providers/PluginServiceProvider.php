@@ -18,7 +18,6 @@ class PluginServiceProvider extends ServiceProvider
     public function boot()
     {
         $plugins = $this->loadPluginAvailable();
-
         foreach ($plugins as $plugin) {
             if (class_exists($plugin->provider)) {
                 $this->app->register($plugin->provider);

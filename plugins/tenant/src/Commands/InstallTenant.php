@@ -118,7 +118,7 @@ class InstallTenant extends Command
 
         $connectionName = $connectionName ?? $this->databaseConnection->tenantName();
 
-        $configDatabase = $this->databaseConnection->updateConfigurationConnectionTenant($tenant, $connectionName);
+        $configDatabase = update_configuration_connection_tenant($tenant, $connectionName);
         $this->databaseConnection->connectToDBByConnectionName($connectionName);
 
         $this->database = $configDatabase['database'];

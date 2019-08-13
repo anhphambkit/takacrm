@@ -35,19 +35,6 @@ interface DatabaseConnection
     public function tenantName(): string;
 
     /**
-     * @param Tenant $tenant
-     * @param null $connectionName
-     * @return array
-     */
-    public function updateConfigurationConnectionTenant(Tenant $tenant, $connectionName = null): array;
-
-    /**
-     * @param Tenant $tenant
-     * @return array
-     */
-    public function generateConfigurationArray(Tenant $tenant): array;
-
-    /**
      * @param string $driver
      * @return DatabaseGenerator
      * @throws \Exception

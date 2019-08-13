@@ -100,7 +100,7 @@ class ImplementDatabaseConnection implements DatabaseConnection
      */
     public function systemName(): string
     {
-        return config('plugins-tenant.tenant.db.system-connection-name');
+        return config('tenant.db.system-connection-name');
     }
 
     /**
@@ -108,39 +108,21 @@ class ImplementDatabaseConnection implements DatabaseConnection
      */
     public function tenantName(): string
     {
-        return config('plugins-tenant.tenant.db.tenant-connection-name');
+        return config('tenant.db.tenant-connection-name');
     }
 
     /**
-     * @param Tenant $tenant
-     * @param null $connectionName
+     * @param $tenant
      * @return array
      */
-    public function updateConfigurationConnectionTenant(Tenant $tenant, $connectionName = null): array {
-        $connectionName = $connectionName ?? $this->tenantName();
-        $configDatabase = $this->generateConfigurationArray($tenant);
-
-        // Sets current connection settings.
-        $this->config->set(
-            sprintf('database.connections.%s', $connectionName),
-            $configDatabase
-        );
-
-        return $configDatabase;
-    }
-
-    /**
-     * @param Tenant $tenant
-     * @return array
-     */
-    public function generateConfigurationArray(Tenant $tenant): array {
+    public function generateConfigurationArray($tenant): array {
         $clone = config(sprintf(
             'database.connections.%s',
             $tenant->managed_by_database_connection ?? $this->systemName()
         ));
 
-        $mode = config('plugins-tenant.tenant.db.tenant-division-mode');
-        $prefixTenant = config('plugins-tenant.tenant.db.database_tenant_prefix');
+        $mode = config('tenant.db.tenant-division-mode');
+        $prefixTenant = config('tenant.db.database_tenant_prefix');
 
         switch ($mode) {
             case TenantContracts::DIVISION_MODE_SEPARATE_DATABASE:
@@ -167,7 +149,7 @@ class ImplementDatabaseConnection implements DatabaseConnection
      */
     private function drivers()
     {
-        $isPgsqlSchema = config('plugins-tenant.tenant.db.tenant-division-mode') === TenantContracts::DIVISION_MODE_SEPARATE_SCHEMA;
+        $isPgsqlSchema = config('tenant.db.tenant-division-mode') === TenantContracts::DIVISION_MODE_SEPARATE_SCHEMA;
 
         return collect([
             'pgsql' => $isPgsqlSchema ? null : PostgreSQL::class,
@@ -211,7 +193,7 @@ class ImplementDatabaseConnection implements DatabaseConnection
     public function createAndMigrateNewTenantDatabase(Tenant $tenant, string $connectionName = null) {
         $connectionName = $connectionName ?? $this->tenantName();
         $this->updateCurrentDatabaseConnection($connectionName);
-        $configDatabase = $this->updateConfigurationConnectionTenant($tenant, $connectionName);
+        $configDatabase = update_configuration_connection_tenant($tenant, $connectionName);
         $databaseDriver = $this->getDatabaseInstanceByDriver($configDatabase['driver']);
         $databaseDriver->createDatabaseByConfig($configDatabase, $this->systemName(), $this);
         $this->connectToDBByConnectionName($connectionName);

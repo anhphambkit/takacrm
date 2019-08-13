@@ -30,7 +30,7 @@ class PostgreSQL implements DatabaseGenerator
     {
         $connection = $databaseConnection->connectToDBByConnectionName($connectionName);
 
-        $createUser = config('plugins-tenant.tenant.db.auto-create-tenant-database-user');
+        $createUser = config('tenant.db.auto-create-tenant-database-user');
 
         if ($createUser) {
             return
