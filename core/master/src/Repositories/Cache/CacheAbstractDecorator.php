@@ -22,6 +22,11 @@ abstract class CacheAbstractDecorator implements RepositoryInterface
      * @var Repository
      */
     protected $cache;
+
+    /**
+     * @var Repository
+     */
+    protected $subDomain;
     
     /**
      * @var string The entity name
@@ -37,6 +42,7 @@ abstract class CacheAbstractDecorator implements RepositoryInterface
     {
         $this->cache     = app(Repository::class);
         $this->cacheTime = app(ConfigRepository::class)->get('cache.time', 60);
+        $this->subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
     }
 
     /**
@@ -60,11 +66,10 @@ abstract class CacheAbstractDecorator implements RepositoryInterface
     public function getDataIfExistCache($function, array $args)
     {
         try {
-
-            $cacheKey = md5(get_class($this) . $function . serialize(request()->input()) . serialize(func_get_args()));
+            $cacheKey = md5($this->subDomain . get_class($this) . $function . serialize(request()->input()) . serialize(func_get_args()));
 
             return $this->cache
-            ->tags([$this->entityName, 'global'])
+            ->tags(["{$this->subDomain}_{$this->entityName}", 'global'])
             ->remember($cacheKey, $this->cacheTime,
                 function () use ($function, $args){
                     return $this->getDataWithoutCache($function, $args);
@@ -87,7 +92,7 @@ abstract class CacheAbstractDecorator implements RepositoryInterface
     public function flushCacheAndUpdateData($function, $args, bool $flushCache = true)
     {
         if ($flushCache) {
-            $this->cache->tags($this->entityName)->flush();
+            $this->cache->tags("{$this->subDomain}_{$this->entityName}")->flush();
         }
 
         return $this->getDataWithoutCache($function, $args);

@@ -55,14 +55,14 @@ return [
         'url'         => 'admin.product.origin.list',
         'permissions' => ['product_origins.list']
     ],
-    [
-        'id'          => 'menu-custom-attribute-product',
-        'priority'    => 7,
-        'parent_id'   => 'menu-product-administrator',
-        'name'        => 'plugins-custom-attributes::sidebar.custom_attributes',
-        'icon'        => 'far fa-list-alt',
-        'url'         => 'admin.custom-attributes.entity.list',
-        'params_url'  => [ 'typeEntity' => 'product' ],
-        'permissions' => ['custom-attributes.list']
-    ],
+//    [
+//        'id'          => 'menu-custom-attribute-product',
+//        'priority'    => 7,
+//        'parent_id'   => 'menu-product-administrator',
+//        'name'        => 'plugins-custom-attributes::sidebar.custom_attributes',
+//        'icon'        => 'far fa-list-alt',
+//        'url'         => 'admin.custom-attributes.entity.list',
+//        'params_url'  => [ 'typeEntity' => 'product' ],
+//        'permissions' => ['custom-attributes.list']
+//    ],
 ];

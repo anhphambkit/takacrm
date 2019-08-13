@@ -166,7 +166,8 @@ class DashboardMenu
      */
     public function loadRegisterMenus()
     {
-        $sources =  Cache::tags('loadPackages')->remember("allPackages", 120, function(){
+        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
+        $sources =  Cache::tags("{$subDomain}_loadPackages")->remember("{$subDomain}_allPackages", 120, function(){
             return loadPackages('');
         });
 

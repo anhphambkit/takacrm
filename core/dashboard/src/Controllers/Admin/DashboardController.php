@@ -36,6 +36,7 @@ class DashboardController extends BaseAdminController{
 //        dd($query);
 //
 ////        dd(User::all());
+///
         return view('core-dashboard::admin.index');
     }
 }

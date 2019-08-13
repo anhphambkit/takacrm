@@ -1,7 +1,8 @@
 <?php
-
+/*
+ * include /Users/anhpham/Documents/workspace/php/takacrm/storage/app/Applications/MAMP/conf/nginx/sites-enabled/*;
+ */
 return [
-
     'use_server_type' => env('USE_SERVER_TYPE', 'nginx'),
     'default_localhost_ip' => env('DEFAULT_LOCALHOST_IP', '127.0.0.1'),
     'path_server_hosts' => env('PATH_SERVER_HOSTS', '/etc/hosts'),

@@ -9,6 +9,8 @@ use Core\Media\Models\MediaFile;
 use Core\Media\Models\MediaFolder;
 use Illuminate\Contracts\Filesystem\Factory;
 use Core\User\Models\User;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Process\Process;
 
@@ -54,7 +56,25 @@ class CommandTest extends Command
      */
     public function handle()
     {
+//        config()->set('core-base.cms.current_database_connection', 'pgsql');
+//        DB::connection()->reconnect();
 
+        $plugins = [
+            'product',
+            'blog',
+            'custom-attributes',
+            'customer',
+            'faq',
+            'history',
+            'newsletter',
+            'order',
+        ];
+
+        foreach ($plugins as $plugin) {
+            (new Process(sprintf('php artisan plugin:activate %s', $plugin)))
+                ->mustRun()
+                ->isSuccessful();
+        }
     }
 
     /**

@@ -66,4 +66,9 @@ interface DatabaseConnection
      * @return mixed
      */
     public function makeAdminTenant(array $data);
+
+    /**
+     * @param string|null $connectionName
+     */
+    public function updateCurrentDatabaseConnection(string $connectionName = null);
 }

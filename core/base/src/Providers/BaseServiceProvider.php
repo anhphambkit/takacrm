@@ -2,6 +2,7 @@
 namespace Core\Base\Providers;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Core\Master\Supports\Helper;
 use Core\Master\Providers\MasterServiceProvider;
@@ -37,6 +38,10 @@ class BaseServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
+        $this->publishes([
+            __DIR__ . '/../../config/core-general.php' => config_path('core-general.php')
+        ], 'core-general');
+
 		Helper::autoloadHelpers();
 		
 		/**
@@ -68,8 +73,15 @@ class BaseServiceProvider extends ServiceProvider
 	 * @return type
 	 */
 	public function boot()
-	{	
-		# load config important use helper.
+	{
+        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
+
+//        if (!empty($subDomain)) {
+//            config()->set('database.default', 'pgsql');
+//            DB::connection()->reconnect();
+//        }
+
+        # load config important use helper.
 		$this->cmsLoadTranslates();
 		$this->cmsLoadConfigs();
 		$this->cmsLoadViews();

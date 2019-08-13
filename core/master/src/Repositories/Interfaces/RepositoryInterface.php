@@ -15,6 +15,12 @@ interface RepositoryInterface
     public function getModel();
 
     /**
+     * @param string $connectionName
+     * @return Model
+     */
+    public function setDatabaseConnection(string $connectionName);
+
+    /**
      * @param $data
      * @param $screen
      * @param bool $is_single

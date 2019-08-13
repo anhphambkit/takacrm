@@ -13,6 +13,11 @@ abstract class RepositoriesAbstract implements RepositoryInterface
     protected $originalModel;
 
     /**
+     * @var
+     */
+    protected $databaseConnection;
+
+    /**
      * @var Eloquent
      */
     protected $model;
@@ -64,6 +69,16 @@ abstract class RepositoriesAbstract implements RepositoryInterface
     }
 
     /**
+     * @param string $connectionName
+     * @return Model
+     */
+    public function setDatabaseConnection(string $connectionName)
+    {
+        $this->databaseConnection = $connectionName;
+        return $this->model->setConnection($this->databaseConnection);
+    }
+
+    /**
      * @return $this
      */
     public function resetModel()
@@ -94,14 +109,9 @@ abstract class RepositoriesAbstract implements RepositoryInterface
      */
     public function getFirstBy(array $condition = [], array $select = ['*'], array $with = [])
     {
-
         $this->make($with);
 
-        if (!empty($select)) {
-            $data = $this->model->where($condition)->select($select)->first();
-        } else {
-            $data = $this->model->where($condition)->first();
-        }
+        $data = $this->model->where($condition)->first();
 
         $this->resetModel();
 
@@ -473,7 +483,7 @@ abstract class RepositoriesAbstract implements RepositoryInterface
      */
     public function make(array $with = [])
     {
-        $this->model = $this->model->with($with);
+        $this->model = $this->model->setConnection($this->databaseConnection)->with($with);
         return $this->model;
     }
 

@@ -8,6 +8,7 @@
 
 namespace Plugins\Tenant\Services\Implement;
 
+use App\Http\Kernel;
 use Core\User\Repositories\Interfaces\UserInterface;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -35,18 +36,21 @@ class ImplementTenantServices implements TenantServices
      * @var ServerServices
      */
     protected $serverServices;
+    protected $artisan;
 
     /**
      * ImplementTenantServices constructor.
      * @param TenantRepositories $tenantRepositories
      * @param ServerServices $serverServices
      * @param DatabaseConnection $databaseConnection
+     * @param Kernel $artisan
      */
     public function __construct(TenantRepositories $tenantRepositories, ServerServices $serverServices,
-                                DatabaseConnection $databaseConnection){
+                                DatabaseConnection $databaseConnection, Kernel $artisan){
         $this->tenantRepositories = $tenantRepositories;
         $this->databaseConnection = $databaseConnection;
         $this->serverServices = $serverServices;
+        $this->artisan = $artisan;
     }
 
     /**
@@ -87,6 +91,7 @@ class ImplementTenantServices implements TenantServices
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
         ];
+
         $this->databaseConnection->makeAdminTenant($adminData);
 
         // Create vhost for server tenant:

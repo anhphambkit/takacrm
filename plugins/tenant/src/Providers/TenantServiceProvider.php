@@ -4,6 +4,8 @@ namespace Plugins\Tenant\Providers;
 
 use Core\Master\Supports\LoadRegisterTrait;
 use Illuminate\Support\ServiceProvider;
+use Plugins\Tenant\Commands\InstallTenant;
+use Plugins\Tenant\Commands\PluginActiveTenant;
 use Plugins\Tenant\Models\Tenant;
 use Plugins\Tenant\Repositories\Interfaces\TenantRepositories;
 use Plugins\Tenant\Services\DatabaseConnection;
@@ -55,6 +57,10 @@ class TenantServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishMigrationTenancy();
+        $this->commands([
+            InstallTenant::class,
+            PluginActiveTenant::class
+        ]);
     }
 
     /**

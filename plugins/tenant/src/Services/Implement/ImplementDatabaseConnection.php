@@ -8,6 +8,10 @@
 
 namespace Plugins\Tenant\Services\Implement;
 
+use Carbon\Carbon;
+use Core\User\AclManager;
+use Core\User\Models\Activation;
+use Core\User\Models\User;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -15,11 +19,13 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Plugins\Tenancy\Events;
 use Plugins\Tenant\Contracts\TenantContracts;
 use Plugins\Tenant\Models\Tenant;
 use Plugins\Tenant\Services\DatabaseConnection;
 use Plugins\Tenant\Services\DatabaseGenerator;
+use Symfony\Component\Process\Process;
 
 class ImplementDatabaseConnection implements DatabaseConnection
 {
@@ -209,26 +215,30 @@ class ImplementDatabaseConnection implements DatabaseConnection
         $databaseDriver = $this->getDatabaseInstanceByDriver($configDatabase['driver']);
         $databaseDriver->createDatabaseByConfig($configDatabase, $this->systemName(), $this);
         $this->connectToDBByConnectionName($connectionName);
-        Artisan::call('lcms:migrate', [
-            'path' => $connectionName,
+        // Install/migrate tenant
+        $this->artisan->call('tenant:install', [
+            'tenant_id' => $tenant->id,
+            'connection' => $connectionName,
         ]);
-        // Active all plugin of tenant:
-        $plugins = config('plugins-tenant.tenant.active-plugins');
-        foreach ($plugins as $plugin) {
-            Artisan::call('plugin:activate', [
-                'name' => $plugin,
-            ]);
-        }
         $this->updateCurrentDatabaseConnection();
+        $this->connectToDBByConnectionName();
     }
 
     /**
      * @param array $data
-     * @return mixed
+     * @return int|mixed
      */
     public function makeAdminTenant(array $data) {
-        $dbExt = DB::connection($this->tenantName());
-        $user = $dbExt->table(config('plugins-tenant.tenant.system.user_table'))->insert($data);
-        return $user;
+        $dbExt = $this->connectToDBByConnectionName($this->tenantName());
+        $userId = $dbExt->table(app(User::class)->getTable())->insertGetId($data);
+        $now = Carbon::now();$activation = $dbExt->table(app(Activation::class)->getTable())->insert([
+            'user_id' => $userId,
+            'code' => Str::uuid()->toString(),
+            'completed' => true,
+            'completed_at' => $now,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+        return $userId;
     }
 }

@@ -175,3 +175,20 @@ if (function_exists('get_id_from_url') === false) {
         return (int)$id;
     }
 }
+
+if (!function_exists('get_sub_domain')) {
+    /**
+     * @return mixed
+     */
+    function get_sub_domain()
+    {
+        $domain        = \request()->getHost();
+        $primaryDomain = config('core-general.general.primary_domain');
+        $concatDomain  = config('core-general.general.portal_concat_domain');
+        $subDomain     = str_replace("{$concatDomain}{$primaryDomain}", "", $domain);
+
+        if ($subDomain === $primaryDomain)
+            return null;
+        return $subDomain;
+    }
+}
