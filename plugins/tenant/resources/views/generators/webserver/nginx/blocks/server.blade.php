@@ -1,6 +1,10 @@
 server {
 
     listen {{ array_get($config, 'ports.http', 80) }};
+    listen {{ array_get($config, 'ports.https', 443) }} ssl;
+    ssl on;
+    ssl_certificate {{ array_get($config, 'ssl_certificate', storage_path('app/ssl/takacrm.bi.pem')) }};
+    ssl_certificate_key {{ array_get($config, 'ssl_certificate_key', storage_path('app/ssl/takacrm.bi-key.pem')) }};
 
     # server hostnames
     server_name {{ $hostname->fqdn }};

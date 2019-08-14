@@ -107,13 +107,15 @@ class TenantController extends BaseAdminController
      */
     public function postEdit($id, TenantRequest $request)
     {
-        $tenant = $this->tenantRepository->findById($id);
-        if (empty($tenant)) {
+        $currentTenant = $this->tenantRepository->findById($id);
+
+        if (empty($currentTenant)) {
             abort(404);
         }
-        $tenant->fill($request->input());
 
-        $this->tenantRepository->createOrUpdate($tenant);
+        $data = $request->all();
+
+        $tenant = $this->tenantServices->updateTenant($data, $currentTenant);
 
         do_action(BASE_ACTION_AFTER_UPDATE_CONTENT, TENANT_MODULE_SCREEN_NAME, $request, $tenant);
 

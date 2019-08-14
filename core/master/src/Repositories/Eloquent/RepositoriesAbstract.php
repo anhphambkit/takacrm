@@ -483,7 +483,7 @@ abstract class RepositoriesAbstract implements RepositoryInterface
      */
     public function make(array $with = [])
     {
-        $this->model = $this->model->setConnection($this->databaseConnection)->with($with);
+        $this->model = $this->model->with($with);
         return $this->model;
     }
 

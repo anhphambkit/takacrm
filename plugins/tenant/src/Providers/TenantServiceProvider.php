@@ -3,7 +3,9 @@
 namespace Plugins\Tenant\Providers;
 
 use Core\Master\Supports\LoadRegisterTrait;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 use Plugins\Tenant\Commands\InstallTenant;
 use Plugins\Tenant\Commands\PluginActiveTenant;
 use Plugins\Tenant\Models\Tenant;
@@ -53,6 +55,7 @@ class TenantServiceProvider extends ServiceProvider
         $this->app->singleton(VhostGenerator::class);
         $this->app->singleton(ServerServices::class, ImplementServerServices::class);
         register_repositories($this);
+        $this->registerValidation();
     }
 
     /**
@@ -105,5 +108,37 @@ class TenantServiceProvider extends ServiceProvider
         return [
             TenantRepositories::class => Tenant::class,
         ];
+    }
+
+    /**
+     * Register list extend validation
+     * @author TrinhLe
+     */
+    protected function registerValidation()
+    {
+        /**
+         * Create validation mutiple level
+         * @author TrinhLe
+         * @return boolean
+         */
+        Validator::extend('unique_tenant', function ($attribute, $value, $parameters, $validator) {
+            $valueFormated  = strtolower(str_slug($value, "_"));
+            $dbTable        = $parameters[0] ?? config('tenant.system.tenant_table');
+            $columnName     = $parameters[1] ?? $attribute;
+            $idRecord       = $parameters[2] ?? null;
+            $query = DB::table($dbTable)->where($columnName, $valueFormated);
+            if (!empty($idRecord))
+                $query = $query->where('id', '<>', $idRecord);
+            return !$query->exists();
+        });
+
+        /**
+         * Replace validation mutiple level
+         * @author TrinhLe ['portal' => $portal]
+         * @return String
+         */
+        Validator::replacer('unique_tenant', function ($message, $attribute, $rule, $parameters) {
+            return trans('plugins-tenant::tenant.messages.unique_tenant', [ 'attr' => $attribute ]);
+        });
     }
 }

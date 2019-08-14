@@ -20,12 +20,24 @@
                         <div class="card-body">
                             <div class="form-body">
                                 <div class="row">
-                                    <div class="form-group col-md-12 mb-2 @if ($errors->has('name')) has-error @endif">
-                                        <label for="name">{{ trans('core-base::forms.name') }}</label>
-                                        {!! Form::text('name', $tenant->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => trans('core-base::forms.name_placeholder'), 'data-counter' => 120]) !!}
-                                        {!! Form::error('name', $errors) !!}
+                                    <div class="form-group col-md-6 mb-2 @if ($errors->has('host_name')) has-error @endif">
+                                        <label for="name">{{ trans('plugins-tenant::tenant.form.tenancy_name') }}</label>
+                                        {!! Form::text('host_name', old('host_name') ?? $tenant->host_name, ['class' => 'form-control', 'id' => 'host_name', 'placeholder' => trans('plugins-tenant::tenant.form.tenancy_name'), 'data-counter' => 120]) !!}
+                                        {!! Form::error('host_name', $errors) !!}
                                     </div>
                                 </div>
+                                {{--<div class="row">--}}
+                                    {{--<div class="form-group col-md-6 mb-2 @if ($errors->has('redirect_to')) has-error @endif">--}}
+                                        {{--<label for="redirect_to">{{ trans('plugins-tenant::tenant.form.redirect_to') }}</label>--}}
+                                        {{--{!! Form::text('redirect_to', old('redirect_to'), ['class' => 'form-control', 'id' => 'redirect_to', 'placeholder' => trans('plugins-tenant::tenant.form.redirect_to'), 'data-counter' => 250]) !!}--}}
+                                        {{--{!! Form::error('redirect_to', $errors) !!}--}}
+                                    {{--</div>--}}
+                                    {{--<div class="form-group col-md-6 mb-2 @if ($errors->has('force_https')) has-error @endif">--}}
+                                        {{--<label for="force_https">{{ trans('plugins-tenant::tenant.form.force_https') }}</label>--}}
+                                        {{--{!! Form::onOffPretty('force_https', old('force_https'), ['id' => 'force_https' ], 'force_https-switch checkbox-large') !!}--}}
+                                        {{--{!! Form::error('force_https', $errors) !!}--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
                             </div>
                         </div>
                     </div>

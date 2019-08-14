@@ -20,6 +20,12 @@ return [
         'enabled' => false,
 
         /**
+         * Path ssl cert
+         */
+        'ssl_certificate' => storage_path('app/ssl/takacrm.bi.pem'),
+        'ssl_certificate_key' => storage_path('app/ssl/takacrm.bi-key.pem'),
+
+        /**
          * Define the ports of your Apache service.
          */
         'ports' => [
@@ -99,6 +105,12 @@ return [
          * The php sock to be used.
          */
         'php-sock' => 'unix:/Applications/MAMP/Library/logs/fastcgi/nginxFastCGI.sock',
+
+        /**
+         * Path ssl cert
+         */
+        'ssl_certificate' => storage_path('app/ssl/takacrm.bi.pem'),
+        'ssl_certificate_key' => storage_path('app/ssl/takacrm.bi-key.pem'),
 
         /**
          * Define the ports of your nginx service.

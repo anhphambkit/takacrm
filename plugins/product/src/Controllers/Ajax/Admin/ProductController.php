@@ -15,6 +15,7 @@ use Plugins\Product\Models\Product;
 use Plugins\Product\Models\ProductBusinessType;
 use Plugins\Product\Models\ProductCategory;
 use Plugins\Product\Models\ProductSpace;
+use Plugins\Product\Repositories\Interfaces\ProductCategoryRepositories;
 use Plugins\Product\Services\ProductServices;
 use Plugins\Product\Requests\ImportProductRequest;
 
@@ -25,9 +26,20 @@ class ProductController extends BaseAdminController
      */
     protected $productServices;
 
-    public function __construct(ProductServices $productServices)
+    /**
+     * @var ProductCategoryRepositories
+     */
+    protected $productCategoryRepositories;
+
+    /**
+     * ProductController constructor.
+     * @param ProductServices $productServices
+     * @param ProductCategoryRepositories $productCategoryRepositories
+     */
+    public function __construct(ProductServices $productServices, ProductCategoryRepositories $productCategoryRepositories)
     {
         $this->productServices = $productServices;
+        $this->productCategoryRepositories = $productCategoryRepositories;
     }
 
     /**
@@ -74,5 +86,15 @@ class ProductController extends BaseAdminController
         if(!$result)
             return response()->json(['message' => 'Vui lòng điền đầy đủ thông tin'], 400);
         return response()->json(['message'  => 'File has been import success']);
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function getChildCategories(Request $request) {
+        $categoryId = (int)$request->get('category_id');
+        $categories = $this->productCategoryRepositories->allBy(
+
+        );
     }
 }

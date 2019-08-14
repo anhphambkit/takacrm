@@ -8,6 +8,8 @@
 
 namespace Plugins\Tenant\Services;
 
+use Plugins\Tenant\Models\Tenant;
+
 interface TenantServices
 {
     /**
@@ -15,4 +17,11 @@ interface TenantServices
      * @return mixed
      */
     public function registerTenant(array $data);
+
+    /**
+     * @param array $data
+     * @param Tenant $currentTenant
+     * @return mixed
+     */
+    public function updateTenant(array $data, Tenant $currentTenant);
 }

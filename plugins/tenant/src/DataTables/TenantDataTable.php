@@ -23,7 +23,7 @@ class TenantDataTable extends DataTableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, TENANT_MODULE_SCREEN_NAME)
             ->addColumn('operations', function ($item) {
-                return table_actions('admin.tenant.edit', 'admin.tenant.delete', $item);
+                return "-";
             })
             ->escapeColumns([])
             ->make(true);
@@ -41,7 +41,12 @@ class TenantDataTable extends DataTableAbstract
        /**
         * @var \Eloquent $model
         */
-       $query = $model->select(['tenants.id', 'tenants.host_name', 'tenants.created_at']);
+       $query = $model->select([
+           'tenants.id',
+           'tenants.host_name',
+           'tenants.fqdn',
+           'tenants.created_at'
+       ]);
        return $query;
     }
 
@@ -64,6 +69,12 @@ class TenantDataTable extends DataTableAbstract
                 'name' => 'tenants.host_name',
                 'title' => trans('core-base::tables.name'),
                 'footer' => trans('core-base::tables.name'),
+                'class' => 'text-left searchable',
+            ],
+            'fqdn' => [
+                'name' => 'tenants.fqdn',
+                'title' => trans('plugins-tenant::tenant.table.fqdn'),
+                'footer' => trans('plugins-tenant::tenant.table.fqdn'),
                 'class' => 'text-left searchable',
             ],
             'created_at' => [

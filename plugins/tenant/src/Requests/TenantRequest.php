@@ -14,8 +14,14 @@ class TenantRequest extends CoreRequest
      */
     public function rules()
     {
-        return [
-            'host_name' => 'required|string|unique:tenants',
+        $tenantId = $this->route()->parameter('id');
+        if (!empty($tenantId)) {
+            return [
+                'host_name' => "required|string|unique_tenant:tenants,db_name,{$tenantId}",
+            ];
+        }
+        else return [
+            'host_name' => "required|string|unique_tenant:tenants,db_name",
             'username' => 'required|string',
             'password' => 'required|string|min:6',
             'first_name' => 'required|string',

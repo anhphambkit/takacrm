@@ -15,5 +15,11 @@ return [
         'first_name' => 'First Name',
         'last_name' => 'Last Name',
         'password' => 'Password',
+    ],
+    'messages' => [
+        'unique_tenant' => 'The attribute :attr is exists!'
+    ],
+    'table' => [
+        'fqdn' => 'Url Tenant'
     ]
 ];

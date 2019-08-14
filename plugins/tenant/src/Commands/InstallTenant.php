@@ -153,6 +153,10 @@ class InstallTenant extends Command
             }
         }
 
+        $this->call('db:seed', [
+            '--database' => $connectionName,
+        ]);
+
         $this->databaseConnection->updateCurrentDatabaseConnection();
         $this->databaseConnection->connectToDBByConnectionName();
     }
