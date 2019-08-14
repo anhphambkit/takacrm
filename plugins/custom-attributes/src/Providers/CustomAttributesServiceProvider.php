@@ -41,7 +41,7 @@ class CustomAttributesServiceProvider extends ServiceProvider
     /**
      * @return array
      */
-    public function getRespositories():array
+    public function getRepositories():array
     {
         return [
             CustomAttributesRepositories::class  => \Plugins\CustomAttributes\Models\CustomAttributes::class,

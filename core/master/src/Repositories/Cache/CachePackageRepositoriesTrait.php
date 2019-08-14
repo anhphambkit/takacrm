@@ -14,6 +14,15 @@ trait CachePackageRepositoriesTrait
     }
 
     /**
+     * @param string $connectionName
+     * @return Model
+     */
+    public function setDatabaseConnection(string $connectionName)
+    {
+        return $this->repository->setConnection($connectionName);
+    }
+
+    /**
      * Get table name.
      *
      * @return string
@@ -194,10 +203,10 @@ trait CachePackageRepositoriesTrait
     /**
      * @param array $select
      * @param array $condition
+     * @param array $with
      * @return mixed
-     * @author TrinhLe
      */
-    public function select(array $select = ['*'], array $condition = [])
+    public function select(array $select = ['*'], array $condition = [], array $with = [])
     {
         return $this->getDataWithoutCache(__FUNCTION__, func_get_args());
     }

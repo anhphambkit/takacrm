@@ -5,7 +5,6 @@ use Core\Master\Repositories\Interfaces\RepositoryInterface;
 
 interface UserInterface extends RepositoryInterface
 {
-
     /**
      * @return mixed
      * @author TrinhLe

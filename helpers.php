@@ -257,14 +257,13 @@ if (!function_exists('getAllPlugins')) {
 
 if (!function_exists('checkDatabaseConnection')) {
     /**
-     * Check connection to DB
-     * @return boolean
-     * @author TrinhLe
+     * @param string|null $connectionName
+     * @return bool
      */
-    function checkDatabaseConnection()
+    function checkDatabaseConnection(string $connectionName = null)
     {
         try {
-            DB::connection()->reconnect();
+            DB::connection($connectionName)->reconnect();
             return true;
         } catch (Exception $ex) {
             return false;

@@ -194,7 +194,7 @@ if (!function_exists('register_repositories')) {
      */
     function register_repositories($provider)
     {
-        $repositories = call_user_func_array([$provider, 'getRespositories'],[]);
+        $repositories = call_user_func_array([$provider, 'getRepositories'],[]);
         foreach ($repositories as $interface => $model) {
             # code...
             $detection      = explode('\\', $interface);

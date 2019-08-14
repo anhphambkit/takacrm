@@ -15,6 +15,12 @@ interface RepositoryInterface
     public function getModel();
 
     /**
+     * @param string $connectionName
+     * @return Model
+     */
+    public function setDatabaseConnection(string $connectionName);
+
+    /**
      * @param $data
      * @param $screen
      * @param bool $is_single
@@ -146,10 +152,10 @@ interface RepositoryInterface
     /**
      * @param array $select
      * @param array $condition
+     * @param array $with
      * @return mixed
-     * @author TrinhLe
      */
-    public function select(array $select = ['*'], array $condition = []);
+    public function select(array $select = ['*'], array $condition = [], array $with = []);
 
     /**
      * @param array $condition

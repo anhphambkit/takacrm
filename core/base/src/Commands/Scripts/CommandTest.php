@@ -3,12 +3,16 @@
 namespace Core\Base\Commands\Scripts;
 
 use Illuminate\Console\Command;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Composer;
 use Core\Media\Models\MediaFile;
 use Core\Media\Models\MediaFolder;
 use Illuminate\Contracts\Filesystem\Factory;
 use Core\User\Models\User;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\Process\Process;
 
 class CommandTest extends Command
 {
@@ -32,28 +36,53 @@ class CommandTest extends Command
      * @var \Illuminate\Support\Composer
      */
     protected $composer;
+    protected $filesystemManager;
 
     /**
      * Create a new command instance.
      *
      * @param Composer $composer
      */
-    public function __construct(Composer $composer)
+    public function __construct(Composer $composer, FilesystemManager $filesystemManager)
     {
         parent::__construct();
 
         $this->composer = $composer;
+        $this->filesystemManager = $filesystemManager;
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return void
+     * @return bool
      */
     public function handle()
     {
-        $content = view('core-user::emails.reminder', ['link' => route('auth.reset.complete', ['token' => 123])])->render();
-        print_r($content);
-        print_r("\n");
+//        config()->set('core-base.cms.current_database_connection', 'pgsql');
+//        DB::connection()->reconnect();
+
+        $plugins = [
+            'product',
+            'blog',
+            'custom-attributes',
+            'customer',
+            'faq',
+            'history',
+            'newsletter',
+            'order',
+        ];
+
+        foreach ($plugins as $plugin) {
+            (new Process(sprintf('php artisan plugin:activate %s', $plugin)))
+                ->mustRun()
+                ->isSuccessful();
+        }
+    }
+
+    /**
+     * @param string|null $diskType
+     * @return \Illuminate\Contracts\Filesystem\Filesystem
+     */
+    public function serviceFilesystem(string $diskType = null)
+    {
+        return $this->filesystemManager->disk(!empty($diskType) ? $diskType : config('filesystems.default'));
     }
 }

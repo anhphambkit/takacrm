@@ -21,7 +21,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'lcms:install';
+    protected $signature = 'lcms:install {type? : type install}';
 
     /**
      * The console command description.
@@ -94,7 +94,8 @@ class InstallCommand extends Command
         }
 
         // Set database credentials in .env and migrate
-        $this->setDatabaseInfo();
+        $type = $this->argument('type');
+        $this->setDatabaseInfo($type);
         $this->line('------------------');
 
         // Set cache key prefix
@@ -102,7 +103,8 @@ class InstallCommand extends Command
         $this->line('------------------');
 
         // Create a super user
-        $this->call("create:user");
+        if (empty($type))
+            $this->call("create:user");
         
         $this->completed();
 
@@ -131,11 +133,10 @@ class InstallCommand extends Command
     }
 
     /**
+     * @param string $type
      * @throws Exception
-     * @return void
-     * @author TrinhLe
      */
-    protected function setDatabaseInfo()
+    protected function setDatabaseInfo(string $type = null)
     {
         $this->info('Setting up database (please make sure you created database for this site)...');
 
@@ -184,7 +185,9 @@ class InstallCommand extends Command
         }
 
         if (!empty($this->database)) {
-            $this->call('lcms:migrate');
+            $this->call('lcms:migrate', [
+                'path' => $type
+            ]);
         }
     }
 

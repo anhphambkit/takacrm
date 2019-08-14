@@ -33,6 +33,11 @@ $router->group(['prefix' => 'admin'], function (Router $router) {
             ->name('ajax.admin.product.import.process');
     });
 
+    $router->get('/get-child-categories', [
+        'as' => 'ajax.admin.get_child_categories',
+        'uses' => 'Admin\ProductController@getChildCategories',
+    ]);
+
     /** end import product */
 
 });

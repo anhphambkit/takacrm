@@ -41,6 +41,6 @@ class RoleAssignmentListener
             'permissions' => json_encode($permissions),
         ]);
 
-        cache()->forget(md5('cache-dashboard-menu-' . Auth::user()->getKey()));
+        cache()->forget(md5("{$subDomain}_cache-dashboard-menu-" . Auth::user()->getKey()));
     }
 }

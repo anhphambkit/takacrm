@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Core\User\Traits\PermissionTrait;
 use Illuminate\Notifications\Notifiable;
 use Core\User\Events\ResetPasswordNotification;
+use Plugins\Tenancy\Traits\UsesTenantConnection;
 
 class User extends Authenticatable
 {

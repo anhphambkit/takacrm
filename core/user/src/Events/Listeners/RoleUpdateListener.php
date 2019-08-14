@@ -25,11 +25,8 @@ class RoleUpdateListener
     }
 
     /**
-     * Handle the event.
-     *
-     * @param  RoleUpdateEvent $event
-     * @return void
-     * @author TrinhLe
+     * @param RoleUpdateEvent $event
+     * @throws \Exception
      */
     public function handle(RoleUpdateEvent $event)
     {
@@ -37,7 +34,9 @@ class RoleUpdateListener
 
         $this->updatePermission($event->role, $permissions);
 
-        cache()->forget(md5('cache-dashboard-menu-' . Auth::user()->getKey()));
+        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
+
+        cache()->forget(md5("{$subDomain}_cache-dashboard-menu-" . Auth::user()->getKey()));
     }
 
 

@@ -8,6 +8,7 @@ use Core\Base\Middlewares\RedirectIfAuthenticated;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use File;
+use Plugins\Tenant\Middlewares\SwitchPortal;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,13 @@ class RouteServiceProvider extends ServiceProvider
     ];
 
     /**
+     * {@inheritDoc}
+     */
+    protected $applyAllRouteMiddleware = [
+        'switch-portal'
+    ];
+
+    /**
      * @var array
      */
     protected $routeSources = [];
@@ -50,6 +58,7 @@ class RouteServiceProvider extends ServiceProvider
         $router = $this->app['router'];
         
         $router->aliasMiddleware('auth', Authenticate::class);
+        $router->aliasMiddleware('switch-portal', SwitchPortal::class);
         $router->aliasMiddleware('guest', RedirectIfAuthenticated::class);
         
         $this->registerMiddleware($router);
@@ -101,7 +110,7 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Register routes
      * @param string $routeDirectory
-     * @param string $group 
+     * @param string $group
      * @author TrinhLe
      */
     public function registerRouterPackage(string $routeDirectory, string $group)
@@ -115,6 +124,7 @@ class RouteServiceProvider extends ServiceProvider
         $controlerDirectory  = getDirectoryController($group, $routeDirectory, $routeFileName);
         $middlewareNamespace = getNamespaceMiddleware($group, $routeFileName, $routeDirectory);
         $middleware[]        = $middlewareNamespace;
+        $middleware = array_merge($this->applyAllRouteMiddleware, $middleware);
 
         return $route->middleware($middleware)->namespace($controlerDirectory)->group($routeDirectory);
     }

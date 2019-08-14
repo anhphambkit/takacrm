@@ -9,7 +9,7 @@ class MigrateSystemCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'lcms:migrate';
+    protected $signature = 'lcms:migrate {path? : path of migration database} {connection? : connection of database}';
 
     /**
      * The console command description.
@@ -31,14 +31,36 @@ class MigrateSystemCommand extends Command
 
     /**
      * Execute the console command.
-     *
+     * $dir => database_path('migrations')
      * @return mixed
      */
     public function handle() 
     {
-    	$this->call('vendor:publish', [
-            '--tag' => 'cms-migrations', '--force' => true
+        $path = $this->argument('path');
+        $databaseConnection = $this->argument('connection');
+
+        if (!empty($path)) {
+            $migrationPath = "database/migrations/{$path}";
+
+            $this->call('vendor:publish', [
+                '--tag' => "cms-migrations-{$path}", '--force' => true
+            ]);
+
+            $this->call('migrate', [
+                '--path' => $migrationPath,
+                '--database' => $databaseConnection,
+                '--force' => true,
+            ]);
+        }
+
+        $this->call('vendor:publish', [
+            '--tag' => 'cms-migrations',
+            '--force' => true
         ]);
-       	$this->call('migrate');
+
+        $this->call('migrate', [
+            '--database' => $databaseConnection,
+            '--force' => true,
+        ]);
     }
 }

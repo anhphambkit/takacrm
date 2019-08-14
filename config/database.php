@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -58,7 +57,7 @@ return [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST', '127.0.0.1'),
             'port'     => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
+            'database' => 'bi_anh_pham',
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'prefix'   => env('DB_PREFIX', ''),
@@ -77,6 +76,19 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
         ],
+
+        'system' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'prefix'   => env('DB_PREFIX', 'bi_'),
+            'charset' => 'utf8',
+            'schema'   => 'public',
+            'sslmode'  => 'prefer',
+        ]
 
     ],
 

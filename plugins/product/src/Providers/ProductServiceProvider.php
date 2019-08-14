@@ -43,11 +43,9 @@ class ProductServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get config repositories
-     * @author TrinhLe
-     * @return [array] [description]
+     * @return array
      */
-    public function getRespositories():array
+    public function getRepositories():array
     {
         return [
             ProductRepositories::class           => \Plugins\Product\Models\Product::class,

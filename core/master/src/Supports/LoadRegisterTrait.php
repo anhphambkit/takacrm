@@ -142,7 +142,8 @@ trait LoadRegisterTrait
      */
     protected function loadPackages(string $pathSource = '', bool $formatNamespace = true) : array
     {
-        return Cache::tags($this->entityCache)->remember("{$pathSource}", 120, function() use ($pathSource, $formatNamespace){
+        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
+        return Cache::tags("{$subDomain}_{$this->entityCache}")->remember("{$subDomain}_{$pathSource}", 120, function() use ($pathSource, $formatNamespace){
             return loadPackages($pathSource, $formatNamespace);
         });
     }
@@ -155,7 +156,8 @@ trait LoadRegisterTrait
      */
     protected function loadPackageAvailable() : array
     {
-        return Cache::tags($this->entityCache)->remember("loadPackageAvailable", 120, function(){
+        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
+        return Cache::tags("{$subDomain}_{$this->entityCache}")->remember("{$subDomain}_loadPackageAvailable", 120, function(){
             return loadPackageAvailable();
         });
     }
@@ -168,7 +170,8 @@ trait LoadRegisterTrait
      */
     protected function loadPluginAvailable()
     {
-        return Cache::tags($this->entityCache)->remember("loadPluginAvailable", 120, function(){
+        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
+        return Cache::tags("{$subDomain}_{$this->entityCache}")->remember("{$subDomain}_loadPluginAvailable", 120, function(){
             return getAllPlugins(1) ?? [];
         });
     }
@@ -179,7 +182,8 @@ trait LoadRegisterTrait
      */
     protected function flushAllCacheProvider()
     {
-        return Cache::tags($this->entityCache)->flush();
+        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
+        return Cache::tags("{$subDomain}_{$this->entityCache}")->flush();
     }
 
     /**
