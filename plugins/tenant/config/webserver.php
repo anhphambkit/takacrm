@@ -20,6 +20,12 @@ return [
         'enabled' => false,
 
         /**
+         * The php sock to be used.
+         */
+        'php-sock' => 'unix:/var/run/php/php7.3-fpm.sock',
+//        'php-sock' => 'unix:/Applications/MAMP/Library/logs/fastcgi/nginxFastCGI.sock',
+
+        /**
          * Path ssl cert
          */
         'ssl_certificate' => storage_path('app/ssl/takacrm.bi.pem'),
@@ -104,7 +110,8 @@ return [
         /**
          * The php sock to be used.
          */
-        'php-sock' => 'unix:/Applications/MAMP/Library/logs/fastcgi/nginxFastCGI.sock',
+        'php-sock' => 'unix:/var/run/php/php7.3-fpm.sock',
+//        'php-sock' => 'unix:/Applications/MAMP/Library/logs/fastcgi/nginxFastCGI.sock',
 
         /**
          * Path ssl cert
