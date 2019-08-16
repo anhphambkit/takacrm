@@ -1,9 +1,9 @@
 import axios from 'axios';
-//import JSLib from '@helper/util/js-lib';
-//import message from '@helper/config/messages';
-//import responeForm from '@supportResources/respone-form';
-//import toastrAlert from '@supportResources/toastr-alert';
-//import helper from "@/helper/js/helper";
+import JSLib from '@helper/util/js-lib';
+import message from '@helper/config/messages';
+import responeForm from '@supportResources/respone-form';
+import toastrAlert from '@supportResources/toastr-alert';
+import helper from "@/helper/js/helper";
 
 class Form {
     constructor(){
@@ -27,7 +27,7 @@ class Form {
         // Has toastr when update/create success/fail:
         this.hasToastr = true;
         // Default message success:
-        this.successMessage = '';
+        this.successMessage = (new JSLib).format(message.CREATED_SUCCESS, ['Item']);
         // Default Error message:
         this.errorMessage = null;
         // Data to send

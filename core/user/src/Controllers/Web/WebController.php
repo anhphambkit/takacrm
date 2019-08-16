@@ -24,7 +24,7 @@ class WebController extends BasePublicController{
     }
 
     public function showHomePage() {
-        return view('homepage');
+        return view('core-user::homepage');
     }
 
     /**
