@@ -39,6 +39,16 @@ class MigrateSystemCommand extends Command
         $path = $this->argument('path');
         $databaseConnection = $this->argument('connection');
 
+        $this->call('vendor:publish', [
+            '--tag' => 'cms-migrations',
+            '--force' => true
+        ]);
+
+        $this->call('migrate', [
+            '--force' => true,
+            '--database' => $databaseConnection
+        ]);
+
         if (!empty($path)) {
             $migrationPath = "database/migrations/{$path}";
 
@@ -52,15 +62,5 @@ class MigrateSystemCommand extends Command
                 '--force' => true,
             ]);
         }
-
-        $this->call('vendor:publish', [
-            '--tag' => 'cms-migrations',
-            '--force' => true
-        ]);
-
-        $this->call('migrate', [
-            '--database' => $databaseConnection,
-            '--force' => true,
-        ]);
     }
 }
