@@ -33,12 +33,12 @@ class DashboardMenu
     public $prefix;
 
     /**
+     * DashboardMenu constructor.
      * @param User $user
-     * @author TrinhLe
      */
     public function init(User $user)
     {
-        $this->user = $user;
+        $this->user = !empty($user) ? $user : auth()->user();
         $this->url = URL::full();
         $this->prefix = '/' . request()->route()->getPrefix();
     }

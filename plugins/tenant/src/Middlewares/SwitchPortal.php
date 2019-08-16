@@ -21,11 +21,6 @@ class SwitchPortal
      */
     public function handle($request, Closure $next)
     {
-        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
 
-        if (empty($subDomain)) {
-            return $next($request);
-        }
-        return $next($request);
     }
 }

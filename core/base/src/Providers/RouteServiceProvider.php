@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $middlewares = [
         'web'   => ['web'],
-        'admin' => ['web','auth'],
+        'admin' => ['web','auth-admin'],
         'ajax'  => ['web'],
         'api'   => ['api'],
     ];
@@ -37,7 +37,6 @@ class RouteServiceProvider extends ServiceProvider
      * {@inheritDoc}
      */
     protected $applyAllRouteMiddleware = [
-        'switch-portal'
     ];
 
     /**
@@ -57,7 +56,7 @@ class RouteServiceProvider extends ServiceProvider
          */
         $router = $this->app['router'];
         
-        $router->aliasMiddleware('auth', Authenticate::class);
+        $router->aliasMiddleware('auth-admin', Authenticate::class);
         $router->aliasMiddleware('switch-portal', SwitchPortal::class);
         $router->aliasMiddleware('guest', RedirectIfAuthenticated::class);
         
@@ -117,6 +116,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $routeFileName = pathinfo($routeDirectory, PATHINFO_FILENAME);
         $middleware = array_get($this->middlewares,$routeFileName);
+
         if(!is_array($middleware))
             throw new \Exception("System not support route type is {$routeFileName}", 1);
         
