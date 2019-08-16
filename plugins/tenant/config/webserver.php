@@ -128,7 +128,7 @@ return [
              *
              * @default 80
              */
-            'http' => 81,
+            'http' => 80,
             /**
              * HTTPS, SSL port.
              *
@@ -155,7 +155,7 @@ return [
             /**
              * Location where vhost configuration files can be found.
              */
-            'vhost-files' => '/Applications/MAMP/conf/nginx/sites-enabled/',
+            'vhost-files' => '/v-hosts/',
 
             /**
              * Actions to run to work with the Nginx service.
