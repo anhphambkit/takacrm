@@ -2,6 +2,7 @@
 namespace Core\User\Controllers\Web;
 use Core\Base\Controllers\Web\BasePublicController;
 use Core\User\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class WebController extends BasePublicController{
@@ -24,7 +25,11 @@ class WebController extends BasePublicController{
     }
 
     public function showHomePage() {
-        return view('core-user::homepage');
+        if (!Auth::check())
+            return redirect(route('login'));
+        else
+            return redirect(route('admin.dashboard.index'));
+//        return view('core-user::homepage');
     }
 
     /**
