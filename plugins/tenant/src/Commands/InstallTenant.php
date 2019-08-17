@@ -136,16 +136,8 @@ class InstallTenant extends Command
             ]);
 
 //      Active all plugin of tenant:
-        $plugins = [
-            'blog',
-            'custom-attributes',
-            'customer',
-            'faq',
-            'history',
-            'newsletter',
-            'order',
-            'product',
-        ];
+        $plugins = config('tenant.active-plugins');
+
         foreach ($plugins as $plugin) {
             (new Process(sprintf('php artisan tenant-plugin:activate %s %s', $plugin, $tenantId), base_path()))
                 ->mustRun()
