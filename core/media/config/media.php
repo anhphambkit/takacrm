@@ -1,5 +1,5 @@
 <?php
-
+$userTable = app(\Core\User\Models\User::class)->getTable();
 return [
     'filesystem' => env('STORAGE_MEDIA', 'local'),
     'mode' => env('RV_MEDIA_MODE', 'advanced'), // Use "simple" or "advanced"
@@ -90,7 +90,7 @@ return [
     'max_file_size_upload' => env('RV_MEDIA_MAX_FILE_SIZE_UPLOAD', 10 * 1024), // Maximum size to upload
     'default-img'          => env('RV_MEDIA_DEFAULT_IMAGE', '/backend/core/media/images/default-image.png'), // Default image
     'sidebar_display'      => env('RV_MEDIA_SIDEBAR_DISPLAY', 'horizontal'), // Use "vertical" or "horizontal"
-    'user_attributes'      => 'users.id, CONCAT(users.first_name, " ", users.last_name) AS name',
+    'user_attributes'      => "users.id, CONCAT({$userTable}.first_name, \" \", {$userTable}.last_name) AS name",
     'layouts' => [
         'master' => 'bases::layouts.master',
         'main'   => 'content',

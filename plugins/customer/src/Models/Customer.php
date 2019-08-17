@@ -127,7 +127,8 @@ class Customer extends Model
      */
     public function createdByUser()
     {
-        return $this->belongsTo(User::class, 'created_by')->select(['id', 'first_name', 'last_name', DB::raw("CONCAT(users.first_name, ' ', users.last_name) as full_name"),'username', 'profile_image as avatar']);
+        $userTable = env('DB_PREFIX') . app(User::class)->getTable();
+        return $this->belongsTo(User::class, 'created_by')->select(['id', 'first_name', 'last_name', DB::raw("CONCAT({$userTable}.first_name, ' ', {$userTable}.last_name) as full_name"),'username', 'profile_image as avatar']);
     }
 
     /**
@@ -136,7 +137,8 @@ class Customer extends Model
      */
     public function userManage()
     {
-        return $this->belongsTo(User::class, 'user_manage_id')->select(['id', 'first_name', 'last_name', DB::raw("CONCAT(users.first_name, ' ', users.last_name) as full_name"),'username', 'profile_image as avatar']);
+        $userTable = env('DB_PREFIX') . app(User::class)->getTable();
+        return $this->belongsTo(User::class, 'user_manage_id')->select(['id', 'first_name', 'last_name', DB::raw("CONCAT({$userTable}.first_name, ' ', {$userTable}.last_name) as full_name"),'username', 'profile_image as avatar']);
     }
 
     /**
@@ -309,8 +311,10 @@ class Customer extends Model
     public function getIntroducePersonInstanceAttribute() {
         if (empty($this->type_reference_data)) return null;
 
+        $userTable = env('DB_PREFIX') . app(User::class)->getTable();
+
         if ($this->type_reference_data === ReferenceConfig::REFERENCE_USER_DATA)
-            return User::where('id', $this->introduce_person_id)->select('id', 'first_name', 'last_name', DB::raw("CONCAT(lcms_users.first_name, ' ', lcms_users.last_name) as full_name"),'username', 'profile_image as avatar')->first();
+            return User::where('id', $this->introduce_person_id)->select('id', 'first_name', 'last_name', DB::raw("CONCAT({$userTable}.first_name, ' ', {$userTable}.last_name) as full_name"),'username', 'profile_image as avatar')->first();
         else if ($this->type_reference_data === ReferenceConfig::REFERENCE_CUSTOMER_DATA)
             return Customer::where('id', $this->introduce_person_id)->select('id', 'full_name', 'avatar')->first();
     }
