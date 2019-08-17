@@ -28,8 +28,8 @@ return [
         /**
          * Path ssl cert
          */
-        'ssl_certificate' => storage_path('app/ssl/soria.pem'),
-        'ssl_certificate_key' => storage_path('app/ssl/soria.key'),
+        'ssl_certificate' => storage_path('app/ssl/bipham.pem'),
+        'ssl_certificate_key' => storage_path('app/ssl/bipham.key'),
 
         /**
          * Define the ports of your Apache service.
@@ -116,8 +116,8 @@ return [
         /**
          * Path ssl cert
          */
-        'ssl_certificate' => storage_path('app/ssl/soria.pem'),
-        'ssl_certificate_key' => storage_path('app/ssl/soria.key'),
+        'ssl_certificate' => storage_path('app/ssl/bipham.pem'),
+        'ssl_certificate_key' => storage_path('app/ssl/bipham.key'),
 
         /**
          * Define the ports of your nginx service.
