@@ -47,7 +47,7 @@ class UserRepository extends RepositoriesAbstract implements UserInterface
      */
     public function getAllUsers()
     {
-        $table = $this->model->getTable();
+        $table = env('DB_PREFIX') . $this->model->getTable();
         $data = $this->model
                     ->select('id', DB::raw("CONCAT(".$table.".first_name, ' ', ".$table.".last_name) as text"), 'profile_image as avatar')
                     ->orderBy(DB::raw("CONCAT(".$table.".first_name, ' ', ".$table.".last_name)"), 'asc')
