@@ -28,8 +28,8 @@ return [
         /**
          * Path ssl cert
          */
-        'ssl_certificate' => storage_path('app/ssl/local.crt'),
-        'ssl_certificate_key' => storage_path('app/ssl/local.key'),
+       'ssl_certificate' => storage_path('app/ssl/bipham.pem'),
+        'ssl_certificate_key' => storage_path('app/ssl/bipham.key'),
 
         /**
          * Define the ports of your Apache service.
@@ -116,8 +116,8 @@ return [
         /**
          * Path ssl cert
          */
-        'ssl_certificate' => storage_path('app/ssl/local.crt'),
-        'ssl_certificate_key' => storage_path('app/ssl/local.key'),
+       'ssl_certificate' => storage_path('app/ssl/bipham.pem'),
+        'ssl_certificate_key' => storage_path('app/ssl/bipham.key'),
 
         /**
          * Define the ports of your nginx service.
@@ -128,7 +128,7 @@ return [
              *
              * @default 80
              */
-            'http' => 81,
+            'http' => 80,
             /**
              * HTTPS, SSL port.
              *
