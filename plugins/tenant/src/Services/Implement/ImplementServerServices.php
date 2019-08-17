@@ -50,7 +50,8 @@ class ImplementServerServices implements ServerServices
         // Update host domain to hosts:
         $this->updateDomainToHosts($tenant);
 
-        $serverGeneratorInstance->reload();
+        if(config('plugins-tenant.webserver.auto_reload_web_server'))
+            $serverGeneratorInstance->reload();
     }
 
     /**

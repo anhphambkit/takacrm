@@ -6,6 +6,7 @@ return [
     'use_server_type' => env('USE_SERVER_TYPE', 'nginx'),
     'default_localhost_ip' => env('DEFAULT_LOCALHOST_IP', '127.0.0.1'),
     'path_server_hosts' => env('PATH_SERVER_HOSTS', '/etc/hosts'),
+    'auto_reload_web_server' => env('AUTO_RELOAD_WEB_SERVER', false),
 
     /**
      * Apache2 is one of the most widely adopted webserver packages available.
