@@ -23,14 +23,14 @@ return [
         /**
          * The php sock to be used.
          */
-        'php-sock' => env('WEB_SERVER_PHP_SOCK', 'unix:/var/run/php/php7.3-fpm.sock'),
+        'php-sock' => env('WEB_SERVER_PHP_SOCK', 'unix:/var/run/php/php7.1-fpm.sock'),
 //        'php-sock' => 'unix:/Applications/MAMP/Library/logs/fastcgi/nginxFastCGI.sock',
 
         /**
          * Path ssl cert
          */
-        'ssl_certificate' => env('WEB_SERVER_SSL_CRT', storage_path('app/ssl/crmtop.pem')),
-        'ssl_certificate_key' => env('WEB_SERVER_SSL_KEY', storage_path('app/ssl/crmtop.key')),
+        'ssl_certificate' => env('WEB_SERVER_SSL_CRT', storage_path('app/ssl/bipham.pem')),
+        'ssl_certificate_key' => env('WEB_SERVER_SSL_KEY', storage_path('app/ssl/bipham.key')),
 
         /**
          * Define the ports of your Apache service.
@@ -111,14 +111,14 @@ return [
         /**
          * The php sock to be used.
          */
-        'php-sock' => env('WEB_SERVER_PHP_SOCK', 'unix:/var/run/php/php7.3-fpm.sock'),
+        'php-sock' => env('WEB_SERVER_PHP_SOCK', 'unix:/var/run/php/php7.1-fpm.sock'),
 //        'php-sock' => 'unix:/Applications/MAMP/Library/logs/fastcgi/nginxFastCGI.sock',
 
         /**
          * Path ssl cert
          */
-        'ssl_certificate' => env('WEB_SERVER_SSL_CRT', storage_path('app/ssl/crmtop.pem')),
-        'ssl_certificate_key' => env('WEB_SERVER_SSL_KEY', storage_path('app/ssl/crmtop.key')),
+        'ssl_certificate' => env('WEB_SERVER_SSL_CRT', storage_path('app/ssl/bipham.pem')),
+        'ssl_certificate_key' => env('WEB_SERVER_SSL_KEY', storage_path('app/ssl/bipham.key')),
 
         /**
          * Define the ports of your nginx service.
