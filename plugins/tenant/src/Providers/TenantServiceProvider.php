@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Plugins\Tenant\Commands\InstallTenant;
+use Plugins\Tenant\Commands\MigrateTenant;
 use Plugins\Tenant\Commands\PluginActiveTenant;
 use Plugins\Tenant\Models\Tenant;
 use Plugins\Tenant\Repositories\Interfaces\TenantRepositories;
@@ -66,7 +67,8 @@ class TenantServiceProvider extends ServiceProvider
         $this->publishMigrationTenancy();
         $this->commands([
             InstallTenant::class,
-            PluginActiveTenant::class
+            PluginActiveTenant::class,
+            MigrateTenant::class
         ]);
     }
 

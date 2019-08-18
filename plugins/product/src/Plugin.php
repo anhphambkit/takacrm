@@ -5,14 +5,15 @@ namespace Plugins\Product;
 use Artisan;
 use Core\Master\Supports\PermissionCommand;
 use Schema;
+
 class Plugin
 {
     /**
-     * @author AnhPham
+     * @param null $databaseConnection
      */
-    public static function activate()
+    public static function activate($databaseConnection = null)
     {
-        $databaseConnection = config('core-base.cms.current_database_connection');
+        $databaseConnection = !empty($databaseConnection) ? $databaseConnection : config('database.default');
         Artisan::call('migrate', [
             '--force' => true,
             '--path' => 'plugins/product/database/migrations',
@@ -34,11 +35,11 @@ class Plugin
     }
 
     /**
-     * @author AnhPham
+     * @param null $databaseConnection
      */
-    public static function remove()
+    public static function remove($databaseConnection = null)
     {
-        $databaseConnection = config('core-base.cms.current_database_connection');
+        $databaseConnection = !empty($databaseConnection) ? $databaseConnection : config('database.default');
         Artisan::call('migrate:rollback', [
             '--force' => true,
             '--path' => 'plugins/product/database/migrations',

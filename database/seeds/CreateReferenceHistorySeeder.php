@@ -37,9 +37,8 @@ class CreateReferenceHistorySeeder extends Seeder
 					'created_at' => Carbon::now(),
 					'updated_at' => Carbon::now(),
         		]);
-        		print_r("\nInsert new reference with value : {$reference}");
+        		print_r("Insert new reference with value : {$reference} \n");
         	}
         }
-        print_r("\n");
     }
 }

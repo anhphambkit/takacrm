@@ -133,6 +133,8 @@ class PluginActiveTenant extends Command
                         ->update($dataPlugin);
                 $this->flushAllCacheProvider();
             }
+            $this->info("AAAAAA");
+            call_user_func([$content['plugin'], 'activate'], $connectionName);
         }
         return true;
     }

@@ -21,7 +21,7 @@ return [
         'tenant_table' => 'tenants',
     ],
     'db' => [
-        'database_tenant_prefix' => env('DATABASE_TENANT_PREFIX', 'bi_'),
+        'database_tenant_prefix' => env('DATABASE_TENANT_PREFIX', 'crm_'),
         /**
          * The default connection to use; this overrules the Laravel database.default
          * configuration setting. In Laravel this is normally configured to 'mysql'.
@@ -55,14 +55,6 @@ return [
          * @see src/Database/Connection.php
          */
         'tenant-division-mode' => env('TENANT_DATABASE_DIVISION_MODE', 'database'),
-
-        /**
-         * The database password generator takes care of creating a valid hashed
-         * string used for tenants to connect to the specific database. Do
-         * note that this will only work in 'division modes' that set up
-         * a connection to a separate database.
-         */
-        'password-generator' => Plugins\Tenancy\Generators\Database\DefaultPasswordGenerator::class,
 
         /**
          * The default Seeder class used on newly created databases and while
