@@ -17,6 +17,11 @@ class TenantDataTable extends DataTableAbstract
     {
         $data = $this->datatables
             ->eloquent($this->query())
+            ->editColumn('fqdn', function ($item) {
+                $serverType = config('plugins-tenant.webserver.use_server_type');
+                $port = config("plugins-tenant.webserver.{$serverType}.ports.http");
+                return "<a href='http://{$item->fqdn}:{$port}' target='_blank' class=''>{$item->fqdn}</a>";
+            })
             ->editColumn('created_at', function ($item) {
                 return date_from_database($item->created_at, config('core-base.cms.date_format.date'));
             });
