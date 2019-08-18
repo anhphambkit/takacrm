@@ -1,5 +1,11 @@
 <?php
 $userTable = app(\Core\User\Models\User::class)->getTable();
+$subDomain = get_sub_domain();
+$mediaDefaultPath = "/media-core/";
+
+if (!empty($subDomain))
+    $mediaDefaultPath = "/media/{$subDomain}/";
+
 return [
     'filesystem' => env('STORAGE_MEDIA', 'local'),
     'mode' => env('RV_MEDIA_MODE', 'advanced'), // Use "simple" or "advanced"
@@ -12,7 +18,7 @@ return [
         'folder'         => 'uploads',
         'path'           => public_path('uploads'),
         'reserved_names' => [],
-        'files-path'     => '/media/'
+        'files-path'     => $mediaDefaultPath
     ],
     'route' => [
         'prefix' => env('ADMIN_DIR', 'admin') . '/media',
