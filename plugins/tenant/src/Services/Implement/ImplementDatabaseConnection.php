@@ -197,11 +197,13 @@ class ImplementDatabaseConnection implements DatabaseConnection
         $databaseDriver = $this->getDatabaseInstanceByDriver($configDatabase['driver']);
         $databaseDriver->createDatabaseByConfig($configDatabase, $this->systemName(), $this);
         $this->connectToDBByConnectionName($connectionName);
+
         // Install/migrate tenant
         $this->artisan->call('tenant:install', [
             'tenant_id' => $tenant->id,
             'connection' => $connectionName,
         ]);
+
         $this->updateCurrentDatabaseConnection();
         $this->connectToDBByConnectionName();
     }

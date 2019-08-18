@@ -109,11 +109,10 @@ class InstallTenant extends Command
     /**
      * @param int $tenantId
      * @param string|null $connectionName
+     * @throws \Exception
      */
     protected function setDatabaseInfo(int $tenantId, string $connectionName = null)
     {
-        $this->info('Setting up database for tenant (please make sure you created database for this site)...');
-
         $tenant = $this->tenantRepositories->findById($tenantId);
 
         $connectionName = $connectionName ?? $this->databaseConnection->tenantName();
@@ -126,25 +125,23 @@ class InstallTenant extends Command
         $this->password = $configDatabase['password'];
 
         if (!checkDatabaseConnection($connectionName)) {
-            return $this->error('Can not connect to database, please try again!');
+            throw new \Exception('Can not connect to database, please try again!');
         }
 
         if (!empty($this->database)) {
-            $this->call('lcms:migrate', [
-                'path' => $connectionName,
-                'connection' => $connectionName,
-            ]);
-
-//      Active all plugin of tenant:
-        $plugins = config('tenant.active-plugins');
-
-        foreach ($plugins as $plugin) {
-            (new Process(sprintf('php artisan tenant-plugin:activate %s %s', $plugin, $tenantId), base_path()))
+            (new Process(sprintf('php artisan tenant:migrate %s %s %s', $tenantId, $connectionName, $connectionName), base_path()))
                 ->mustRun()
                 ->isSuccessful();
+
+            // Active all plugin of tenant:
+            $plugins = config('tenant.active-plugins');
+
+            foreach ($plugins as $plugin) {
+                (new Process(sprintf('php artisan tenant-plugin:activate %s %s', $plugin, $tenantId), base_path()))
+                    ->mustRun()
+                    ->isSuccessful();
             }
         }
-
         $this->call('db:seed', [
             '--database' => $connectionName,
         ]);

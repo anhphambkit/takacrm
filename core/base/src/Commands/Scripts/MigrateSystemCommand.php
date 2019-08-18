@@ -53,7 +53,8 @@ class MigrateSystemCommand extends Command
             $migrationPath = "database/migrations/{$path}";
 
             $this->call('vendor:publish', [
-                '--tag' => "cms-migrations-{$path}", '--force' => true
+                '--tag' => "cms-migrations-{$path}",
+                '--force' => true
             ]);
 
             $this->call('migrate', [
