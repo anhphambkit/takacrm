@@ -23,11 +23,8 @@ class RoleAssignmentListener
     }
 
     /**
-     * Handle the event.
-     *
-     * @param  RoleAssignmentEvent $event
-     * @return void
-     * @author TrinhLe
+     * @param RoleAssignmentEvent $event
+     * @throws \Exception
      */
     public function handle(RoleAssignmentEvent $event)
     {
@@ -41,6 +38,7 @@ class RoleAssignmentListener
             'permissions' => json_encode($permissions),
         ]);
 
+        $subDomain = function_exists('get_sub_domain') ? get_sub_domain() : null;
         cache()->forget(md5("{$subDomain}_cache-dashboard-menu-" . Auth::user()->getKey()));
     }
 }
