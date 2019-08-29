@@ -58,15 +58,15 @@ class ImplementServerServices implements ServerServices
      * @param Tenant $tenant
      */
     private function updateDomainToHosts(Tenant $tenant) {
-        (new Process(sprintf('sudo chmod -R 777 %s', config('plugins-tenant.webserver.path_server_hosts'))))
+        (new Process(sprintf('sudo chmod -R 777 %s', config('plugins-tenant.webserver.path_server_hosts')), base_path()))
             ->mustRun()
             ->isSuccessful();
 
-        (new Process(sprintf('sudo echo \'%s %s\' >> /etc/hosts',  config('plugins-tenant.webserver.default_localhost_ip'), $tenant->fqdn)))
+        (new Process(sprintf('sudo echo \'%s %s\' >> /etc/hosts',  config('plugins-tenant.webserver.default_localhost_ip'), $tenant->fqdn), base_path()))
             ->mustRun()
             ->isSuccessful();
 
-        (new Process(sprintf('sudo chmod -R 644 %s', config('plugins-tenant.webserver.path_server_hosts'))))
+        (new Process(sprintf('sudo chmod -R 644 %s', config('plugins-tenant.webserver.path_server_hosts')), base_path()))
             ->mustRun()
             ->isSuccessful();
     }
